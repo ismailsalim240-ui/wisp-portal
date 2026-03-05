@@ -1,125 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp Command Portal</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #c9d6ff, #e2e2e2);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(255,223,186,1) 0%, rgba(255,223,186,0.5) 100%);
+            color: #333;
         }
-        
-        .portal {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            border-radius: 15px;
             padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        h1 {
-            text-align: center;
-            color: #4e54c8;
+        /* Add your animations and keyframes here */
+        @keyframes waterMotion {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+            100% { transform: translateY(0); }
         }
-        .timer {
-            font-size: 24px;
-            color: #ffb300;
-            text-align: center;
-        }
-        .progress {
-            width: 100%;
-            background: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        .progress-bar {
-            height: 20px;
-            background: #4caf50;
-            width: 0;
-            transition: width 0.5s;
-        }
-        .chat-assistant {
-            margin-top: 20px;
-            background: #f1f1f1;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .input-message {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .submit-button {
-            padding: 10px 15px;
-            background-color: #4e54c8;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .submit-button:hover {
-            background-color: #5a6fcd;
+        .animate {
+            animation: waterMotion 1.5s infinite;
         }
     </style>
 </head>
 <body>
-    <div class="portal">
-        <h1>Welcome to Wisp Command Portal</h1>
-        <div class="timer" id="timer">Timer: <span id="time">00:00:00</span></div>
-        <div class="progress">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="chat-assistant">
-            <h2>Chat Assistant</h2>
-            <input type="text" class="input-message" id="userMessage" placeholder="Type your message...">
-            <button class="submit-button" onclick="sendMessage()">Send</button>
-            <div id="chatOutput"></div>
+    <div class="container">
+        <div class="glass animate">
+            <h1>Welcome to Wisp Command Portal</h1>
+            <div id="countdown"></div>
+            <div id="yield-display"></div>
+            <div id="discipline-flow"></div>
         </div>
     </div>
-
     <script>
-        // Timer Logic
-        let timer = 0;
-        let interval;
-
-        function startTimer() {
-            interval = setInterval(() => {
-                timer++;
-                document.getElementById('time').innerText = new Date(timer * 1000).toISOString().substr(11, 8);
-                updateProgressBar();
-            }, 1000);
-        }
-
-        function updateProgressBar() {
-            let progressBar = document.getElementById('progressBar');
-            let progressPercentage = Math.min(timer / 100, 1) * 100;
-            progressBar.style.width = progressPercentage + '%';
-        }
-
-        startTimer();
-
-        // Chat Assistant Functionality
-        function sendMessage() {
-            let message = document.getElementById('userMessage').value;
-            document.getElementById('chatOutput').innerHTML += '<div>User: ' + message + '</div>';
-            document.getElementById('userMessage').value = '';
-            botResponse(message);
-        }
-
-        function botResponse(userMessage) {
-            let response = ''; // Placeholder for bot logic
-            if (userMessage) {
-                response = 'You said: ' + userMessage;
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const targetDate = new Date();
+            targetDate.setUTCHours(3, 0, 0, 0); // Friday 3 AM UTC
+            const now = new Date();
+            if (now.getUTCDay() > 5) {
+                targetDate.setDate(targetDate.getUTCDate() + 7); // Next week
             }
-            document.getElementById('chatOutput').innerHTML += '<div>WispBot: ' + response + '</div>';
+            const timeDiff = targetDate - now;
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            countdownElement.innerHTML = `Countdown to Friday 3 AM: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            setTimeout(startCountdown, 1000);
         }
+        startCountdown();
     </script>
 </body>
 </html>
