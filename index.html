@@ -4,19 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp Command Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #c9d6ff, #e2e2e2);
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .portal {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4e54c8;
+        }
+        .timer {
+            font-size: 24px;
+            color: #ffb300;
+            text-align: center;
+        }
+        .progress {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            height: 20px;
+            background: #4caf50;
+            width: 0;
+            transition: width 0.5s;
+        }
+        .chat-assistant {
+            margin-top: 20px;
+            background: #f1f1f1;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .input-message {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .submit-button {
+            padding: 10px 15px;
+            background-color: #4e54c8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #5a6fcd;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to the Wisp Command Portal</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Dashboard</h2>
-            <p>This is where you can manage your commands and view status.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Wisp Command Portal</p>
-    </footer>
+    <div class="portal">
+        <h1>Welcome to Wisp Command Portal</h1>
+        <div class="timer" id="timer">Timer: <span id="time">00:00:00</span></div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="chat-assistant">
+            <h2>Chat Assistant</h2>
+            <input type="text" class="input-message" id="userMessage" placeholder="Type your message...">
+            <button class="submit-button" onclick="sendMessage()">Send</button>
+            <div id="chatOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        // Timer Logic
+        let timer = 0;
+        let interval;
+
+        function startTimer() {
+            interval = setInterval(() => {
+                timer++;
+                document.getElementById('time').innerText = new Date(timer * 1000).toISOString().substr(11, 8);
+                updateProgressBar();
+            }, 1000);
+        }
+
+        function updateProgressBar() {
+            let progressBar = document.getElementById('progressBar');
+            let progressPercentage = Math.min(timer / 100, 1) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+
+        startTimer();
+
+        // Chat Assistant Functionality
+        function sendMessage() {
+            let message = document.getElementById('userMessage').value;
+            document.getElementById('chatOutput').innerHTML += '<div>User: ' + message + '</div>';
+            document.getElementById('userMessage').value = '';
+            botResponse(message);
+        }
+
+        function botResponse(userMessage) {
+            let response = ''; // Placeholder for bot logic
+            if (userMessage) {
+                response = 'You said: ' + userMessage;
+            }
+            document.getElementById('chatOutput').innerHTML += '<div>WispBot: ' + response + '</div>';
+        }
+    </script>
 </body>
 </html>
