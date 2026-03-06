@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp Command | Sentinel Flow</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -13,88 +13,109 @@
             --primary-glow: rgba(0, 212, 255, 0.3);
             --ink: #000814;
             --border: rgba(0, 212, 255, 0.1);
-            --surface: rgba(2, 6, 23, 0.8);
+            --surface: rgba(2, 6, 23, 0.85);
         }
 
         .theme-gold { --primary: #D4AF37; --primary-glow: rgba(212, 175, 55, 0.3); --border: rgba(212, 175, 55, 0.2); }
         .theme-emerald { --primary: #10b981; --primary-glow: rgba(16, 185, 129, 0.3); --border: rgba(16, 185, 129, 0.2); }
         .theme-ruby { --primary: #f43f5e; --primary-glow: rgba(244, 63, 94, 0.3); --border: rgba(244, 63, 94, 0.2); }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.5s ease; }
-        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: color 0.6s, border 0.6s, background 0.6s; }
+        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; overflow-x: hidden; min-height: 100vh; }
         
-        /* News Ticker */
-        .news-wrap { width: 100%; background: #000; border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 10px 0; z-index: 2000; position: sticky; top: 0; }
-        .news-content { display: inline-block; padding-left: 100%; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--primary); letter-spacing: 2px; animation: scroll 25s linear infinite; }
+        /* News Ticker Restored */
+        .news-wrap { width: 100%; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 12px 0; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .news-content { display: inline-block; padding-left: 100%; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--primary); letter-spacing: 3px; animation: scroll 30s linear infinite; text-transform: uppercase; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        .layout { max-width: 600px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .sub-tag { font-size: 9px; letter-spacing: 3px; opacity: 0.6; text-transform: uppercase; font-weight: 700; }
+        .layout { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         
-        .btn-fluid { width: 100%; padding: 18px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; background: var(--primary); color: #000; text-transform: uppercase; letter-spacing: 2px; }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; }
+        /* Glass Cards */
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 30px; backdrop-filter: blur(25px); margin-bottom: 25px; }
+        .sub-tag { font-size: 9px; letter-spacing: 4px; opacity: 0.5; text-transform: uppercase; font-weight: 700; }
+        
+        /* Stats Grid Restored */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 20px; text-align: center; }
+        .stat-val { font-family: 'JetBrains Mono'; font-size: 1.5rem; color: #fff; margin-top: 5px; }
 
-        .comment-list { max-height: 250px; overflow-y: auto; margin: 15px 0; }
-        .comment-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 3px solid var(--primary); font-size: 13px; }
-        .comment-item small { display: block; font-size: 9px; opacity: 0.5; margin-top: 4px; }
+        .btn-fluid { width: 100%; padding: 22px; border-radius: 18px; font-weight: 700; cursor: pointer; border: none; background: var(--primary); color: #000; text-transform: uppercase; letter-spacing: 3px; font-size: 12px; box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; box-shadow: none; }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #000; border: 1px solid var(--primary); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
+        .comment-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 4px solid var(--primary); }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 30px; width: 100%; max-width: 450px; text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="news-wrap">
-        <div class="news-content" id="news-ticker">SYSTEM ONLINE • SECURE VENTURE PORTAL ACTIVE • NEW RECORDS RECORDED IN MARCH 2026</div>
+        <div class="news-content" id="news-ticker">COMMAND: ISMA & TARAKIB // INVEST-OUT ACTIVE • NEW VENTURE RECORDS RECORDED • SYSTEM OPTIMIZED</div>
     </div>
 
     <div class="layout">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <header class="nav-header">
             <div>
-                <h1 style="font-size: 14px; letter-spacing: 3px;">SCINTILLATING WISP</h1>
-                <div id="theme-label" class="sub-tag" style="color: var(--primary);">CYBER BLUE</div>
+                <h1 style="font-size: 18px; letter-spacing: 5px; font-weight: 700;">SCINTILLATING WISP</h1>
+                <p class="sub-tag">FLUID VENTURE PORTAL • MARCH 2026</p>
             </div>
-            <div class="sub-tag" style="color: #10b981;">● <span id="user-count">1</span> ONLINE</div>
+            <div style="text-align: right;">
+                <div id="theme-label" class="sub-tag" style="color: var(--primary); opacity: 1;">CYBER BLUE</div>
+                <div class="sub-tag" style="color: #34d399; opacity: 1; margin-top: 5px;">● <span id="user-count">1</span> ONLINE</div>
+            </div>
         </header>
 
-        <div class="card" style="text-align: center;">
-            <span class="sub-tag">Total Capital Secured</span>
-            <div style="font-family: 'JetBrains Mono'; font-size: 1.8rem; font-weight: 700; color: #fff; margin: 10px 0;">
-                KSH <span id="total-capital">1,450,200</span>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div><span class="sub-tag">Venture Pulse</span><div style="font-size: 2.5rem; font-weight: 700; color: var(--primary);">+6.84%</div></div>
+                <div style="text-align: right;"><span class="sub-tag">Total Capital Secured</span><div style="font-family: 'JetBrains Mono'; font-size: 1.2rem;" id="total-capital">1,450,200</div></div>
             </div>
-            <div style="height: 150px;"><canvas id="mainChart"></canvas></div>
+            <div style="height: 200px; margin-top: 20px;"><canvas id="mainChart"></canvas></div>
         </div>
 
-        <div class="card" style="text-align: center;">
-            <div id="p-status" class="sub-tag">Vault Secured</div>
-            <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 2rem; margin: 10px 0;">00:00:00</div>
+        <div class="stats-grid">
+            <div class="stat-box"><span class="sub-tag">Players</span><div class="stat-val">54</div></div>
+            <div class="stat-box"><span class="sub-tag">Skills</span><div class="stat-val">21</div></div>
+            <div class="stat-box"><span class="sub-tag">Giving</span><div class="stat-val">7</div></div>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 50px 30px;">
+            <div id="p-status" class="sub-tag" style="margin-bottom: 10px;">Vault Secured</div>
+            <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 300; letter-spacing: -2px; margin-bottom: 20px;">00:00:00</div>
             <button id="gate-btn" class="btn-fluid btn-locked">Locked</button>
         </div>
 
         <div class="card">
-            <span class="sub-tag">Community Live Feed</span>
-            <div class="comment-list" id="comment-list"></div>
-            <textarea id="com-input" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border); padding:10px; color:#fff; border-radius:8px; margin-bottom:10px;" placeholder="Message..." rows="2"></textarea>
-            <button class="btn-fluid" style="padding: 12px; font-size: 10px;" id="post-btn">SEND MESSAGE</button>
+            <span class="sub-tag">Community Insights</span>
+            <div id="comment-list" style="max-height: 300px; overflow-y: auto; margin: 20px 0;"></div>
+            <textarea id="com-input" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border); padding:15px; color:#fff; border-radius:15px; margin-bottom:15px; font-family:'Montserrat';" placeholder="Enter secure transmission..."></textarea>
+            <button class="btn-fluid" style="padding: 15px; font-size: 10px;" id="post-btn">Post Update</button>
         </div>
+
+        <footer style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between;">
+            <div class="sub-tag">Sentinel Support • 2026</div>
+            <div class="sub-tag" style="opacity: 1;">Ismailsalim240@gmail.com</div>
+        </footer>
     </div>
 
     <div class="modal" id="invest-modal">
         <div class="modal-content">
-            <span class="sub-tag" style="color: var(--primary);">Gateway</span>
-            <h2 style="margin: 20px 0;">MIN KSH. 100</h2>
-            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <span id="p-num" style="font-family:'JetBrains Mono'; font-weight:700;">0793837381</span>
-                <button id="copy-btn" style="background:var(--primary); border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">COPY</button>
+            <span class="sub-tag" style="color: var(--primary);">Secure Gateway</span>
+            <h2 style="margin: 25px 0; letter-spacing: 2px;">MIN KSH. 100+</h2>
+            <div style="background:rgba(255,255,255,0.05); border: 1px dashed var(--border); padding:20px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <span id="p-num" style="font-family:'JetBrains Mono'; font-weight:500; font-size: 1.2rem;">0793837381</span>
+                <button id="copy-btn" style="background:var(--primary); border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:700; font-size: 10px;">COPY</button>
             </div>
-            <button class="btn-fluid" id="close-modal">EXIT</button>
+            <button class="btn-fluid" id="close-modal">Close Portal</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, query, limitToLast, remove, update, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, onValue, query, limitToLast, remove, update, onDisconnect, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBsZi5aE0N78Xgxuy sGrlYT", 
@@ -110,7 +131,7 @@
         const db = getDatabase(app);
         const ADMIN_PASS = "2220";
 
-        // --- Presence ---
+        // --- Presence (Live Count) ---
         const conRef = ref(db, 'connections');
         onValue(ref(db, '.info/connected'), (snap) => {
             if(snap.val()) {
@@ -121,19 +142,12 @@
         });
         onValue(conRef, (snap) => document.getElementById('user-count').innerText = snap.size || 1);
 
-        // --- Capital Growth ---
-        let capital = 1450200;
-        setInterval(() => {
-            capital += Math.floor(Math.random() * 200);
-            document.getElementById('total-capital').innerText = capital.toLocaleString();
-        }, 5000);
-
-        // --- Comments & Admin ---
+        // --- Live Comments & Admin ---
         const comRef = ref(db, 'comments');
         document.getElementById('post-btn').onclick = () => {
             const val = document.getElementById('com-input').value;
             if(val.trim()){
-                push(comRef, { text: val, user: "User_"+Math.floor(Math.random()*999), verified: false });
+                push(comRef, { text: val, user: "Wisp_User_"+Math.floor(Math.random()*999), verified: false, time: serverTimestamp() });
                 document.getElementById('com-input').value = '';
             }
         };
@@ -146,7 +160,8 @@
                 const id = s.key;
                 const div = document.createElement('div');
                 div.className = 'comment-item';
-                div.innerHTML = `${d.text} <small>${d.user} ${d.verified ? '<span style="color:var(--primary)">☑</span>':''} • Admin</small>`;
+                div.style.cursor = "pointer";
+                div.innerHTML = `${d.text} <small>${d.user} ${d.verified ? '<span style="color:var(--primary)">☑</span>':''} • Admin Tap</small>`;
                 div.onclick = () => {
                     const act = prompt("Action: 'D' (Delete) or 'V' (Verify)");
                     const p = prompt("Password:");
@@ -159,7 +174,7 @@
             });
         });
 
-        // --- Interface ---
+        // --- Dashboard Logic (Clock/Status/Themes) ---
         setInterval(() => {
             const h = new Date().getHours();
             const b = document.getElementById('gate-btn');
@@ -167,15 +182,15 @@
             const active = (h >= 3 && h < 10) || (h >= 15 && h < 22);
             document.getElementById('clock').innerText = active ? "LIVE" : "LOCKED";
             if(active){
-                b.className = "btn-fluid"; b.innerText = "Initialize Flow";
-                s.innerText = "Portal Open"; s.style.color = "#10b981";
+                b.className = "btn-fluid"; b.innerText = (h < 12) ? "Initialize In-Flow" : "Initialize Out-Flow";
+                s.innerText = active ? "Invest Open" : "Portal Active"; s.style.color = "#10b981";
             } else {
                 b.className = "btn-fluid btn-locked"; b.innerText = "Locked";
                 s.innerText = "Vault Secured"; s.style.color = "";
             }
         }, 1000);
 
-        const themes = [{c:'', l:'CYBER BLUE'}, {c:'theme-gold', l:'GOLD'}, {c:'theme-emerald', l:'EMERALD'}, {c:'theme-ruby', l:'RUBY'}];
+        const themes = [{c:'', l:'CYBER BLUE'}, {c:'theme-gold', l:'GOLD LUXE'}, {c:'theme-emerald', l:'EMERALD'}, {c:'theme-ruby', l:'RUBY'}];
         let tIdx = 0;
         setInterval(() => {
             document.body.classList.remove(...themes.map(t=>t.c).filter(c=>c));
@@ -184,12 +199,13 @@
             document.getElementById('theme-label').innerText = themes[tIdx].l;
         }, 60000);
 
+        // UI Controls
         document.getElementById('gate-btn').onclick = () => { if(!document.getElementById('gate-btn').classList.contains('btn-locked')) document.getElementById('invest-modal').style.display='flex'; };
         document.getElementById('close-modal').onclick = () => document.getElementById('invest-modal').style.display='none';
         document.getElementById('copy-btn').onclick = (e) => { navigator.clipboard.writeText("0793837381"); e.target.innerText="DONE"; setTimeout(()=>e.target.innerText="COPY", 2000); };
 
         const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, { type: 'line', data: { labels: [1,2,3,4,5,6], datasets: [{ data: [4,5,4.2,6,5.5,6.8], borderColor: '#00d4ff', tension: 0.4, fill: true, backgroundColor: 'rgba(0,212,255,0.05)' }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } });
+        new Chart(ctx, { type: 'line', data: { labels: [1,2,3,4,5,6,7], datasets: [{ data: [4, 4.8, 4.3, 5.2, 6.5, 6, 6.84], borderColor: '#00d4ff', tension: 0.4, fill: true, backgroundColor: 'rgba(0,212,255,0.05)' }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } });
     </script>
 </body>
 </html>
