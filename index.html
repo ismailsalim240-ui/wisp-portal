@@ -1752,3 +1752,128 @@
     writeToTerm("Liquidity Matrix: Scanned 64 pools. Status: DEEP.");
     writeToTerm("Sync: Local Nairobi Node latency optimized to 12ms.");
 </script>
+<style>
+    /* --- DISBURSEMENT & GOVERNANCE VISUALS --- */
+    .disbursement-timeline {
+        position: relative;
+        padding-left: 30px;
+        border-left: 1px solid var(--border);
+        margin-top: 20px;
+    }
+    .disbursement-node {
+        position: relative;
+        margin-bottom: 25px;
+    }
+    .disbursement-node::before {
+        content: '';
+        position: absolute;
+        left: -35px; top: 0;
+        width: 10px; height: 100%;
+        background: var(--gold);
+        opacity: 0.1;
+    }
+    .disbursement-node::after {
+        content: '●';
+        position: absolute;
+        left: -34px; top: 0;
+        color: var(--gold);
+        font-size: 14px;
+    }
+
+    .gov-pill-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    .gov-pill {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 9px;
+        font-family: 'JetBrains Mono';
+        color: var(--text-dim);
+    }
+    .gov-pill.signed { border-color: #34d399; color: #34d399; }
+
+    .uptime-matrix {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 3px;
+        margin-top: 15px;
+    }
+    .uptime-cell { height: 10px; border-radius: 1px; }
+    .up-active { background: #34d399; }
+    .up-warning { background: var(--gold); opacity: 0.5; }
+</style>
+
+<script>
+    // --- INJECTING DISBURSEMENT TRACKER INTO ASSETS TAB ---
+    const assetsDisburse = document.querySelector('#assets');
+    const disburseModule = document.createElement('div');
+    disburseModule.className = 'module';
+    disburseModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Zakat & Purification Disbursement</span>
+            <span style="color:var(--gold); font-size:9px;">STATUS: VERIFIED</span>
+        </div>
+        <div class="disbursement-timeline">
+            <div class="disbursement-node">
+                <span style="font-size:10px; color:var(--gold); display:block;">COMMUNITY_EDUCATION_KE</span>
+                <span style="font-size:8px; opacity:0.5;">0.45 XAU // TXN: 0x92f...A1</span>
+            </div>
+            <div class="disbursement-node">
+                <span style="font-size:10px; color:var(--gold); display:block;">HEALTH_EQUITY_BLOCK</span>
+                <span style="font-size:8px; opacity:0.5;">0.12 XAU // TXN: 0x11b...C8</span>
+            </div>
+        </div>
+    `;
+    assetsDisburse.appendChild(disburseModule);
+
+    // --- INJECTING GOVERNANCE PANEL INTO COMMAND TAB ---
+    const commandGov = document.querySelector('#command');
+    const govModule = document.createElement('div');
+    govModule.className = 'module';
+    govModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Multi-Signature Governance Panel</span></div>
+        <p style="font-size:9px; opacity:0.6;">Current Directive: ASSET_ALLOC_REBALANCE_Q1</p>
+        <div class="gov-pill-container">
+            <div class="gov-pill signed">● OPERATOR_VERIFIED</div>
+            <div class="gov-pill signed">● SHARIA_AUDIT_PASS</div>
+            <div class="gov-pill">● TREASURY_VOTE_PENDING</div>
+        </div>
+        <div style="margin-top:20px;">
+            <div style="display:flex; justify-content:space-between; font-size:10px;">
+                <span>QUORUM PROGRESS</span><span>66%</span>
+            </div>
+            <div class="liquidity-bar"><div class="liquidity-fill" style="width:66%;"></div></div>
+        </div>
+    `;
+    commandGov.insertBefore(govModule, commandGov.firstChild);
+
+    // --- INJECTING UPTIME MATRIX INTO SIDEBAR ---
+    const sidebarUp = document.querySelector('.intel-column');
+    const upModule = document.createElement('div');
+    upModule.className = 'module';
+    upModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Wisp Cloud Node Health (30D)</span></div>
+        <div class="uptime-matrix" id="uptime-grid"></div>
+        <div style="display:flex; justify-content:space-between; font-size:8px; margin-top:8px; opacity:0.4;">
+            <span>30 DAYS AGO</span><span>TOTAL: 99.98%</span>
+        </div>
+    `;
+    sidebarUp.appendChild(upModule);
+
+    const upGrid = document.getElementById('uptime-grid');
+    for(let i=0; i<36; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'uptime-cell ' + (Math.random() > 0.05 ? 'up-active' : 'up-warning');
+        upGrid.appendChild(cell);
+    }
+
+    // Terminal Expansion
+    writeToTerm("Disbursement Engine [PHASE_14] active.");
+    writeToTerm("Governance: Quorum detected. Directive 0x44 in processing.");
+    writeToTerm("Uptime: Global node availability validated at 99.98%.");
+</script>
