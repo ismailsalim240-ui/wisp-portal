@@ -10,7 +10,7 @@
 ### Setup Instructions
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ismailsalim240-ui/wisp-portal.git
+   git clone https://github.com/ismah-ui/wisp-portal.git
    ```
 2. Navigate into the project directory:
    ```bash
