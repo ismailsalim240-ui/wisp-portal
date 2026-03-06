@@ -650,3 +650,117 @@
     writeToTerm("Moral Calculator: Analyzing Halal equity pools...");
     writeToTerm("Security: Scan cycle complete. 0 threats detected.");
 </script>
+<style>
+    /* --- DATA VISUALIZATION ENGINE --- */
+    .heatmap-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 5px;
+        margin-top: 20px;
+    }
+    .heat-cell {
+        height: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+    .heat-cell:hover { background: var(--gold); transform: scale(1.2); z-index: 10; }
+    
+    .data-stream-container {
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        background: rgba(0,0,0,0.5);
+        border-radius: 15px;
+        padding: 15px;
+        font-family: 'JetBrains Mono';
+        font-size: 9px;
+        border: 1px solid var(--border);
+    }
+    
+    .stream-line {
+        color: var(--primary);
+        white-space: nowrap;
+        animation: stream-up 10s linear infinite;
+    }
+    
+    @keyframes stream-up {
+        0% { transform: translateY(100%); }
+        100% { transform: translateY(-100%); }
+    }
+
+    .matrix-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+</style>
+
+<script>
+    // --- INJECTING SYSTEM HEATMAP INTO PULSE TAB ---
+    const pulseTarget = document.querySelector('#pulse');
+    const heatmapModule = document.createElement('div');
+    heatmapModule.className = 'module';
+    heatmapModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Compute Resource Heatmap</span>
+            <span style="font-size:9px; color:var(--text-dim);">LAST 24H ACTIVITY</span>
+        </div>
+        <div class="heatmap-grid" id="heatmap-container"></div>
+        <p style="font-size:9px; opacity:0.4; margin-top:15px; text-align:right;">Node: WISP-ALPHA-01 // Uptime: 100%</p>
+    `;
+    pulseTarget.appendChild(heatmapModule);
+
+    // Generate 48 cells for the heatmap
+    const heatContainer = document.getElementById('heatmap-container');
+    for(let i=0; i<48; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        // Randomize initial intensity
+        const opacity = Math.random() * 0.6 + 0.1;
+        cell.style.background = `rgba(0, 212, 255, ${opacity})`;
+        heatContainer.appendChild(cell);
+    }
+
+    // --- INJECTING DATA STREAMER INTO SIDEBAR ---
+    const intelTarget = document.querySelector('.intel-column');
+    const streamModule = document.createElement('div');
+    streamModule.className = 'module';
+    streamModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Live Uplink Stream</span></div>
+        <div class="data-stream-container">
+            <div class="stream-line">
+                >> RECV: 0x4F22 - CRYPTO_SHARIA_V_AUDIT<br>
+                >> SEND: ACK_PORTAL_UPTIME_99<br>
+                >> SYNC: RTDB_FIREBASE_CONNECTED<br>
+                >> AUTH: USER_COMMANDER_VERIFIED<br>
+                >> ENCR: AES_256_GCM_PROTOCOL<br>
+                >> GEO: 1.2921° S, 36.8219° E<br>
+                >> STAT: RIBBA_PERCENTAGE_ZERO<br>
+                >> PUSH: LOGS_COMMIT_772A<br>
+            </div>
+        </div>
+    `;
+    intelTarget.appendChild(streamModule);
+
+    // --- INJECTING RESOURCE MATRIX INTO ASSETS TAB ---
+    const assetsTarget = document.querySelector('#assets');
+    const matrixModule = document.createElement('div');
+    matrixModule.className = 'module';
+    matrixModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Resource Allocation Matrix</span></div>
+        <div style="margin-top:20px;">
+            <div class="matrix-row"><span>ALLOCATED_CAPITAL</span><span style="color:var(--gold);">$1,400,000.00</span></div>
+            <div class="matrix-row"><span>OPERATIONAL_BURN</span><span style="color:var(--danger);">$0.00</span></div>
+            <div class="matrix-row"><span>RISK_QUOTIENT</span><span style="color:var(--primary);">MINIMAL</span></div>
+            <div class="matrix-row"><span>SHARIA_SCORE</span><span style="color:#34d399;">100/100</span></div>
+        </div>
+    `;
+    assetsTarget.insertBefore(matrixModule, assetsTarget.firstChild);
+
+    // Final Terminal Updates
+    writeToTerm("Neural Oversight [PHASE_5] active.");
+    writeToTerm("Heatmap: Processing node activity metadata...");
+    writeToTerm("Stream: Continuous encrypted packet inspection running.");
+</script>
