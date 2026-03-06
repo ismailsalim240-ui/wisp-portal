@@ -4394,3 +4394,88 @@ setInterval(() => {
     const fakeAmt = (Math.random() * 5000).toFixed(0);
     simulateMpesaCallback(fakeReceipt, fakeAmt);
 }, 120000);
+/* ==================== PHASE 34: THE DARAJA API ORCHESTRATOR ==================== */
+
+// --- 1. THE STK PUSH (LIPA NA M-PESA ONLINE) ---
+// This function simulates the Express Request (NI-X)
+function initiateSTKPush(amount, phone) {
+    const checkoutID = "ws_CO_" + Math.random().toString(36).substring(2, 12).toUpperCase();
+    
+    writeToTerm(`[DARAJA] POST /mpesa/stkpush/v1/processrequest`, "info");
+    writeToTerm(`[AUTH] Generating OAuth Access Token... [SUCCESS]`, "success");
+    
+    // The Exact Payload Safaricom's API expects
+    const stkPayload = {
+        "BusinessShortCode": "592031",
+        "Password": "MTc0Mzc5YmZiM2...[ENCRYPTED]",
+        "Timestamp": "20240520103005",
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": amount,
+        "PartyA": phone,
+        "PartyB": "592031",
+        "PhoneNumber": phone,
+        "CallBackURL": "https://wisp.sovereign/api/callback",
+        "AccountReference": "WISP_GOLD_VAULT",
+        "TransactionDesc": "Gold Purchase"
+    };
+
+    console.log("DARAJA_STK_PAYLOAD:", stkPayload);
+
+    // Simulate the phone vibration/PIN prompt
+    setTimeout(() => {
+        writeToTerm(`[STK] Push Sent to ${phone}. Waiting for User PIN...`, "warning");
+    }, 1500);
+
+    // Simulate the Successful Callback from Safaricom
+    setTimeout(() => {
+        const receipt = "R" + Math.random().toString(36).substring(2, 9).toUpperCase();
+        writeToTerm(`[CALLBACK] ResultCode: 0 (Success)`, "success");
+        writeToTerm(`[CALLBACK] Receipt: ${receipt} | Amount: KES ${amount}`, "success");
+        
+        // Final Gold Conversion Logic
+        const xauGained = (amount / 8421000).toFixed(6);
+        writeToTerm(`[VAULT] Crediting ${xauGained} XAU to Sovereign Ledger.`, "gold");
+        
+        alert(`M-PESA Confirmed! ${receipt} Received. Your Gold Vault has been updated.`);
+    }, 7000);
+}
+
+// --- 2. THE B2C (BUSINESS TO CONSUMER) WITHDRAWAL ---
+// This is the "Liquidation" flow where the system sends money TO the user
+function initiateB2CWithdrawal(amount, phone) {
+    const conversationID = "AG_" + Math.random().toString(36).substring(2, 10).toUpperCase();
+    
+    writeToTerm(`[DARAJA] POST /mpesa/b2c/v1/paymentrequest`, "warning");
+    writeToTerm(`[VAULT] Checking Asset Collateral... [VERIFIED]`, "success");
+
+    const b2cPayload = {
+        "InitiatorName": "WISP_ADMIN",
+        "SecurityCredential": "enc_...[SECURE]",
+        "CommandID": "BusinessPayment",
+        "Amount": amount,
+        "PartyA": "592031",
+        "PartyB": phone,
+        "Remarks": "Liquidation of XAU Assets",
+        "QueueTimeOutURL": "https://wisp.sovereign/timeout",
+        "ResultURL": "https://wisp.sovereign/result",
+        "Occassion": "Sovereign Withdrawal"
+    };
+
+    console.log("DARAJA_B2C_PAYLOAD:", b2cPayload);
+
+    setTimeout(() => {
+        writeToTerm(`[B2C] Originating Funds from Wisp Float...`, "info");
+    }, 2000);
+
+    setTimeout(() => {
+        writeToTerm(`[B2C] Payment Dispatched to ${phone}.`, "success");
+        writeToTerm(`[B2C] ConversationID: ${conversationID}`, "info");
+        
+        // Simulate the SMS sound/notification
+        writeToTerm(`[SYSTEM] User SMS: "Confirmed. KES ${amount} received from WISP_SOVEREIGN."`, "success");
+        
+        alert(`Withdrawal Successful. KES ${amount} has been sent to your M-PESA.`);
+    }, 5000);
+}
+
+/* ============================================================================== */
