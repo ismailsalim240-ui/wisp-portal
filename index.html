@@ -764,3 +764,126 @@
     writeToTerm("Heatmap: Processing node activity metadata...");
     writeToTerm("Stream: Continuous encrypted packet inspection running.");
 </script>
+<style>
+    /* --- TRAFFIC & YIELD VISUALIZATIONS --- */
+    .traffic-monitor {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        height: 100px;
+        margin-top: 25px;
+        padding: 10px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 12px;
+    }
+    
+    .traffic-bar {
+        flex: 1;
+        background: var(--primary);
+        opacity: 0.3;
+        border-radius: 2px 2px 0 0;
+        transition: height 0.5s ease;
+    }
+    
+    .yield-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .yield-box {
+        border: 1px solid var(--border);
+        padding: 20px;
+        border-radius: 20px;
+        background: linear-gradient(145deg, rgba(255,255,255,0.02), transparent);
+    }
+
+    .pulse-dot {
+        width: 6px;
+        height: 6px;
+        background: #34d399;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+        box-shadow: 0 0 8px #34d399;
+        animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.5; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+</style>
+
+<script>
+    // --- INJECTING TRAFFIC INTERCEPTOR INTO PULSE TAB ---
+    const pulseCitadel = document.querySelector('#pulse');
+    const trafficModule = document.createElement('div');
+    trafficModule.className = 'module';
+    trafficModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Global Packet Traffic Interceptor</span>
+            <span style="font-size:9px; color:var(--primary);">LIVE_BITRATE: 4.2 Gbps</span>
+        </div>
+        <div class="traffic-monitor" id="bar-container"></div>
+        <div style="display:flex; justify-content:space-between; font-size:8px; margin-top:10px; opacity:0.5; font-family:'JetBrains Mono';">
+            <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:59</span>
+        </div>
+    `;
+    pulseCitadel.appendChild(trafficModule);
+
+    // Dynamic Bar Generation
+    const barContainer = document.getElementById('bar-container');
+    for(let i=0; i<24; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'traffic-bar';
+        bar.style.height = (Math.random() * 80 + 20) + '%';
+        barContainer.appendChild(bar);
+    }
+
+    // --- INJECTING YIELD FORECASTER INTO COMMAND TAB ---
+    const commandCitadel = document.querySelector('#command');
+    const yieldModule = document.createElement('div');
+    yieldModule.className = 'module';
+    yieldModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Ethical Yield Forecasting (Musharakah)</span>
+        </div>
+        <div class="yield-grid">
+            <div class="yield-box">
+                <span style="font-size:9px; opacity:0.5; display:block;">EST. ANNUAL ROI</span>
+                <span style="font-size:22px; font-weight:900; color:var(--gold);">14.2%</span>
+            </div>
+            <div class="yield-box">
+                <span style="font-size:9px; opacity:0.5; display:block;">RISK WEIGHT</span>
+                <span style="font-size:22px; font-weight:900; color:var(--primary);">LOW</span>
+            </div>
+        </div>
+        <div style="margin-top:25px; padding:15px; background:rgba(255,255,255,0.02); border-radius:12px; font-size:10px; line-height:1.6;">
+            <span class="pulse-dot"></span> <span style="opacity:0.7;">System re-calculating equitable profit distribution based on latest asset performance...</span>
+        </div>
+    `;
+    commandCitadel.appendChild(yieldModule);
+
+    // --- SYSTEM INTEGRITY OVERLAY (SIDEBAR) ---
+    const sidebarCitadel = document.querySelector('.intel-column');
+    const integrityModule = document.createElement('div');
+    integrityModule.className = 'module';
+    integrityModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Kernel Integrity Pulse</span></div>
+        <div style="font-family:'JetBrains Mono'; font-size:10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>FS_ENCRYPTION</span><span style="color:#34d399">[VERIFIED]</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>RIBBA_SCANNER</span><span style="color:#34d399">[CLEAN]</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>AUTH_HANDSHAKE</span><span style="color:#34d399">[SECURE]</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>HALAL_COMPLIANCE</span><span style="color:var(--gold)">[CERTIFIED]</span></div>
+        </div>
+    `;
+    sidebarCitadel.appendChild(integrityModule);
+
+    // Terminal Bootstrapper Expansion
+    writeToTerm("Citadel Protocols [PHASE_6] operational.");
+    writeToTerm("Traffic Interceptor: Mapping global egress points...");
+    writeToTerm("Yield Engine: Musharakah equity models updated.");
+</script>
