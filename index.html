@@ -1,896 +1,178 @@
-Wisp Command Portal
-Code assistant
-Gemini 3 Flash Preview
-Ran for 283s
-
-summarize_auto
-Action history
-chevron_right
-Here are key actions taken for the app:
-
-edit
-Edited 4 files
-src/index.css
-check_circle
-src/App.tsx
-check_circle
-server.ts
-check_circle
-metadata.json
-check_circle
-build
-Built
-I have transformed the Wisp Command Portal into a sophisticated, ethically-aligned venture architecture that strictly adheres to Islamic business principles while introducing a serene, "silent water" aesthetic.
-Key Refinements:
-Ethical Terminology & Architecture:
-Replaced all references to "trading" with Investment, Venture, and Business.
-Renamed "Market Pulse" to Venture Pulse, reflecting a focus on real-world value rather than speculative volatility.
-Updated the Operational Tasks to include critical ethical checks such as "Verify Sharia Compliance" and "Secure Ribba-Free Reserve."
-Zero-Ribba Commitment:
-Implemented a dedicated Ethical Business Charter in the Config tab. This section clearly articulates the platform's stance against Ribba (interest), emphasizing risk-sharing equity and moral capital allocation.
-The Venture Performance module now features a "Ribba-Free Certified" badge, reinforcing the platform's integrity.
-Islamic Intelligence Module:
-The AI Intelligence (v4.0-PRO) has been re-programmed with a deep understanding of Islamic business ethics. It now prioritizes moral integrity, sustainability, and interest-free financial advice in its interactions with you.
-"Silent Water" Aesthetic:
-Interactive Ripple Effect: The entire interface now responds to your presence. As you move your cursor, a subtle, glowing ripple follows, mimicking the surface of silent, undisturbed water.
-Atmospheric Glow: Introduced slow-pulsing radial glows and a "water-drift" background animation that creates a sense of deep, calm immersion.
-Refined Glassmorphism: Cards now feature a more "liquid" blur and soft gold highlights, enhancing the premium, serene feel of the portal.
-Enhanced Configuration:
-Added an Investment Style selector in the Config tab, allowing you to define your approach as "Long-term," "Ethical Growth," or "Venture."
-The portal is now a sanctuary of ethical excellence, designed to facilitate growth that is both prosperous and principled. Salam, Operator. Management standing by.
-Checkpoint
-Provide me the full code of this website.
-Gemini 3 Flash Preview
-Ran for 149s
-
-summarize_auto
-Action history
-chevron_right
-I'll provide the remaining parts of the code. Since the previous response was quite long, I've broken the rest into the following sections.
-1. src/App.tsx (Remaining Part)
-Continuing from the chat input section:
-code
-Tsx
-<div className="flex items-center gap-3 text-gold/60 text-[9px] tracking-[0.4em] uppercase font-black px-4">
-                  <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '200ms' }} />
-                    <div className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '400ms' }} />
-                  </div>
-                  Synchronizing
-                </div>
-              )}
-            </div>
-
-            <div className="p-6 bg-white/[0.02] border-t border-white/5 flex gap-3">
-              <input 
-                type="text" 
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Enter command..."
-                className="flex-1 bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-4 text-[11px] text-white placeholder:text-white/10 focus:outline-none focus:border-gold/40 transition-all"
-              />
-              <button 
-                onClick={handleSendMessage}
-                disabled={isTyping}
-                className="w-12 h-12 bg-gold rounded-2xl flex items-center justify-center text-black hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
-              >
-                <Send size={18} />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-2. src/index.css
-The global styles that implement the "silent water" aesthetic and animations.
-code
-CSS
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-@import "tailwindcss";
-
-@theme {
-  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --color-gold: #D4AF37;
-  --color-deep-blue: #020617;
-  --color-ink: #050505;
-  --color-paper: #f5f5f4;
-}
-
-@layer base {
-  body {
-    @apply bg-ink text-slate-200 font-sans min-h-screen overflow-x-hidden selection:bg-gold/30;
-    background: 
-      radial-gradient(circle at 50% -20%, #1e293b 0%, #050505 80%),
-      radial-gradient(circle at 100% 100%, #1a1a1a 0%, transparent 40%),
-      radial-gradient(circle at 0% 0%, #111 0%, transparent 40%);
-    background-attachment: fixed;
-    position: relative;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  /* Silent Water Ripple Effect */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(212, 175, 55, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-    transition: background 0.3s ease;
-  }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.3; filter: blur(40px); }
-  50% { opacity: 0.6; filter: blur(60px); }
-}
-
-.glow-bg {
-  position: absolute;
-  width: 40vw;
-  height: 40vw;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: -1;
-  animation: glow-pulse 10s ease-in-out infinite;
-}
-
-@keyframes water-drift {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
-}
-
-.water-surface {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.01) 50%, transparent 55%);
-  background-size: 200% 200%;
-  animation: water-drift 20s linear infinite;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.glass-card {
-  @apply bg-white/[0.02] border border-white/[0.05] rounded-[2.5rem] p-8 backdrop-blur-3xl transition-all duration-700 relative overflow-hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.7s ease;
-}
-
-.glass-card:hover::before {
-  opacity: 1;
-}
-
-.glass-card:hover {
-  @apply border-gold/20 shadow-[0_0_80px_rgba(212,175,55,0.05)] translate-y-[-4px] bg-white/[0.04];
-}
-
-.ticker-marquee {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 60s linear infinite;
-}
-
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-@keyframes drift {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(2deg); }
-}
-
-.animate-drift {
-  animation: drift 8s ease-in-out infinite;
-}
-3. index.html
-The entry point for the browser.
-code
-Html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wisp Command Portal</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
-4. src/main.tsx
-Initializes the React application.
-code
-Tsx
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
-5. vite.config.ts
-Vite configuration with Tailwind CSS and environment variable handling.
-code
-TypeScript
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
-import {defineConfig, loadEnv} from 'vite';
-
-export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, '.', '');
-  return {
-    plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '.'),
-      },
-    },
-    server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
-    },
-  };
-});
-6. metadata.json
-Application metadata.
-code
-JSON
-{
-  "name": "Wisp Command Portal",
-  "description": "A sophisticated command center for personal growth, ethical venture monitoring, and Sharia-compliant AI-driven intelligence.",
-  "requestFramePermissions": []
-}
-7. .env.example
-Template for environment variables.
-code
-Env
-# GEMINI_API_KEY: Required for Gemini AI API calls.
-GEMINI_API_KEY="MY_GEMINI_API_KEY"
-
-# APP_URL: The URL where this applet is hosted.
-APP_URL="MY_APP_URL"
-This concludes the full source code for your application. The backend is built with Express and SQLite, and the frontend uses React with Tailwind CSS and Framer Motion for a premium, ethical venture experience.
-I need a full code like this one bellow...
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wisp | Command Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-:root {
---gold: #D4AF37;
---deep-blue: #020617;
---glass-bg: rgba(255, 255, 255, 0.03);
---glass-border: rgba(212, 175, 55, 0.15);
---text-main: #E2E8F0;
-}
-code
-Code
-* { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wisp | Command Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --deep-blue: #020617;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --text-main: #E2E8F0;
+        }
 
-    body {
-        background-color: var(--deep-blue);
-        color: var(--text-main);
-        font-family: 'Montserrat', sans-serif;
-        display: flex; flex-direction: column; align-items: center;
-        background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--deep-blue) 80%);
-        min-height: 100vh;
-        overflow-x: hidden;
-        scroll-behavior: smooth;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* --- Water Motion Keyframes --- */
-    @keyframes drift {
-        0% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-10px) rotate(0.5deg); }
-        100% { transform: translateY(0px) rotate(0deg); }
-    }
+        body {
+            background-color: var(--deep-blue);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            display: flex; flex-direction: column; align-items: center;
+            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--deep-blue) 80%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-    @keyframes ripple-glow {
-        0% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
-        50% { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
-        100% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
-    }
+        @keyframes drift {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
 
-    /* --- Layout --- */
-    .container { 
-        width: 92%; 
-        max-width: 460px; 
-        padding-bottom: 120px; 
-        opacity: 0; 
-        transform: translateY(30px); 
-        transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1); /* Liquid entrance */
-    }
-    
-    .container.visible { opacity: 1; transform: translateY(0); }
+        @keyframes ripple-glow {
+            0% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
+            50% { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
+            100% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
+        }
 
-    .glass-card { 
-        background: var(--glass-bg); 
-        border: 1px solid var(--glass-border); 
-        border-radius: 24px; 
-        padding: 25px; 
-        backdrop-filter: blur(20px); 
-        margin-bottom: 20px; 
-        transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        animation: drift 8s ease-in-out infinite; /* Constant slow water drift */
-    }
+        .container { 
+            width: 92%; 
+            max-width: 460px; 
+            padding-bottom: 120px; 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
+        
+        .container.visible { opacity: 1; transform: translateY(0); }
 
-    .glass-card:hover {
-        animation: ripple-glow 3s infinite;
-        transform: scale(1.01);
-    }
+        .glass-card { 
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 24px; 
+            padding: 25px; 
+            backdrop-filter: blur(20px); 
+            margin-bottom: 20px; 
+            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: drift 8s ease-in-out infinite; 
+        }
 
-    header { text-align: center; padding: 60px 20px 20px 20px; animation: drift 10s ease-in-out infinite; }
-    .logo-aura { font-size: 3.5rem; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); margin-bottom: 10px; }
+        .glass-card:hover {
+            animation: ripple-glow 3s infinite;
+            transform: scale(1.01);
+        }
 
-    /* --- Performance UI --- */
-    .yield-val { font-size: 2rem; font-weight: 700; color: #2ecc71; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
-    .timer-display { font-size: 2.2rem; font-weight: 300; margin: 15px 0; color: #fff; letter-spacing: 2px; }
-    
-    /* --- Buttons --- */
-    .action-btn { 
-        display: block; width: 100%; padding: 20px; border-radius: 15px; 
-        text-align: center; text-decoration: none; font-weight: 700; 
-        text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; 
-        transition: 0.5s; margin-top: 15px; border: none; cursor: pointer;
-    }
-    .btn-gold { background: var(--gold); color: #000; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
-    .btn-gold:active { transform: scale(0.96); opacity: 0.8; }
-    .btn-locked { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.2); pointer-events: none; border: 1px solid rgba(255,255,255,0.05); }
+        header { text-align: center; padding: 60px 20px 20px 20px; animation: drift 10s ease-in-out infinite; }
+        .logo-aura { font-size: 3.5rem; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); margin-bottom: 10px; }
 
-    /* --- Ticker --- */
-    .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.2); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; border-bottom: 1px solid var(--glass-border); }
-    .ticker { display: inline-block; white-space: nowrap; animation: marquee 40s linear infinite; opacity: 0.6; }
-    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .yield-val { font-size: 2rem; font-weight: 700; color: #2ecc71; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+        .timer-display { font-size: 2.2rem; font-weight: 300; margin: 15px 0; color: #fff; letter-spacing: 2px; }
+        
+        .action-btn { 
+            display: block; width: 100%; padding: 20px; border-radius: 15px; 
+            text-align: center; text-decoration: none; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; 
+            transition: 0.5s; margin-top: 15px; border: none; cursor: pointer;
+        }
+        .btn-gold { background: var(--gold); color: #000; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
+        .btn-locked { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.2); pointer-events: none; border: 1px solid rgba(255,255,255,0.05); }
 
-    /* --- Assistant --- */
-    .chat-trigger { 
-        position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; 
-        background: var(--gold); border-radius: 50%; display: flex; 
-        align-items: center; justify-content: center; font-size: 1.5rem; 
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000;
-        transition: 0.5s;
-    }
-    .chat-trigger:active { transform: scale(0.8); }
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.2); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; border-bottom: 1px solid var(--glass-border); }
+        .ticker { display: inline-block; white-space: nowrap; animation: marquee 40s linear infinite; opacity: 0.6; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-    .chat-window { 
-        display: none; position: fixed; bottom: 105px; right: 30px; 
-        width: 320px; background: #050a18; border: 1px solid var(--glass-border); 
-        border-radius: 25px; flex-direction: column; overflow: hidden; 
-        box-shadow: 0 25px 60px rgba(0,0,0,0.8); z-index: 1000;
-    }
-
-    /* --- Progress --- */
-    .progress-track { height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin: 15px 0; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
-
-</style>
+        .progress-track { height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    </style>
 </head>
 <body>
-code
-Code
-<div class="ticker-wrap">
-    <div class="ticker">
-        &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; MARKET PULSE: STABLE &nbsp;&nbsp; &bull; VENTURE ARCHITECTURE: ETHICAL &nbsp;&nbsp; &bull; ASSETS DEPLOYED &nbsp;&nbsp;
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; MARKET PULSE: STABLE &nbsp;&nbsp; &bull; VENTURE ARCHITECTURE: ETHICAL &nbsp;&nbsp; &bull; ASSETS DEPLOYED &nbsp;&nbsp;
+        </div>
     </div>
-</div>
 
-<header>
-    <div class="logo-aura">🌙</div>
-    <h1 style="letter-spacing: 8px; font-size: 1.1rem; opacity: 0.9;">WISP COMMAND</h1>
-</header>
+    <header>
+        <div class="logo-aura">🌙</div>
+        <h1 style="letter-spacing: 8px; font-size: 1.1rem; opacity: 0.9;">WISP COMMAND</h1>
+    </header>
 
-<div class="container" id="main-ui">
-    
-    <div class="glass-card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <div id="yield-display" class="yield-val">+12.8%</div>
-                <div style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5;">Weekly Growth</div>
+    <div class="container" id="main-ui">
+        <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div id="yield-display" class="yield-val">+12.8%</div>
+                    <div style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5;">Weekly Growth</div>
+                </div>
+                <div style="text-align: right; font-size: 0.65rem; line-height: 1.8;">
+                    <div style="color: var(--gold);">● AI INFRASTRUCTURE</div>
+                    <div style="opacity: 0.6;">● ETHICAL ASSETS</div>
+                </div>
             </div>
-            <div style="text-align: right; font-size: 0.65rem; line-height: 1.8;">
-                <div style="color: var(--gold);">● AI INFRASTRUCTURE</div>
-                <div style="opacity: 0.6;">● WEB ARCHITECTURE</div>
+        </div>
+
+        <div class="glass-card" style="text-align: center;">
+            <div id="status" style="font-size: 0.55rem; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px;">PORTAL SECURED</div>
+            <div id="timer" class="timer-display">0D 0H 0M 0S</div>
+            <div class="action-btn btn-locked" id="action-link">Portal Locked</div>
+        </div>
+
+        <div class="glass-card">
+            <div style="font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 15px; opacity: 0.7;">DAILY DISCIPLINE FLOW</div>
+            <div class="progress-track"><div id="p-bar" class="progress-fill"></div></div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">PRAYER</button>
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">SKILL</button>
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">GIVING</button>
             </div>
         </div>
     </div>
 
-    <div class="glass-card" style="text-align: center;">
-        <div id="status" style="font-size: 0.55rem; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px;">PORTAL SECURED</div>
-        <div id="timer" class="timer-display">0D 0H 0M 0S</div>
-        <div class="action-btn btn-locked" id="action-link">Portal Locked</div>
-    </div>
+    <footer style="text-align: center; padding: 40px 20px; font-size: 0.7rem; letter-spacing: 1px; opacity: 0.5; line-height: 2;">
+        <p>ismailsalim240@gmail.com</p>
+        <p>TEL: +254 [YOUR NUMBER]</p>
+        <p style="margin-top: 10px;">&copy; 2026 SCINTILLATING WISP</p>
+    </footer>
 
-    <div class="glass-card">
-        <div style="font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 15px; opacity: 0.7;">DAILY DISCIPLINE FLOW</div>
-        <div class="progress-track"><div id="p-bar" class="progress-fill"></div></div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-            <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">PRAYER</button>
-            <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">SKILL</button>
-            <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">GIVING</button>
-        </div>
-    </div>
+    <script>
+        // Fade in UI
+        window.onload = () => { setTimeout(() => { document.getElementById('main-ui').classList.add('visible'); }, 300); };
 
-</div>
-
-<div class="chat-trigger" onclick="toggleChat()">✨</div>
-<div id="chatWindow" class="chat-window">
-    <div style="background: var(--gold); color: #000; padding: 15px; font-weight: 700; font-size: 0.75rem; display: flex; justify-content: space-between;">
-        <span>INTELLIGENCE</span><span onclick="toggleChat()" style="cursor:pointer">×</span>
-    </div>
-    <div id="chatBody" style="padding: 20px; max-height: 300px; overflow-y: auto; font-size: 0.75rem;">
-        <div style="border-left: 2px solid var(--gold); padding: 10px; background: rgba(255,255,255,0.05); border-radius: 0 10px 10px 0;">Salam. Management standing by for your instructions.</div>
-    </div>
-</div>
-
-<footer>&copy; 2026 SCINTILLATING WISP</footer>
-
-<script>
-    // Liquid Reveal on Load
-    window.onload = () => {
-        setTimeout(() => {
-            document.getElementById('main-ui').classList.add('visible');
-        }, 300);
-    };
-
-    // Progress Math
-    let score = parseInt(localStorage.getItem('wisp-score') || 0);
-    function runProgress() {
-        score = (score >= 100) ? 0 : score + 11.2;
-        document.getElementById('p-bar').style.width = score + '%';
-        localStorage.setItem('wisp-score', score);
-    }
-    document.getElementById('p-bar').style.width = score + '%';
-
-    function toggleChat() {
-        const win = document.getElementById('chatWindow');
-        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    // Timer Logic
-    function refresh() {
-        const now = new Date();
-        const day = now.getDay(), hrs = now.getHours();
-        const btn = document.getElementById('action-link'), pill = document.getElementById('status'), timer = document.getElementById('timer');
-
-        if (day === 5 && hrs >= 3 && hrs < 10) {
-            pill.innerText = "WINDOW ACTIVE"; pill.style.color = "#2ecc71";
-            btn.className = "action-btn btn-gold"; btn.innerText = "INITIALIZE";
-            timer.innerText = "LIVE";
-        } else {
-            let next = new Date();
-            let dDays = (5 - now.getDay() + 7) % 7;
-            if(now.getDay() === 5 && now.getHours() >= 10) dDays = 7;
-            next.setDate(now.getDate() + dDays); next.setHours(3,0,0,0);
-            let ms = next - now;
-            let d = Math.floor(ms / 86400000), h = Math.floor((ms / 3600000) % 24), m = Math.floor((ms / 60000) % 60), s = Math.floor((ms / 1000) % 60);
-            timer.innerText = `${d}D ${h}H ${m}M ${s}S`;
+        // Progress Bar Math (Saves to your local browser)
+        let score = parseInt(localStorage.getItem('wisp-score') || 0);
+        function runProgress() {
+            score = (score >= 100) ? 0 : score + 11.2;
+            document.getElementById('p-bar').style.width = score + '%';
+            localStorage.setItem('wisp-score', score);
         }
-    }
-    setInterval(refresh, 1000); refresh();
-</script>
+        document.getElementById('p-bar').style.width = score + '%';
+
+        // Timer Logic
+        function refresh() {
+            const now = new Date();
+            const day = now.getDay(), hrs = now.getHours();
+            const btn = document.getElementById('action-link'), pill = document.getElementById('status'), timer = document.getElementById('timer');
+
+            if (day === 5 && hrs >= 3 && hrs < 10) {
+                pill.innerText = "WINDOW ACTIVE"; pill.style.color = "#2ecc71";
+                btn.className = "action-btn btn-gold"; btn.innerText = "INITIALIZE";
+                timer.innerText = "LIVE";
+            } else {
+                let next = new Date();
+                let dDays = (5 - now.getDay() + 7) % 7;
+                if(now.getDay() === 5 && now.getHours() >= 10) dDays = 7;
+                next.setDate(now.getDate() + dDays); next.setHours(3,0,0,0);
+                let ms = next - now;
+                let d = Math.floor(ms / 86400000), h = Math.floor((ms / 3600000) % 24), m = Math.floor((ms / 60000) % 60), s = Math.floor((ms / 1000) % 60);
+                timer.innerText = `${d}D ${h}H ${m}M ${s}S`;
+            }
+        }
+        setInterval(refresh, 1000); refresh();
+    </script>
 </body>
 </html>
-Gemini 3 Flash Preview
-Ran for 264s
-
-summarize_auto
-Action history
-chevron_right
-Here are key actions taken for the app:
-
-edit
-Edited 1 file
-src/index.css
-check_circle
-I have refined the application to perfectly match the aesthetic, layout, and "silent water" feel of your provided snippet, while maintaining the advanced AI and backend features we've built.
-1. src/App.tsx
-This version consolidates the UI into the elegant, single-column "Command" layout from your snippet, while keeping the Intelligence (Gemini) and Venture Pulse (Charts) integrated.
-code
-Tsx
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Moon, 
-  Sparkles, 
-  X, 
-  Send, 
-  TrendingUp, 
-  ShieldCheck, 
-  Zap,
-  Heart,
-  BookOpen,
-  MessageSquare,
-  Activity,
-  Globe,
-  Wallet
-} from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  ResponsiveContainer 
-} from 'recharts';
-
-// Initialize Gemini
-const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-
-export default function App() {
-  const [score, setScore] = useState(0);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'ai'; content: string }[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [timeLeft, setTimeLeft] = useState('0D 0H 0M 0S');
-  const [isWindowActive, setIsWindowActive] = useState(false);
-  const [ventureData, setVentureData] = useState<any[]>([]);
-  const chatBodyRef = useRef<HTMLDivElement>(null);
-
-  // Initial Data Fetch
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const statsRes = await fetch('/api/stats');
-        const stats = await statsRes.json();
-        setScore(stats.discipline_score);
-
-        const chatRes = await fetch('/api/chat');
-        const chat = await chatRes.json();
-        setMessages(chat.length > 0 ? chat : [{ role: 'ai', content: "Salam. Management standing by for your instructions." }]);
-
-        const pulseRes = await fetch('/api/venture-pulse?range=1H');
-        const pulseData = await pulseRes.json();
-        setVentureData(pulseData);
-      } catch (error) {
-        console.error("Sync error:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  // Timer Logic (Friday 3AM - 10AM Window)
-  useEffect(() => {
-    const refresh = () => {
-      const now = new Date();
-      const day = now.getDay(), hrs = now.getHours();
-
-      if (day === 5 && hrs >= 3 && hrs < 10) {
-        setIsWindowActive(true);
-        setTimeLeft('LIVE');
-      } else {
-        setIsWindowActive(false);
-        let next = new Date();
-        let dDays = (5 - now.getDay() + 7) % 7;
-        if (now.getDay() === 5 && now.getHours() >= 10) dDays = 7;
-        next.setDate(now.getDate() + dDays);
-        next.setHours(3, 0, 0, 0);
-        const ms = next.getTime() - now.getTime();
-        const d = Math.floor(ms / 86400000), h = Math.floor((ms / 3600000) % 24), m = Math.floor((ms / 60000) % 60), s = Math.floor((ms / 1000) % 60);
-        setTimeLeft(`${d}D ${h}H ${m}M ${s}S`);
-      }
-    };
-    const timer = setInterval(refresh, 1000);
-    refresh();
-    return () => clearInterval(timer);
-  }, []);
-
-  const runProgress = async () => {
-    const next = score >= 100 ? 0 : score + 11.2;
-    setScore(next);
-    await fetch('/api/stats', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ score: next })
-    });
-  };
-
-  const handleSendMessage = async () => {
-    if (!inputValue.trim() || isTyping) return;
-    const userText = inputValue.trim();
-    setMessages(prev => [...prev, { role: 'user', content: userText }]);
-    setInputValue('');
-    setIsTyping(true);
-
-    try {
-      await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: 'user', content: userText })
-      });
-
-      const response = await genAI.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [{ role: 'user', parts: [{ text: userText }] }],
-        config: {
-          systemInstruction: `You are Wisp Intelligence. Persona: Elite, mysterious, professional. Address user as "Operator". Strictly advocate for Ribba-free (interest-free) ethical business.`,
-        }
-      });
-
-      const aiText = response.text || "Sync error.";
-      setMessages(prev => [...prev, { role: 'ai', content: aiText }]);
-      await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: 'ai', content: aiText })
-      });
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', content: "Connection failed." }]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center min-h-screen">
-      {/* Ticker */}
-      <div className="ticker-wrap">
-        <div className="ticker">
-          &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; VENTURE PULSE: STABLE &nbsp;&nbsp; &bull; VENTURE ARCHITECTURE: ETHICAL &nbsp;&nbsp; &bull; ASSETS DEPLOYED &nbsp;&nbsp; &bull; NO RIBBA PROTOCOL ACTIVE &nbsp;&nbsp;
-        </div>
-      </div>
-
-      {/* Header */}
-      <header className="text-center py-16">
-        <div className="text-7xl mb-4 drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">🌙</div>
-        <h1 className="tracking-[0.8em] text-lg font-bold opacity-90 uppercase">Wisp Command</h1>
-      </header>
-
-      {/* Main Container */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-        className="w-[92%] max-w-[460px] space-y-5 pb-32"
-      >
-        {/* Performance Card */}
-        <div className="glass-card">
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="text-4xl font-bold text-emerald-400 drop-shadow-[0_0_15px_rgba(46,204,113,0.3)]">+12.8%</div>
-              <div className="text-[9px] uppercase tracking-[0.2em] opacity-50 mt-1">Weekly Growth</div>
-            </div>
-            <div className="text-right text-[10px] space-y-1">
-              <div className="text-gold flex items-center justify-end gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                AI INFRASTRUCTURE
-              </div>
-              <div className="opacity-60 flex items-center justify-end gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                ETHICAL ASSETS
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Pulse Chart Card */}
-        <div className="glass-card h-48 p-4">
-          <div className="text-[9px] tracking-[0.3em] text-white/40 uppercase font-bold mb-4">Venture Pulse</div>
-          <ResponsiveContainer width="100%" height="80%">
-            <AreaChart data={ventureData}>
-              <defs>
-                <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <Tooltip 
-                contentStyle={{ background: '#050a18', border: '1px solid rgba(212,175,55,0.2)', borderRadius: '12px', fontSize: '10px' }}
-                itemStyle={{ color: '#D4AF37' }}
-              />
-              <Area type="monotone" dataKey="value" stroke="#D4AF37" strokeWidth={2} fill="url(#colorVal)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Timer Card */}
-        <div className="glass-card text-center">
-          <div className={cn("text-[9px] tracking-[0.3em] font-bold uppercase mb-2", isWindowActive ? "text-emerald-400" : "opacity-60")}>
-            {isWindowActive ? "WINDOW ACTIVE" : "PORTAL SECURED"}
-          </div>
-          <div className="text-4xl font-light tracking-widest my-4">{timeLeft}</div>
-          <button 
-            className={cn(
-              "w-full py-5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-500",
-              isWindowActive ? "bg-gold text-black shadow-lg" : "bg-white/5 text-white/20 pointer-events-none border border-white/5"
-            )}
-          >
-            {isWindowActive ? "Initialize" : "Portal Locked"}
-          </button>
-        </div>
-
-        {/* Discipline Card */}
-        <div className="glass-card">
-          <div className="text-[10px] tracking-[0.2em] opacity-70 mb-4 uppercase font-bold">Daily Discipline Flow</div>
-          <div className="progress-track">
-            <motion.div 
-              animate={{ width: `${score}%` }}
-              className="progress-fill" 
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            {[
-              { id: 'prayer', label: 'PRAYER', icon: Sparkles },
-              { id: 'skill', label: 'SKILL', icon: BookOpen },
-              { id: 'giving', label: 'GIVING', icon: Heart },
-            ].map((btn) => (
-              <button 
-                key={btn.id}
-                onClick={runProgress}
-                className="flex flex-col items-center gap-2 p-4 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-white/[0.05] transition-all"
-              >
-                <btn.icon size={14} className="text-gold/60" />
-                <span className="text-[8px] font-bold tracking-widest">{btn.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Floating Chat */}
-      <button 
-        onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-8 right-8 w-16 h-16 bg-gold rounded-full flex items-center justify-center shadow-2xl z-50 hover:scale-110 active:scale-90 transition-all"
-      >
-        <MessageSquare size={24} className="text-black" />
-      </button>
-
-      <AnimatePresence>
-        {isChatOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-28 right-8 w-80 bg-[#050a18] border border-white/10 rounded-[2rem] flex flex-col overflow-hidden shadow-2xl z-50"
-          >
-            <div className="bg-gold p-4 flex justify-between items-center">
-              <span className="text-[10px] font-bold text-black tracking-widest uppercase">Intelligence</span>
-              <button onClick={() => setIsChatOpen(false)}><X size={16} className="text-black" /></button>
-            </div>
-            <div ref={chatBodyRef} className="p-6 h-64 overflow-y-auto space-y-4 scrollbar-hide">
-              {messages.map((msg, i) => (
-                <div key={i} className={cn("p-3 rounded-2xl text-[11px] leading-relaxed", msg.role === 'user' ? "bg-gold/10 text-gold ml-4" : "bg-white/5 text-white/80 mr-4")}>
-                  {msg.content}
-                </div>
-              ))}
-              {isTyping && <div className="text-[9px] text-gold/40 animate-pulse uppercase tracking-widest">Syncing...</div>}
-            </div>
-            <div className="p-4 border-t border-white/5 flex gap-2">
-              <input 
-                type="text" 
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Command..."
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[11px] focus:outline-none focus:border-gold/40"
-              />
-              <button onClick={handleSendMessage} className="p-2 bg-gold rounded-xl text-black"><Send size={14} /></button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <footer className="pb-10 text-[9px] tracking-[0.4em] opacity-20 uppercase font-bold">
-        &copy; 2026 Scintillating Wisp
-      </footer>
-    </div>
-  );
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
-}
-2. server.ts
-The backend remains robust, ensuring that your "Discipline Flow" and "Intelligence" sessions are persisted in a real database.
-code
-TypeScript
-import express from "express";
-import { createServer as createViteServer } from "vite";
-import Database from "better-sqlite3";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const db = new Database("wisp.db");
-
-// Database Setup
-db.exec(`
-  CREATE TABLE IF NOT EXISTS stats (id INTEGER PRIMARY KEY, key TEXT UNIQUE, value TEXT);
-  CREATE TABLE IF NOT EXISTS chat_history (id INTEGER PRIMARY KEY, role TEXT, content TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);
-  INSERT OR IGNORE INTO stats (key, value) VALUES ('discipline_score', '0');
-`);
-
-async function startServer() {
-  const app = express();
-  app.use(express.json());
-
-  app.get("/api/stats", (req, res) => {
-    const score = db.prepare("SELECT value FROM stats WHERE key = 'discipline_score'").get() as any;
-    res.json({ discipline_score: parseFloat(score.value) });
-  });
-
-  app.post("/api/stats", (req, res) => {
-    db.prepare("UPDATE stats SET value = ? WHERE key = 'discipline_score'").run(req.body.score.toString());
-    res.json({ success: true });
-  });
-
-  app.get("/api/venture-pulse", (req, res) => {
-    const data = Array.from({ length: 20 }, (_, i) => ({
-      time: i,
-      value: 15 + Math.random() * 5
-    }));
-    res.json(data);
-  });
-
-  app.get("/api/chat", (req, res) => {
-    res.json(db.prepare("SELECT role, content FROM chat_history ORDER BY timestamp ASC").all());
-  });
-
-  app.post("/api/chat", (req, res) => {
-    db.prepare("INSERT INTO chat_history (role, content) VALUES (?, ?)").run(req.body.role, req.body.content);
-    res.json({ success: true });
-  });
-
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
-    app.use(vite.middlewares);
-  } else {
-    app.use(express.static(path.join(__dirname, "dist")));
-    app.get("*", (req, res) => res.sendFile(path.join(__dirname, "dist", "index.html")));
-  }
-
-  app.listen(3000, "0.0.0.0", () => console.log("Wisp Server Active"));
-}
-
-startServer();
