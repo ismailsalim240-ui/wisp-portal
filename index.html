@@ -1645,3 +1645,110 @@
     writeToTerm("Intelligence Scraper: 14 new data points ingested.");
     writeToTerm("Treasury: Zero-Debt status confirmed via independent audit.");
 </script>
+<style>
+    /* --- ALLOCATION WHEEL & DEPTH VISUALS --- */
+    .allocation-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 30px;
+        gap: 20px;
+    }
+    
+    .chart-svg {
+        transform: rotate(-90deg);
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+    }
+    
+    .chart-sector {
+        fill: none;
+        stroke-width: 8;
+        transition: stroke-width 0.3s, opacity 0.3s;
+        cursor: pointer;
+    }
+    .chart-sector:hover { stroke-width: 10; opacity: 1; }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 10px;
+        font-family: 'JetBrains Mono';
+    }
+    .color-box { width: 10px; height: 10px; border-radius: 2px; }
+
+    .depth-matrix {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 2px;
+        margin-top: 15px;
+    }
+    .depth-cell {
+        height: 12px;
+        background: #1e293b;
+        border-radius: 1px;
+    }
+    .depth-high { background: var(--gold); box-shadow: 0 0 5px var(--gold); }
+</style>
+
+<script>
+    // --- INJECTING ASSET WHEEL INTO ASSETS TAB ---
+    const assetsWheel = document.querySelector('#assets');
+    const wheelModule = document.createElement('div');
+    wheelModule.className = 'module';
+    wheelModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Asset Allocation Distribution</span>
+            <span style="color:var(--gold); font-size:9px;">TOTAL_VALUE: $4.2M</span>
+        </div>
+        <div class="allocation-container">
+            <svg width="150" height="150" class="chart-svg">
+                <circle cx="75" cy="75" r="60" class="chart-sector" stroke="#D4AF37" stroke-dasharray="264 377" />
+                <circle cx="75" cy="75" r="60" class="chart-sector" stroke="#00d4ff" stroke-dasharray="113 377" stroke-dashoffset="-264" />
+            </svg>
+            <div class="legend">
+                <div class="legend-item"><div class="color-box" style="background:#D4AF37;"></div> 70% PHYSICAL GOLD</div>
+                <div class="legend-item"><div class="color-box" style="background:#00d4ff;"></div> 30% TRADE EQUITY</div>
+            </div>
+        </div>
+    `;
+    assetsWheel.appendChild(wheelModule);
+
+    // --- INJECTING LIQUIDITY DEPTH INTO COMMAND ---
+    const commandDepth = document.querySelector('#command');
+    const depthModule = document.createElement('div');
+    depthModule.className = 'module';
+    depthModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Liquidity Pool Depth Matrix</span></div>
+        <div class="depth-matrix" id="depth-grid"></div>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px;">Monitoring Market Depth across 64 Decentralized Pools.</p>
+    `;
+    commandDepth.appendChild(depthModule);
+
+    const depthGrid = document.getElementById('depth-grid');
+    for(let i=0; i<64; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'depth-cell' + (Math.random() > 0.85 ? ' depth-high' : '');
+        depthGrid.appendChild(cell);
+    }
+
+    // --- INJECTING NODE LATENCY INTO SIDEBAR ---
+    const sidebarLat = document.querySelector('.intel-column');
+    const latModule = document.createElement('div');
+    latModule.className = 'module';
+    latModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Sync Latency</span></div>
+        <div style="font-family:'JetBrains Mono'; font-size:9px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>DXB-HUB</span><span style="color:#34d399">128ms</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>LND-ASSET</span><span style="color:#34d399">84ms</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>NBO-WISP</span><span style="color:var(--gold)">12ms</span></div>
+        </div>
+    `;
+    sidebarLat.appendChild(latModule);
+
+    // Terminal Expansion
+    writeToTerm("Asset Allocation [PHASE_13] rendered.");
+    writeToTerm("Liquidity Matrix: Scanned 64 pools. Status: DEEP.");
+    writeToTerm("Sync: Local Nairobi Node latency optimized to 12ms.");
+</script>
