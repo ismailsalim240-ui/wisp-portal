@@ -4360,3 +4360,37 @@
     writeToTerm("PERFORMANCE: 120 FPS target reached. Neural field stable.");
     writeToTerm("READY FOR DEPLOYMENT. STAND BY FOR COMMANDER HANDOVER.");
 </script>
+// --- M-PESA CALLBACK SIMULATOR (DARAJA API) ---
+function simulateMpesaCallback(receipt, amount) {
+    const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    
+    // Log the raw JSON callback (How Safaricom sends it)
+    const rawCallback = {
+        "Body": {
+            "stkCallback": {
+                "MerchantRequestID": "29115-3462058-1",
+                "CheckoutRequestID": "ws_CO_191220191020363925",
+                "ResultCode": 0,
+                "ResultDesc": "The service request is processed successfully.",
+                "CallbackMetadata": {
+                    "Item": [
+                        {"Name": "Amount", "Value": amount},
+                        {"Name": "MpesaReceiptNumber", "Value": receipt},
+                        {"Name": "TransactionDate", "Value": timestamp},
+                        {"Name": "PhoneNumber", "Value": 254700000000}
+                    ]
+                }
+            }
+        }
+    };
+
+    writeToTerm(`DARAJA_API: Received POST Callback for ${receipt}`, "success");
+    console.log("M-PESA_JSON_PAYLOAD:", rawCallback);
+}
+
+// Trigger a random callback every 2 minutes to show activity
+setInterval(() => {
+    const fakeReceipt = "QKJ" + Math.random().toString(36).substring(2, 9).toUpperCase();
+    const fakeAmt = (Math.random() * 5000).toFixed(0);
+    simulateMpesaCallback(fakeReceipt, fakeAmt);
+}, 120000);
