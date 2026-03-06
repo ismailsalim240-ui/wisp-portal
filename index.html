@@ -428,3 +428,107 @@
     writeToTerm("Extension Module [ASSET_SIM] loaded successfully.");
     writeToTerm("Ticker Engine [v2.4] online.");
 </script>
+<style>
+    /* --- MASSIVE ANIMATION LIBRARY (The 5,000-line Feel) --- */
+    @keyframes gold-pulse {
+        0% { box-shadow: 0 0 0 0px rgba(212, 175, 55, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+        100% { box-shadow: 0 0 0 0px rgba(212, 175, 55, 0); }
+    }
+    
+    @keyframes neon-flow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .shimmer-text {
+        background: linear-gradient(90deg, #64748b, #fff, #64748b);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: neon-flow 3s linear infinite;
+    }
+
+    .data-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        padding: 15px;
+        border-bottom: 1px solid var(--border);
+        font-size: 11px;
+        font-family: 'JetBrains Mono';
+        transition: 0.2s;
+    }
+    
+    .data-row:hover { background: rgba(255,255,255,0.05); color: var(--gold); }
+    
+    .status-tag {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 9px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .status-ok { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .status-pending { background: rgba(212, 175, 55, 0.2); color: var(--gold); }
+</style>
+
+<script>
+    // --- EXPANDING THE PROFILE TAB WITH A TRANSACTION LEDGER ---
+    const profileSection = document.querySelector('#profile');
+    const ledgerModule = document.createElement('div');
+    ledgerModule.className = 'module';
+    ledgerModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Sovereign Transaction Ledger</span>
+            <span class="shimmer-text">v2.0 SECURE</span>
+        </div>
+        <div style="margin-top:20px;">
+            <div class="data-row" style="opacity:0.5; font-weight:700;">
+                <span>TIMESTAMP</span><span>IDENTIFIER</span><span>STATUS</span>
+            </div>
+            <div class="data-row">
+                <span>07/03/26</span><span>UPLINK_ESTABLISHED_KE</span><span><span class="status-tag status-ok">ACTIVE</span></span>
+            </div>
+            <div class="data-row">
+                <span>06/03/26</span><span>FIREBASE_SYNC_PROTOCOL</span><span><span class="status-tag status-ok">SUCCESS</span></span>
+            </div>
+            <div class="data-row">
+                <span>05/03/26</span><span>ZERO_RIBBA_AUDIT</span><span><span class="status-tag status-ok">VERIFIED</span></span>
+            </div>
+            <div class="data-row">
+                <span>04/03/26</span><span>ASSET_POOL_REBALANCE</span><span><span class="status-tag status-pending">PENDING</span></span>
+            </div>
+        </div>
+    `;
+    profileSection.appendChild(ledgerModule);
+
+    // --- EXPANDING THE PULSE TAB WITH A GLOBAL INFRASTRUCTURE MAP ---
+    const pulseSection = document.querySelector('#pulse');
+    const infraModule = document.createElement('div');
+    infraModule.className = 'module';
+    infraModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Infrastructure Map</span></div>
+        <div style="height:200px; background: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg') no-repeat center; background-size: contain; opacity: 0.1; filter: invert(1); margin: 20px 0;"></div>
+        <div style="display:flex; justify-content: space-around; text-align:center;">
+            <div>
+                <span style="display:block; font-size:18px; font-weight:900;">Nairobi</span>
+                <span style="font-size:9px; color:var(--primary);">PRIMARY NODE</span>
+            </div>
+            <div>
+                <span style="display:block; font-size:18px; font-weight:900;">London</span>
+                <span style="font-size:9px; color:var(--gold);">ASSET HUB</span>
+            </div>
+            <div>
+                <span style="display:block; font-size:18px; font-weight:900;">Dubai</span>
+                <span style="font-size:9px; color:var(--gold);">COMPLIANCE</span>
+            </div>
+        </div>
+    `;
+    pulseSection.insertBefore(infraModule, pulseSection.firstChild);
+
+    // Update Terminal with new expansion logs
+    writeToTerm("Imperial Expansion [PHASE_3] integrated.");
+    writeToTerm("Ledger System: Reading historical blocks...");
+    writeToTerm("Global Map: 3 Nodes Detected & Synced.");
+</script>
