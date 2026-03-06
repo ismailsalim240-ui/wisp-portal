@@ -3,312 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scintillating Wisp | Command Portal v5.2</title>
+    <title>Scintillating Wisp | v5.5 Cloud</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
-        :root {
-            --primary: #00d4ff;
-            --primary-glow: rgba(0, 212, 255, 0.3);
-            --ink: #000814;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(0, 212, 255, 0.15);
-            --surface: rgba(2, 6, 23, 0.85);
-            --gold: #D4AF37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --whatsapp: #25D366;
-        }
-
-        .theme-gold {
-            --primary: #D4AF37;
-            --primary-glow: rgba(212, 175, 55, 0.3);
-            --ink: #050505;
-            --border: rgba(212, 175, 55, 0.2);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
-        
-        body {
-            background: var(--ink);
-            color: #f8fafc;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* --- Atmospheric Water Background --- */
-        .water-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%);
-            overflow: hidden;
-        }
-        .ripple {
-            position: absolute; border: 1px solid var(--primary);
-            border-radius: 50%; animation: ripple-effect 8s infinite linear;
-            opacity: 0; pointer-events: none;
-        }
-        @keyframes ripple-effect {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { opacity: 0.1; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-
-        /* --- Task Ticker --- */
-        .task-ticker {
-            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
-            padding: 12px 0; text-align: center; font-family: 'JetBrains Mono';
-            font-size: 10px; letter-spacing: 4px; color: var(--primary);
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
-            text-transform: uppercase;
-        }
-
-        .layout {
-            max-width: 1100px; margin: 0 auto; padding: 40px 20px;
-            display: grid; grid-template-columns: 1fr 380px; gap: 30px;
-            position: relative; z-index: 10;
-        }
-
-        @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
-
-        /* --- Brand Section --- */
-        .brand-card { grid-column: 1 / -1; text-align: center; padding: 40px 0; }
-        .moon-icon { font-size: 50px; color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin-bottom: 15px; }
-        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; }
-        .sub-tag { font-size: 10px; letter-spacing: 5px; opacity: 0.5; text-transform: uppercase; margin-top: 10px; }
-
-        /* --- Card Architecture --- */
-        .card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 35px; padding: 35px; backdrop-filter: blur(30px);
-            margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .chart-btn { 
-            background: transparent; border: 1px solid var(--border); color: var(--primary); 
-            padding: 6px 14px; border-radius: 10px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 11px;
-        }
-        .chart-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; }
-
-        .timer-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 300; letter-spacing: -3px; margin: 20px 0; }
-        .btn-fluid {
-            width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer;
-            letter-spacing: 4px; border: none; text-transform: uppercase;
-            background: linear-gradient(90deg, var(--primary), #0077b6); color: #000;
-        }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #444; cursor: not-allowed; }
-
-        .goal-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px; background: rgba(255,255,255,0.02);
-            border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent;
-        }
-        .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.05); }
-        .check-box { width: 24px; height: 24px; border: 2px solid var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .check-box.active::after { content: '✓'; color: var(--gold); font-weight: 900; }
-
-        .chat-box { height: 450px; display: flex; flex-direction: column; }
-        #chat-flow { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 15px 20px; border-radius: 22px; font-size: 13px; line-height: 1.6; max-width: 85%; }
-        .bot { background: rgba(255,255,255,0.05); border-left: 3px solid var(--primary); align-self: flex-start; }
-        .user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
-
-        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; text-align: left; }
-        .history-table th { color: var(--primary); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; opacity: 0.8; }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 30px; }
-        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 30px; max-width: 550px; }
+        :root { --primary: #00d4ff; --ink: #000814; --gold: #D4AF37; --surface: rgba(2, 6, 23, 0.85); --border: rgba(0, 212, 255, 0.15); }
+        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; margin: 0; overflow-x: hidden; }
+        .layout { max-width: 1100px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 35px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px; }
+        .btn-fluid { width: 100%; padding: 20px; border-radius: 15px; background: var(--primary); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
+        #auth-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
+        .goal-row { display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
+        .check-box { width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 5px; }
+        .check-box.active { background: var(--gold); }
+        table { width: 100%; font-size: 12px; border-collapse: collapse; }
+        td { padding: 10px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; }
     </style>
 </head>
-<body id="main-body">
+<body>
 
-    <div class="task-ticker" id="live-ticker">INITIALIZING SENTINEL...</div>
-    <div class="water-bg" id="ripples"></div>
-
-    <div class="layout">
-        <div class="brand-card">
-            <div class="moon-icon">🌙</div>
-            <h1 class="brand-name">SCINTILLATING WISP</h1>
-            <p class="sub-tag">Digital Excellence • Sharia Compliant • Ramadhan 2026</p>
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
-                <button class="chart-btn" onclick="toggleTheme()">TOGGLE THEME</button>
-                <button class="chart-btn" onclick="toggleModal()">LEGAL VAULT</button>
-            </div>
-        </div>
-
-        <div class="main-stack">
-            <div class="card">
-                <div class="chart-header">
-                    <div>
-                        <span class="sub-tag">Growth Pulse (Capped 7%)</span>
-                        <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary);" id="pulse-display">+6.84%</div>
-                    </div>
-                    <div class="chart-controls">
-                        <button class="chart-btn" onclick="updateChart('H', this)">H</button>
-                        <button class="chart-btn active" onclick="updateChart('D', this)">D</button>
-                    </div>
-                </div>
-                <div style="height: 280px;"><canvas id="mainChart"></canvas></div>
-            </div>
-
-            <div class="card">
-                <h3 class="sub-tag" style="color: var(--gold); margin-bottom: 25px;">Spiritual Protocol</h3>
-                <div class="goal-row" onclick="toggleGoal(this, 'p')">
-                    <span>5 Daily Prayers 🏰 <small style="opacity:0.5; margin-left:10px;">(Current: 54)</small></span>
-                    <div class="check-box" id="check-p"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal(this, 'q')">
-                    <span>Quran Recitation 📖 <small style="opacity:0.5; margin-left:10px;">(Current: 21)</small></span>
-                    <div class="check-box" id="check-q"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal(this, 's')">
-                    <span>Daily Sadaqah 🤲 <small style="opacity:0.5; margin-left:10px;">(Current: 7)</small></span>
-                    <div class="check-box" id="check-s"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="sub-tag" style="margin-bottom: 20px;">Venture History</h3>
-                <table class="history-table">
-                    <thead><tr><th>Protocol</th><th>Timestamp</th><th>Status</th></tr></thead>
-                    <tbody id="history-body"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="side-stack">
-            <div class="card" style="text-align: center;">
-                <div id="p-status" class="sub-tag">Vault Secured</div>
-                <div class="timer-val" id="clock">00:00:00</div>
-                <button id="gate-btn" class="btn-fluid btn-locked" onclick="logAction()">Portal Locked</button>
-            </div>
-
-            <div class="card chat-box">
-                <span class="sub-tag" style="opacity: 1; font-weight: 700; margin-bottom:15px;">WISP.INTEL v4.1</span>
-                <div id="chat-flow"><div class="msg bot">Salam, Operator. "Silent Water" environment stabilized. How shall we proceed?</div></div>
-                <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
-                    <input type="text" id="user-in" placeholder="Enter command..." style="flex:1; background:transparent; border:none; color:#fff; outline:none; font-family:'JetBrains Mono';">
-                    <button onclick="askAI()" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">EXEC</button>
-                </div>
-            </div>
-        </div>
+    <div id="auth-overlay">
+        <h1 style="letter-spacing: 10px;">SCINTILLATING WISP</h1>
+        <button onclick="login()" class="btn-fluid" style="width: 300px;">Unlock via Google</button>
     </div>
 
-    <div class="modal" id="tc-modal" onclick="toggleModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="margin-bottom: 20px; color: var(--primary); letter-spacing: 4px;">TERMS & CONDITIONS</h2>
-            <p style="opacity: 0.8; font-size: 13px; line-height: 1.8;">Sharia Compliance Protocol: Zero Ribba. Access is time-gated by window schedule.</p>
-            <button class="btn-fluid" style="margin-top: 30px;" onclick="toggleModal()">Accept</button>
+    <div class="layout">
+        <div class="main">
+            <div class="card">
+                <h3 style="color: var(--gold)">Spiritual Protocol</h3>
+                <div class="goal-row" onclick="toggleGoal('prayers')"><span>5 Daily Prayers</span><div id="check-prayers" class="check-box"></div></div>
+                <div class="goal-row" onclick="toggleGoal('quran')"><span>Quran Recitation</span><div id="check-quran" class="check-box"></div></div>
+                <div class="goal-row" onclick="toggleGoal('sadaqah')"><span>Daily Sadaqah</span><div id="check-sadaqah" class="check-box"></div></div>
+            </div>
+            <div class="card">
+                <h3>Venture History</h3>
+                <table><tbody id="history-body"></tbody></table>
+            </div>
+        </div>
+        <div class="side">
+            <div class="card" style="text-align: center;">
+                <div id="clock" style="font-size: 2rem; margin-bottom: 20px;">00:00:00</div>
+                <button onclick="logVenture()" class="btn-fluid">Log Protocol</button>
+            </div>
+            <button onclick="firebase.auth().signOut()" style="background: none; color: gray; border: none; cursor: pointer; width: 100%;">Sign Out</button>
         </div>
     </div>
 
     <script>
-        let currentStatus = null;
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsZbI5aEOM70XgxuysGrlYTZ_vBMf3Fsg",
+            authDomain: "ismah-aaa28.firebaseapp.com",
+            databaseURL: "https://ismah-aaa28-default-rtdb.firebaseio.com",
+            projectId: "ismah-aaa28",
+            storageBucket: "ismah-aaa28.firebasestorage.app",
+            messagingSenderId: "46463400864",
+            appId: "1:46463400864:web:0762edb1dd99aacdc402c5"
+        };
 
-        // --- Memory Logic ---
-        function toggleGoal(el, id) {
-            const box = el.querySelector('.check-box');
-            box.classList.toggle('active');
-            el.classList.toggle('checked');
-            const state = JSON.parse(localStorage.getItem('w_goals') || '{}');
-            state[id] = box.classList.contains('active');
-            localStorage.setItem('w_goals', JSON.stringify(state));
-        }
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const provider = new firebase.auth.GoogleAuthProvider();
 
-        function loadMemory() {
-            const state = JSON.parse(localStorage.getItem('w_goals') || '{}');
-            ['p', 'q', 's'].forEach(id => {
-                if(state[id]) {
-                    const box = document.getElementById('check-' + id);
-                    box.classList.add('active');
-                    box.parentElement.classList.add('checked');
-                }
-            });
-            renderLogs();
-        }
+        function login() { firebase.auth().signInWithPopup(provider); }
 
-        function updateTaskTicker() {
-            const hrs = new Date().getHours();
-            const ticker = document.getElementById('live-ticker');
-            const taskList = [
-                {h: 3, m: "TAHAJJUD & SUHOOR // INVEST-IN ACTIVE"},
-                {h: 5, m: "FAJR // SPIRITUAL ALIGNMENT"},
-                {h: 6, m: "SKILL DEV // FLOW OPEN"},
-                {h: 19, m: "ISHA & TARAWIH // INVEST-OUT ACTIVE"}
-            ];
-            let msg = "REST & REGENERATE // VAULT SECURED";
-            taskList.forEach(t => { if(hrs >= t.h) msg = `COMMAND: ${t.m}`; });
-            ticker.innerText = msg;
-        }
-
-        function runClock() {
-            const now = new Date(); const hrs = now.getHours();
-            const clock = document.getElementById('clock'); const btn = document.getElementById('gate-btn');
-            const isIn = (hrs >= 3 && hrs < 10); const isOut = (hrs >= 15 && hrs < 22);
-            if (isIn || isOut) {
-                currentStatus = isIn ? "INVEST-IN" : "INVEST-OUT";
-                clock.innerText = "LIVE"; btn.className = "btn-fluid"; btn.innerText = "Initialize Flow";
-            } else {
-                currentStatus = null;
-                btn.className = "btn-fluid btn-locked"; btn.innerText = "Locked";
-                clock.innerText = now.toLocaleTimeString();
-            }
-        }
-
-        function logAction() {
-            if (!currentStatus) return;
-            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
-            logs.unshift({ type: currentStatus, time: new Date().toLocaleTimeString() });
-            localStorage.setItem('v_logs', JSON.stringify(logs.slice(0, 5)));
-            renderLogs();
-        }
-
-        function renderLogs() {
-            const body = document.getElementById('history-body');
-            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
-            body.innerHTML = logs.map(l => `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:#34d399">VERIFIED</td></tr>`).join('');
-        }
-
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        let myChart = new Chart(ctx, {
-            type: 'line',
-            data: { labels: ['M','T','W','T','F','S','S'], datasets: [{ data: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84], borderColor: '#00d4ff', tension: 0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        firebase.auth().onAuthStateChanged(user => {
+            document.getElementById('auth-overlay').style.display = user ? 'none' : 'flex';
+            if (user) { syncData(user.uid); }
         });
 
-        async function askAI() {
-            const input = document.getElementById('user-in'); const val = input.value.trim(); if (!val) return;
-            let key = localStorage.getItem('g_key');
-            if (!key) { key = prompt("API Key:"); localStorage.setItem('g_key', key); }
-            addMsg(val, 'user'); input.value = ''; const bot = addMsg("Thinking...", 'bot');
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Persona: Sharia-compliant assistant. User: " + val }] }] })
+        function syncData(uid) {
+            db.ref('users/' + uid + '/goals').on('value', snap => {
+                const goals = snap.val() || {};
+                ['prayers', 'quran', 'sadaqah'].forEach(g => {
+                    document.getElementById('check-' + g).className = goals[g] ? 'check-box active' : 'check-box';
                 });
-                const d = await res.json(); bot.innerText = d.candidates[0].content.parts[0].text;
-            } catch (e) { bot.innerText = "Connection error."; }
+            });
+            db.ref('users/' + uid + '/history').limitToLast(10).on('value', snap => {
+                const logs = snap.val() || {};
+                document.getElementById('history-body').innerHTML = Object.values(logs).reverse().map(l => 
+                    `<tr><td>${l.type}</td><td>${l.time}</td></tr>`
+                ).join('');
+            });
         }
 
-        function addMsg(t, type) { const m = document.createElement('div'); m.className = `msg ${type}`; m.innerText = t; const flow = document.getElementById('chat-flow'); flow.appendChild(m); flow.scrollTop = flow.scrollHeight; return m; }
-        
-        const rip = document.getElementById('ripples');
-        for(let i=0; i<5; i++) {
-            const r = document.createElement('div'); r.className = 'ripple';
-            r.style.width = r.style.height = Math.random() * 300 + 200 + 'px';
-            r.style.left = Math.random() * 100 + '%'; r.style.top = Math.random() * 100 + '%';
-            r.style.animationDelay = (i*1.5)+'s'; rip.appendChild(r);
+        function toggleGoal(id) {
+            const uid = firebase.auth().currentUser.uid;
+            const el = document.getElementById('check-' + id);
+            const newState = !el.classList.contains('active');
+            db.ref('users/' + uid + '/goals/' + id).set(newState);
         }
 
-        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
-        function toggleModal() { const m = document.getElementById('tc-modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+        function logVenture() {
+            const uid = firebase.auth().currentUser.uid;
+            db.ref('users/' + uid + '/history').push({
+                type: "VENTURE_INIT",
+                time: new Date().toLocaleTimeString()
+            });
+        }
 
-        window.onload = () => { loadMemory(); setInterval(() => { runClock(); updateTaskTicker(); }, 1000); };
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
     </script>
 </body>
 </html>
