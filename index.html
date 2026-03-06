@@ -1299,3 +1299,116 @@
     writeToTerm("Map: Inter-node handshake protocol: SECURE.");
     writeToTerm("Kernel: Sustainability parameters within Green Zone.");
 </script>
+<style>
+    /* --- GHOST UI & CONTRACT VISUALS --- */
+    .ghost-blur {
+        filter: blur(8px);
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+    }
+    .ghost-blur:hover { filter: blur(0px); }
+
+    .contract-engine {
+        background: #050b14;
+        border: 1px solid var(--gold);
+        border-radius: 15px;
+        padding: 25px;
+        position: relative;
+        overflow: hidden;
+    }
+    .contract-watermark {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotate(-30deg);
+        font-size: 40px;
+        font-weight: 900;
+        opacity: 0.03;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    .latency-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+        margin-top: 15px;
+    }
+    .latency-dot {
+        height: 6px;
+        background: #1e293b;
+        border-radius: 2px;
+    }
+    .latency-active {
+        background: var(--primary);
+        box-shadow: 0 0 5px var(--primary);
+        animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+
+<script>
+    // --- INJECTING GHOST LEDGER INTO ASSETS ---
+    const assetsGhost = document.querySelector('#assets');
+    const ghostModule = document.createElement('div');
+    ghostModule.className = 'module';
+    ghostModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Sovereign Stealth Ledger</span>
+            <span style="font-size:8px; color:var(--danger);">[HOVER TO DECRYPT]</span>
+        </div>
+        <div class="ghost-blur">
+            <div class="matrix-row"><span>PRIVATE_KEY_SIG</span><span>0x992...F2E1</span></div>
+            <div class="matrix-row"><span>OFFSHORE_RESERVE</span><span>$8,442,100.00</span></div>
+            <div class="matrix-row"><span>LIQUIDITY_TOKEN</span><span>WISP-GOLD-V3</span></div>
+        </div>
+    `;
+    assetsGhost.appendChild(ghostModule);
+
+    // --- INJECTING MURABAHA GENERATOR INTO COMMAND ---
+    const commandMurabaha = document.querySelector('#command');
+    const contractModule = document.createElement('div');
+    contractModule.className = 'module';
+    contractModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Murabaha Smart Contract Engine</span></div>
+        <div class="contract-engine">
+            <div class="contract-watermark">SHARIA COMPLIANT</div>
+            <div style="font-family:'JetBrains Mono'; font-size:9px; line-height:1.8;">
+                <span style="color:var(--gold);">[CLAUSE_01]</span> The Seller hereby agrees to purchase the Asset on behalf of the Client...<br>
+                <span style="color:var(--gold);">[CLAUSE_02]</span> Total Cost: <span id="m-cost">$0.00</span><br>
+                <span style="color:var(--gold);">[CLAUSE_03]</span> Profit Margin: 5% Fixed (No Interest)<br>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;">
+                <button class="btn-cta btn-mail" style="padding:10px; font-size:9px;" onclick="generateContract()">GENERATE SECURE HASH</button>
+            </div>
+        </div>
+    `;
+    commandMurabaha.appendChild(contractModule);
+
+    function generateContract() {
+        const hash = 'M-HASH-' + Math.random().toString(16).toUpperCase().slice(2, 10);
+        writeToTerm(`Contract Hashed: ${hash}`, "success");
+        alert("Smart Contract Initialized: " + hash);
+    }
+
+    // --- INJECTING LATENCY HEATMAP INTO SIDEBAR ---
+    const sidebarLatency = document.querySelector('.intel-column');
+    const latencyModule = document.createElement('div');
+    latencyModule.className = 'module';
+    latencyModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Quantum Node Stability</span></div>
+        <div class="latency-grid" id="l-grid"></div>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px;">Monitoring 36 Global Edge Nodes...</p>
+    `;
+    sidebarLatency.appendChild(latencyModule);
+
+    const lGrid = document.getElementById('l-grid');
+    for(let i=0; i<36; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'latency-dot' + (Math.random() > 0.7 ? ' latency-active' : '');
+        lGrid.appendChild(dot);
+    }
+
+    // Final Terminal Updates
+    writeToTerm("Ghost Protocol [PHASE_10] initialized.");
+    writeToTerm("Murabaha: Contract hashing algorithm: SHA-3/256.");
+    writeToTerm("Stealth: GUI Blur-Redaction system: ARMED.");
+</script>
