@@ -1151,3 +1151,151 @@
     writeToTerm("Biometric: Identity packet hashed and secured.");
     writeToTerm("Zakat: Calculation engine online.");
 </script>
+<style>
+    /* --- NETWORK TOPOLOGY & SYSTEM PULSE --- */
+    .connectivity-map {
+        width: 100%;
+        height: 250px;
+        background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+    }
+    
+    .node-point {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--primary);
+    }
+
+    .node-line {
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        opacity: 0.2;
+        transform-origin: left center;
+    }
+
+    .health-meter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        padding: 12px;
+        background: rgba(255,255,255,0.02);
+        border-radius: 10px;
+    }
+
+    .meter-bar {
+        flex: 1;
+        height: 4px;
+        background: #0f172a;
+        margin: 0 15px;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .meter-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--gold));
+        width: 94%;
+        box-shadow: 0 0 10px var(--primary);
+    }
+
+    .haptic-btn {
+        background: rgba(212, 175, 55, 0.1);
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 9px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+    .haptic-btn:hover { background: var(--gold); color: #000; }
+</style>
+
+<script>
+    // --- INJECTING NEURAL MAP INTO PULSE TAB ---
+    const pulseNeural = document.querySelector('#pulse');
+    const mapModule = document.createElement('div');
+    mapModule.className = 'module';
+    mapModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Neural Node Connectivity Map</span>
+            <span style="color:var(--primary); font-size:9px;">ACTIVE_NODES: 12</span>
+        </div>
+        <div class="connectivity-map" id="node-map"></div>
+    `;
+    pulseNeural.insertBefore(mapModule, pulseNeural.children[1]);
+
+    // Generate random nodes and connecting lines
+    const mapContainer = document.getElementById('node-map');
+    const nodes = [];
+    for(let i=0; i<12; i++) {
+        const x = Math.random() * 90 + 5;
+        const y = Math.random() * 80 + 10;
+        nodes.push({x, y});
+        const dot = document.createElement('div');
+        dot.className = 'node-point';
+        dot.style.left = x + '%';
+        dot.style.top = y + '%';
+        mapContainer.appendChild(dot);
+    }
+
+    // --- INJECTING SYSTEM HEALTH INTO SIDEBAR ---
+    const sidebarHealth = document.querySelector('.intel-column');
+    const healthModule = document.createElement('div');
+    healthModule.className = 'module';
+    healthModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Kernel Sustainability</span></div>
+        <div class="health-meter">
+            <span style="font-size:8px; opacity:0.5;">CORE</span>
+            <div class="meter-bar"><div class="meter-fill"></div></div>
+            <span style="font-size:8px; color:var(--primary);">94%</span>
+        </div>
+        <div class="health-meter">
+            <span style="font-size:8px; opacity:0.5;">MEM</span>
+            <div class="meter-bar"><div class="meter-fill" style="width:62%;"></div></div>
+            <span style="font-size:8px; color:var(--gold);">62%</span>
+        </div>
+        <button class="haptic-btn" onclick="triggerHaptic()">INITIALIZE HAPTIC SYNC</button>
+    `;
+    sidebarHealth.appendChild(healthModule);
+
+    // Haptic Simulation Function
+    function triggerHaptic() {
+        writeToTerm("Haptic Sync: Calibrating interface feedback...", "info");
+        gsap.to("body", { x: 5, duration: 0.05, repeat: 5, yoyo: true });
+        setTimeout(() => {
+            writeToTerm("Haptic Sync: Success. Physical feedback active.", "success");
+        }, 500);
+    }
+
+    // --- INJECTING ASSET RISK RADAR INTO ASSETS ---
+    const assetsRisk = document.querySelector('#assets');
+    const riskModule = document.createElement('div');
+    riskModule.className = 'module';
+    riskModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Risk-Weighting Distribution</span></div>
+        <div style="display:flex; justify-content:center; padding:20px;">
+            <div style="width:120px; height:120px; border-radius:50%; border:10px solid #1e293b; border-top-color:var(--gold); border-right-color:var(--primary); transform: rotate(45deg);"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:9px; text-align:center;">
+            <div><span style="color:var(--gold);">●</span> EQUITY (60%)</div>
+            <div><span style="color:var(--primary);">●</span> COMMODITY (40%)</div>
+        </div>
+    `;
+    assetsRisk.appendChild(riskModule);
+
+    // Final Terminal Updates
+    writeToTerm("Neural Expansion [PHASE_9] synchronized.");
+    writeToTerm("Map: Inter-node handshake protocol: SECURE.");
+    writeToTerm("Kernel: Sustainability parameters within Green Zone.");
+</script>
