@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scintillating Wisp | Command Portal v5.5</title>
+    <title>Scintillating Wisp | v5.8 Ultra-Sentinel</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,127 +17,93 @@
             --primary: #00d4ff;
             --primary-glow: rgba(0, 212, 255, 0.3);
             --ink: #000814;
-            --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(0, 212, 255, 0.15);
             --surface: rgba(2, 6, 23, 0.85);
             --gold: #D4AF37;
             --gold-glow: rgba(212, 175, 55, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background: var(--ink);
-            color: #f8fafc;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
+        .theme-gold {
+            --primary: #D4AF37;
+            --primary-glow: rgba(212, 175, 55, 0.3);
+            --border: rgba(212, 175, 55, 0.2);
         }
 
-        /* --- Animated Atmospheric Background --- */
-        .water-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%);
-            overflow: hidden;
-        }
-        .ripple {
-            position: absolute; border: 1px solid var(--primary);
-            border-radius: 50%; animation: ripple-effect 8s infinite linear;
-            opacity: 0; pointer-events: none;
-        }
-        @keyframes ripple-effect {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { opacity: 0.1; }
-            100% { transform: scale(2.5); opacity: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
+        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; overflow-x: hidden; min-height: 100vh; }
+
+        /* --- Global Ticker --- */
+        .task-ticker {
+            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
+            padding: 12px 0; text-align: center; font-family: 'JetBrains Mono';
+            font-size: 10px; letter-spacing: 4px; color: var(--primary);
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
+            text-transform: uppercase;
         }
 
-        /* --- Login Overlay --- */
-        #auth-overlay {
-            position: fixed; inset: 0; background: var(--ink); z-index: 9999;
-            display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 30px;
-        }
+        /* --- Atmospheric Background --- */
+        .water-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%); overflow: hidden; }
+        .ripple { position: absolute; border: 1px solid var(--primary); border-radius: 50%; animation: ripple-effect 8s infinite linear; opacity: 0; pointer-events: none; }
+        @keyframes ripple-effect { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.1; } 100% { transform: scale(2.5); opacity: 0; } }
+
+        /* --- Auth Overlay --- */
+        #auth-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 30px; }
 
         /* --- Layout --- */
-        .layout {
-            max-width: 1200px; margin: 0 auto; padding: 40px 20px;
-            display: grid; grid-template-columns: 1fr 380px; gap: 30px;
-            position: relative; z-index: 10;
-        }
-
-        .card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 35px; padding: 35px; backdrop-filter: blur(30px);
-            margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        /* --- Typography & Buttons --- */
-        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; text-align: center; margin-bottom: 40px; }
-        .sub-tag { font-size: 10px; letter-spacing: 5px; opacity: 0.5; text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .layout { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; position: relative; z-index: 10; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 35px; padding: 35px; backdrop-filter: blur(30px); margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
         
-        .btn-fluid {
-            width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer;
-            letter-spacing: 4px; border: none; text-transform: uppercase;
-            background: linear-gradient(90deg, var(--primary), #0077b6); color: #000;
-            transition: 0.3s;
-        }
-        .btn-fluid:hover { filter: brightness(1.2); box-shadow: 0 0 30px var(--primary-glow); }
+        /* --- Buttons & UI --- */
+        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; text-align: center; }
+        .btn-fluid { width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer; letter-spacing: 4px; border: none; text-transform: uppercase; background: var(--primary); color: #000; }
+        .btn-locked { background: transparent; border: 1px solid #334155; color: #444; cursor: not-allowed; }
 
-        .goal-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px; background: rgba(255,255,255,0.02);
-            border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent;
-        }
+        /* --- Protocols --- */
+        .goal-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent; }
         .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.05); }
         .check-box { width: 24px; height: 24px; border: 2px solid var(--gold); border-radius: 8px; position: relative; }
         .check-box.active::after { content: '✓'; position: absolute; top: -5px; left: 3px; color: var(--gold); font-size: 20px; font-weight: 900; }
 
-        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; text-align: left; }
-        .history-table th { color: var(--primary); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; opacity: 0.8; }
+        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; }
+        .history-table th { color: var(--primary); text-align: left; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; }
 
         @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body>
+<body id="main-body">
 
     <div id="auth-overlay">
-        <div class="brand-name">SCINTILLATING WISP</div>
+        <h1 class="brand-name">SCINTILLATING WISP</h1>
         <button onclick="login()" class="btn-fluid" style="max-width: 320px;">Unlock with Google</button>
     </div>
 
+    <div class="task-ticker" id="live-ticker">INITIALIZING CLOUD SENTINEL...</div>
     <div class="water-bg" id="ripples"></div>
 
     <div class="layout">
-        
         <div class="main-stack">
-            <div class="brand-name" style="margin-bottom: 60px;">COMMAND PORTAL</div>
-
+            <div class="brand-name" style="margin-bottom: 40px;">COMMAND PORTAL</div>
+            
             <div class="card">
-                <span class="sub-tag">Growth Pulse (Capped 7%)</span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                    <span style="font-size:10px; letter-spacing:3px; opacity:0.5;">GROWTH PULSE</span>
+                    <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--primary); font-size:9px; padding:5px 10px; border-radius:5px; cursor:pointer;">THEME SWITCH</button>
+                </div>
                 <div style="height: 250px;"><canvas id="mainChart"></canvas></div>
             </div>
 
             <div class="card">
-                <h3 class="sub-tag" style="color: var(--gold); margin-bottom: 25px;">Spiritual Protocol</h3>
-                <div class="goal-row" onclick="toggleGoal('prayers')">
-                    <span>5 Daily Prayers 🏰</span>
-                    <div class="check-box" id="check-prayers"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal('quran')">
-                    <span>Quran Recitation 📖</span>
-                    <div class="check-box" id="check-quran"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal('sadaqah')">
-                    <span>Daily Sadaqah 🤲</span>
-                    <div class="check-box" id="check-sadaqah"></div>
-                </div>
+                <h3 style="font-size:10px; letter-spacing:5px; color:var(--gold); margin-bottom:25px; text-transform:uppercase;">Spiritual Protocol</h3>
+                <div class="goal-row" onclick="toggleGoal('prayers')"><span>5 Daily Prayers 🏰</span><div class="check-box" id="check-prayers"></div></div>
+                <div class="goal-row" onclick="toggleGoal('quran')"><span>Quran Recitation 📖</span><div class="check-box" id="check-quran"></div></div>
+                <div class="goal-row" onclick="toggleGoal('sadaqah')"><span>Daily Sadaqah 🤲</span><div class="check-box" id="check-sadaqah"></div></div>
             </div>
 
             <div class="card">
-                <h3 class="sub-tag">Venture History</h3>
+                <h3 style="font-size:10px; letter-spacing:5px; opacity:0.5; margin-bottom:20px;">VENTURE HISTORY</h3>
                 <table class="history-table">
-                    <thead><tr><th>Protocol</th><th>Timestamp</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Type</th><th>Time</th><th>Status</th></tr></thead>
                     <tbody id="history-body"></tbody>
                 </table>
             </div>
@@ -145,20 +111,18 @@
 
         <div class="side-stack">
             <div class="card" style="text-align: center;">
-                <span class="sub-tag">System Time</span>
+                <span id="p-status" style="font-size:10px; letter-spacing:3px; opacity:0.5;">SYSTEM LIVE</span>
                 <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 3rem; margin: 20px 0;">00:00:00</div>
-                <button onclick="logVenture()" class="btn-fluid">Initialize Flow</button>
+                <button id="gate-btn" onclick="logVenture()" class="btn-fluid">Initialize Flow</button>
             </div>
-
-            <div class="card">
-                <h3 class="sub-tag">Session Control</h3>
-                <button onclick="firebase.auth().signOut()" style="background: none; border: 1px solid var(--border); color: #666; width: 100%; padding: 10px; border-radius: 10px; cursor: pointer;">Terminate Session</button>
+            
+            <div class="card" style="text-align:center;">
+                <button onclick="firebase.auth().signOut()" style="background:none; border:none; color:#444; font-size:10px; cursor:pointer; letter-spacing:2px;">TERMINATE SESSION</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. FIREBASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBsZbI5aEOM70XgxuysGrlYTZ_vBMf3Fsg",
             authDomain: "ismah-aaa28.firebaseapp.com",
@@ -172,43 +136,29 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const provider = new firebase.auth.GoogleAuthProvider();
+        let currentStatus = "IDLE";
 
-        // --- 2. AUTHENTICATION ---
-        function login() { firebase.auth().signInWithPopup(provider).catch(e => alert(e.message)); }
+        function login() { firebase.auth().signInWithPopup(provider); }
 
         firebase.auth().onAuthStateChanged(user => {
-            const overlay = document.getElementById('auth-overlay');
-            if (user) {
-                overlay.style.display = 'none';
-                syncData(user.uid);
-            } else {
-                overlay.style.display = 'flex';
-            }
+            document.getElementById('auth-overlay').style.display = user ? 'none' : 'flex';
+            if (user) { syncCloud(user.uid); }
         });
 
-        // --- 3. CLOUD SYNC ---
-        function syncData(uid) {
-            // Sync Goals
-            db.ref('users/' + uid + '/goals').on('value', snap => {
+        function syncCloud(uid) {
+            db.ref('u/'+uid+'/goals').on('value', snap => {
                 const goals = snap.val() || {};
                 ['prayers', 'quran', 'sadaqah'].forEach(id => {
                     const box = document.getElementById('check-' + id);
-                    if (goals[id]) {
-                        box.classList.add('active');
-                        box.parentElement.classList.add('checked');
-                    } else {
-                        box.classList.remove('active');
-                        box.parentElement.classList.remove('checked');
-                    }
+                    box.className = goals[id] ? 'check-box active' : 'check-box';
+                    box.parentElement.className = goals[id] ? 'goal-row checked' : 'goal-row';
                 });
             });
 
-            // Sync History
-            db.ref('users/' + uid + '/history').limitToLast(8).on('value', snap => {
+            db.ref('u/'+uid+'/history').limitToLast(10).on('value', snap => {
                 const logs = snap.val() || {};
-                const body = document.getElementById('history-body');
-                body.innerHTML = Object.values(logs).reverse().map(l => 
-                    `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:#34d399">VERIFIED</td></tr>`
+                document.getElementById('history-body').innerHTML = Object.values(logs).reverse().map(l => 
+                    `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:var(--primary)">VERIFIED</td></tr>`
                 ).join('');
             });
         }
@@ -216,38 +166,56 @@
         function toggleGoal(id) {
             const uid = firebase.auth().currentUser.uid;
             const el = document.getElementById('check-' + id);
-            const newState = !el.classList.contains('active');
-            db.ref('users/' + uid + '/goals/' + id).set(newState);
+            db.ref('u/'+uid+'/goals/'+id).set(!el.classList.contains('active'));
         }
 
         function logVenture() {
+            if (currentStatus === "LOCKED") return;
             const uid = firebase.auth().currentUser.uid;
-            db.ref('users/' + uid + '/history').push({
-                type: "VENTURE_INIT",
-                time: new Date().toLocaleTimeString()
-            });
+            db.ref('u/'+uid+'/history').push({ type: "VENTURE_INIT", time: new Date().toLocaleTimeString() });
         }
 
-        // --- 4. VISUALS & CLOCK ---
-        function initVisuals() {
-            const rip = document.getElementById('ripples');
-            for(let i=0; i<6; i++) {
-                const r = document.createElement('div'); r.className = 'ripple';
-                r.style.width = r.style.height = Math.random() * 300 + 200 + 'px';
-                r.style.left = Math.random() * 100 + '%'; r.style.top = Math.random() * 100 + '%';
-                r.style.animationDelay = (i*1.5)+'s'; rip.appendChild(r);
+        function updateSystem() {
+            const now = new Date();
+            const hrs = now.getHours();
+            const clock = document.getElementById('clock');
+            const btn = document.getElementById('gate-btn');
+            const ticker = document.getElementById('live-ticker');
+            
+            clock.innerText = now.toLocaleTimeString();
+            
+            if ((hrs >= 3 && hrs < 10) || (hrs >= 15 && hrs < 22)) {
+                currentStatus = "LIVE";
+                btn.className = "btn-fluid";
+                btn.innerText = "Initialize Flow";
+                ticker.innerText = "SYSTEM ACTIVE // FLOW INITIALIZED";
+            } else {
+                currentStatus = "LOCKED";
+                btn.className = "btn-fluid btn-locked";
+                btn.innerText = "Vault Locked";
+                ticker.innerText = "VAULT SECURED // STANDBY MODE";
             }
-
-            const ctx = document.getElementById('mainChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: { labels: ['M','T','W','T','F','S','S'], datasets: [{ data: [4.2, 5.1, 4.8, 6.1, 6.4, 6.7, 6.84], borderColor: '#00d4ff', tension: 0.4, borderWeight: 2, pointRadius: 0, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)' }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-            });
         }
 
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-        initVisuals();
+        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
+
+        // Visual Init
+        const rip = document.getElementById('ripples');
+        for(let i=0; i<6; i++) {
+            const r = document.createElement('div'); r.className = 'ripple';
+            r.style.width = r.style.height = Math.random()*300+200+'px';
+            r.style.left = Math.random()*100+'%'; r.style.top = Math.random()*100+'%';
+            r.style.animationDelay = (i*1.5)+'s'; rip.appendChild(r);
+        }
+
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: { labels: ['M','T','W','T','F','S','S'], datasets: [{ data: [4.2, 5.1, 4.8, 6.1, 6.4, 6.7, 6.84], borderColor: '#00d4ff', tension: 0.4, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)' }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+        });
+
+        setInterval(updateSystem, 1000);
     </script>
 </body>
 </html>
