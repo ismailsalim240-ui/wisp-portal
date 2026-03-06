@@ -1026,3 +1026,128 @@
     writeToTerm("Oracle: Fetching latest XAU/USD parity...");
     writeToTerm("Radar: Scanning for ethical venture opportunities...");
 </script>
+<style>
+    /* --- BLOCK EXPLORER & BIOMETRIC VISUALS --- */
+    .ledger-explorer {
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        border-radius: 25px;
+        padding: 30px;
+        margin-top: 40px;
+        border: 1px solid var(--border);
+        font-family: 'JetBrains Mono';
+    }
+    
+    .block-row {
+        display: grid;
+        grid-template-columns: 100px 1fr 120px 100px;
+        padding: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+        font-size: 10px;
+        align-items: center;
+    }
+
+    .hash-text { color: var(--primary); opacity: 0.7; font-size: 9px; }
+    
+    .biometric-scanner {
+        width: 100%;
+        height: 120px;
+        background: rgba(0, 212, 255, 0.02);
+        border: 1px dashed var(--primary);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        cursor: crosshair;
+    }
+
+    .bio-line {
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background: var(--primary);
+        box-shadow: 0 0 15px var(--primary);
+        animation: bio-scan 3s ease-in-out infinite;
+    }
+
+    @keyframes bio-scan {
+        0%, 100% { top: 0%; }
+        50% { top: 100%; }
+    }
+
+    .calc-input {
+        width: 100%;
+        background: transparent;
+        border: 1px solid var(--border);
+        padding: 10px;
+        color: var(--gold);
+        border-radius: 8px;
+        margin-bottom: 15px;
+        outline: none;
+    }
+</style>
+
+<script>
+    // --- INJECTING BLOCK EXPLORER INTO PULSE TAB ---
+    const pulseExplorer = document.querySelector('#pulse');
+    const explorerModule = document.createElement('div');
+    explorerModule.className = 'ledger-explorer';
+    explorerModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Ethical Block Explorer</span>
+            <span style="color:var(--gold);">CHAIN_ID: WISP-001</span>
+        </div>
+        <div id="block-list">
+            <div class="block-row" style="opacity:0.4;"><span>HEIGHT</span><span>TRANSACTION_HASH</span><span>VALUE</span><span>STATUS</span></div>
+            <div class="block-row"><span>#8,442</span><span class="hash-text">0x71c...a92f</span><span>2.40 XAU</span><span style="color:#34d399;">FINAL</span></div>
+            <div class="block-row"><span>#8,441</span><span class="hash-text">0x92b...e11d</span><span>0.15 XAU</span><span style="color:#34d399;">FINAL</span></div>
+            <div class="block-row"><span>#8,440</span><span class="hash-text">0x14e...c44b</span><span>1.10 XAU</span><span style="color:#34d399;">FINAL</span></div>
+        </div>
+    `;
+    pulseExplorer.appendChild(explorerModule);
+
+    // --- INJECTING BIOMETRIC SIM INTO PROFILE TAB ---
+    const profileBio = document.querySelector('#profile');
+    const bioModule = document.createElement('div');
+    bioModule.className = 'module';
+    bioModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Identity Verification (DNA/BIO)</span></div>
+        <div class="biometric-scanner">
+            <div class="bio-line"></div>
+            <span style="font-size:10px; letter-spacing:3px; opacity:0.5;">SCANNING RETINA...</span>
+        </div>
+        <p style="font-size:9px; text-align:center; margin-top:15px; opacity:0.4;">Multi-factor sovereign encryption active.</p>
+    `;
+    profileBio.insertBefore(bioModule, profileBio.children[1]);
+
+    // --- INJECTING PURIFICATION CALCULATOR INTO COMMAND TAB ---
+    const commandCalc = document.querySelector('#command');
+    const calcModule = document.createElement('div');
+    calcModule.className = 'module';
+    calcModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Capital Purification (Zakat)</span></div>
+        <div style="padding:10px;">
+            <label style="font-size:9px; opacity:0.5;">ENTER TOTAL ASSETS ($)</label>
+            <input type="number" class="calc-input" id="zakat-val" placeholder="0.00" oninput="calcZakat()">
+            <div style="display:flex; justify-content:space-between; font-size:12px;">
+                <span>REQUIRED PURIFICATION (2.5%)</span>
+                <span style="color:var(--gold); font-weight:800;" id="zakat-result">$0.00</span>
+            </div>
+        </div>
+    `;
+    commandCalc.appendChild(calcModule);
+
+    function calcZakat() {
+        const val = document.getElementById('zakat-val').value;
+        const result = val * 0.025;
+        document.getElementById('zakat-result').innerText = '$' + result.toLocaleString(undefined, {minimumFractionDigits: 2});
+    }
+
+    // Terminal Expansion
+    writeToTerm("Ledger System [PHASE_8] synchronized.");
+    writeToTerm("Biometric: Identity packet hashed and secured.");
+    writeToTerm("Zakat: Calculation engine online.");
+</script>
