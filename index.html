@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scintillating Wisp | v5.8 Ultra-Sentinel</title>
+    <title>SCINTILLATING WISP | Sovereign Command v6.0</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,112 +17,237 @@
             --primary: #00d4ff;
             --primary-glow: rgba(0, 212, 255, 0.3);
             --ink: #000814;
+            --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(0, 212, 255, 0.15);
             --surface: rgba(2, 6, 23, 0.85);
             --gold: #D4AF37;
             --gold-glow: rgba(212, 175, 55, 0.3);
+            --whatsapp: #25D366;
         }
 
         .theme-gold {
             --primary: #D4AF37;
             --primary-glow: rgba(212, 175, 55, 0.3);
+            --ink: #050505;
             --border: rgba(212, 175, 55, 0.2);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
-        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; overflow-x: hidden; min-height: 100vh; }
-
-        /* --- Global Ticker --- */
-        .task-ticker {
-            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
-            padding: 12px 0; text-align: center; font-family: 'JetBrains Mono';
-            font-size: 10px; letter-spacing: 4px; color: var(--primary);
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
-            text-transform: uppercase;
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.6s, border 0.6s, transform 0.3s; }
+        
+        body {
+            background: var(--ink);
+            color: #f8fafc;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        /* --- Atmospheric Background --- */
-        .water-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%); overflow: hidden; }
-        .ripple { position: absolute; border: 1px solid var(--primary); border-radius: 50%; animation: ripple-effect 8s infinite linear; opacity: 0; pointer-events: none; }
-        @keyframes ripple-effect { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.1; } 100% { transform: scale(2.5); opacity: 0; } }
+        /* --- Global Task Ticker --- */
+        .task-ticker {
+            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
+            padding: 14px 0; text-align: center; font-family: 'JetBrains Mono';
+            font-size: 10px; letter-spacing: 5px; color: var(--primary);
+            position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(20px);
+            text-transform: uppercase; font-weight: 500;
+        }
 
-        /* --- Auth Overlay --- */
-        #auth-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 30px; }
+        /* --- Atmospheric Engine --- */
+        .water-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%);
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute; border: 1.5px solid var(--primary);
+            border-radius: 50%; animation: ripple-effect 10s infinite linear;
+            opacity: 0; pointer-events: none;
+        }
+        @keyframes ripple-effect {
+            0% { transform: scale(0.3) translateY(0); opacity: 0; }
+            50% { opacity: 0.15; }
+            100% { transform: scale(3) translateY(-100px); opacity: 0; }
+        }
 
-        /* --- Layout --- */
-        .layout { max-width: 1200px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; position: relative; z-index: 10; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 35px; padding: 35px; backdrop-filter: blur(30px); margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        /* --- Authentication Guard UI --- */
+        #auth-overlay {
+            position: fixed; inset: 0; background: var(--ink); z-index: 9999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 40px;
+        }
+        .login-card {
+            padding: 50px; border-radius: 40px; background: var(--surface);
+            border: 1px solid var(--border); text-align: center; max-width: 400px;
+        }
+
+        /* --- Main Architecture --- */
+        .layout {
+            max-width: 1300px; margin: 0 auto; padding: 40px 20px;
+            display: grid; grid-template-columns: 1fr 400px; gap: 35px;
+            position: relative; z-index: 10;
+        }
+
+        @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 40px; padding: 40px; backdrop-filter: blur(40px);
+            margin-bottom: 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        }
+
+        /* --- Brand Elements --- */
+        .brand-header { grid-column: 1 / -1; text-align: center; padding-bottom: 40px; }
+        .moon-icon { font-size: 60px; color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); margin-bottom: 20px; cursor: pointer; }
+        .brand-name { font-size: 32px; letter-spacing: 15px; font-weight: 700; text-transform: uppercase; color: #fff; }
         
-        /* --- Buttons & UI --- */
-        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; text-align: center; }
-        .btn-fluid { width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer; letter-spacing: 4px; border: none; text-transform: uppercase; background: var(--primary); color: #000; }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #444; cursor: not-allowed; }
+        /* --- Interactive UI Components --- */
+        .btn-fluid {
+            width: 100%; padding: 24px; border-radius: 22px; font-weight: 700; cursor: pointer;
+            letter-spacing: 5px; border: none; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--primary), #0077b6); color: #000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-fluid:active { transform: scale(0.98); }
+        .btn-locked { background: transparent !important; border: 1px solid #1e293b !important; color: #334155 !important; cursor: not-allowed; }
 
-        /* --- Protocols --- */
-        .goal-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent; }
-        .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.05); }
-        .check-box { width: 24px; height: 24px; border: 2px solid var(--gold); border-radius: 8px; position: relative; }
-        .check-box.active::after { content: '✓'; position: absolute; top: -5px; left: 3px; color: var(--gold); font-size: 20px; font-weight: 900; }
+        .goal-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 22px; background: rgba(255,255,255,0.02);
+            border-radius: 20px; margin-bottom: 15px; cursor: pointer; border: 1px solid transparent;
+        }
+        .goal-row:hover { background: rgba(255,255,255,0.05); }
+        .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.08); }
+        .check-box { width: 28px; height: 28px; border: 2.5px solid var(--gold); border-radius: 10px; position: relative; }
+        .check-box.active::after { content: '✓'; position: absolute; top: -7px; left: 4px; color: var(--gold); font-size: 24px; font-weight: 900; }
 
-        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; }
-        .history-table th { color: var(--primary); text-align: left; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; }
+        /* --- History & Data --- */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 20px; }
+        .history-table th { color: var(--primary); text-align: left; padding-bottom: 15px; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid var(--border); }
+        .history-table td { padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: 'JetBrains Mono'; opacity: 0.9; }
 
-        @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
+        /* --- Intelligence Chat Console --- */
+        .chat-console { height: 500px; display: flex; flex-direction: column; }
+        #chat-flow { flex: 1; overflow-y: auto; padding-right: 10px; display: flex; flex-direction: column; gap: 20px; }
+        .msg { padding: 18px 25px; border-radius: 25px; font-size: 13px; line-height: 1.6; max-width: 85%; position: relative; }
+        .bot { background: rgba(255,255,255,0.04); border-left: 4px solid var(--primary); align-self: flex-start; }
+        .user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; box-shadow: 0 10px 20px var(--primary-glow); }
+
+        .chat-input-area { display: flex; gap: 12px; margin-top: 25px; border-top: 1px solid var(--border); padding-top: 25px; }
+        #user-in { flex: 1; background: transparent; border: none; color: #fff; outline: none; font-family: 'JetBrains Mono'; font-size: 14px; }
+
+        /* --- Utility Classes --- */
+        .sub-label { font-size: 10px; letter-spacing: 4px; opacity: 0.4; text-transform: uppercase; display: block; margin-bottom: 12px; }
+        .status-glow { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; background: #34d399; box-shadow: 0 0 10px #34d399; }
     </style>
 </head>
 <body id="main-body">
 
     <div id="auth-overlay">
-        <h1 class="brand-name">SCINTILLATING WISP</h1>
-        <button onclick="login()" class="btn-fluid" style="max-width: 320px;">Unlock with Google</button>
+        <div class="login-card">
+            <div class="moon-icon" style="font-size: 80px;">🌙</div>
+            <h1 class="brand-name" style="font-size: 20px; margin-bottom: 30px;">Access Protocol</h1>
+            <button onclick="login()" class="btn-fluid">Unlock with Google</button>
+            <p style="margin-top: 20px; font-size: 10px; opacity: 0.5; letter-spacing: 2px;">SECURE SOVEREIGN ENVIRONMENT</p>
+        </div>
     </div>
 
-    <div class="task-ticker" id="live-ticker">INITIALIZING CLOUD SENTINEL...</div>
+    <div class="task-ticker" id="live-ticker">ESTABLISHING SECURE CONNECTION...</div>
     <div class="water-bg" id="ripples"></div>
 
     <div class="layout">
+        
+        <header class="brand-header">
+            <div class="moon-icon" onclick="toggleTheme()">🌙</div>
+            <h1 class="brand-name">SCINTILLATING WISP</h1>
+            <p style="letter-spacing: 8px; font-size: 10px; opacity: 0.4; margin-top: 15px;">RAMADHAN EDITION • v6.0 OMEGA</p>
+        </header>
+
         <div class="main-stack">
-            <div class="brand-name" style="margin-bottom: 40px;">COMMAND PORTAL</div>
             
             <div class="card">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <span style="font-size:10px; letter-spacing:3px; opacity:0.5;">GROWTH PULSE</span>
-                    <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--primary); font-size:9px; padding:5px 10px; border-radius:5px; cursor:pointer;">THEME SWITCH</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+                    <div>
+                        <span class="sub-label">Venture Growth Pulse</span>
+                        <div style="font-size: 2.8rem; font-weight: 700; color: var(--primary);" id="pulse-display">+6.84%</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="sub-label">Capping Limit</span>
+                        <div style="color: var(--gold); font-weight: 600;">7.00% MAX</div>
+                    </div>
                 </div>
-                <div style="height: 250px;"><canvas id="mainChart"></canvas></div>
+                <div style="height: 300px;"><canvas id="mainChart"></canvas></div>
             </div>
 
             <div class="card">
-                <h3 style="font-size:10px; letter-spacing:5px; color:var(--gold); margin-bottom:25px; text-transform:uppercase;">Spiritual Protocol</h3>
-                <div class="goal-row" onclick="toggleGoal('prayers')"><span>5 Daily Prayers 🏰</span><div class="check-box" id="check-prayers"></div></div>
-                <div class="goal-row" onclick="toggleGoal('quran')"><span>Quran Recitation 📖</span><div class="check-box" id="check-quran"></div></div>
-                <div class="goal-row" onclick="toggleGoal('sadaqah')"><span>Daily Sadaqah 🤲</span><div class="check-box" id="check-sadaqah"></div></div>
+                <h3 class="sub-label" style="color: var(--gold); opacity: 1;">Spiritual Alignment Protocol</h3>
+                <div class="goal-row" onclick="toggleGoal('prayers')">
+                    <div>
+                        <p style="font-weight: 600; letter-spacing: 1px;">5 Daily Prayers 🏰</p>
+                        <small style="opacity: 0.4; font-size: 10px;">Cloud Synchronized</small>
+                    </div>
+                    <div class="check-box" id="check-prayers"></div>
+                </div>
+                <div class="goal-row" onclick="toggleGoal('quran')">
+                    <div>
+                        <p style="font-weight: 600; letter-spacing: 1px;">Quran Recitation 📖</p>
+                        <small style="opacity: 0.4; font-size: 10px;">Cloud Synchronized</small>
+                    </div>
+                    <div class="check-box" id="check-quran"></div>
+                </div>
+                <div class="goal-row" onclick="toggleGoal('sadaqah')">
+                    <div>
+                        <p style="font-weight: 600; letter-spacing: 1px;">Daily Sadaqah 🤲</p>
+                        <small style="opacity: 0.4; font-size: 10px;">Cloud Synchronized</small>
+                    </div>
+                    <div class="check-box" id="check-sadaqah"></div>
+                </div>
             </div>
 
             <div class="card">
-                <h3 style="font-size:10px; letter-spacing:5px; opacity:0.5; margin-bottom:20px;">VENTURE HISTORY</h3>
+                <h3 class="sub-label">Venture Initialization Logs</h3>
                 <table class="history-table">
-                    <thead><tr><th>Type</th><th>Time</th><th>Status</th></tr></thead>
-                    <tbody id="history-body"></tbody>
+                    <thead>
+                        <tr>
+                            <th>Protocol</th>
+                            <th>Timestamp</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        </tbody>
                 </table>
             </div>
         </div>
 
         <div class="side-stack">
-            <div class="card" style="text-align: center;">
-                <span id="p-status" style="font-size:10px; letter-spacing:3px; opacity:0.5;">SYSTEM LIVE</span>
-                <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 3rem; margin: 20px 0;">00:00:00</div>
-                <button id="gate-btn" onclick="logVenture()" class="btn-fluid">Initialize Flow</button>
-            </div>
             
-            <div class="card" style="text-align:center;">
-                <button onclick="firebase.auth().signOut()" style="background:none; border:none; color:#444; font-size:10px; cursor:pointer; letter-spacing:2px;">TERMINATE SESSION</button>
+            <div class="card" style="text-align: center;">
+                <span class="sub-label" id="p-status">VAULT STATUS: SECURED</span>
+                <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 300; margin: 25px 0; letter-spacing: -2px;">00:00:00</div>
+                <button id="gate-btn" onclick="logVenture()" class="btn-fluid btn-locked">Portal Locked</button>
+            </div>
+
+            <div class="card chat-console">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+                    <span class="sub-label" style="opacity: 1; color: var(--primary);">Wisp.Intel v4.2</span>
+                    <div class="status-glow"></div>
+                </div>
+                <div id="chat-flow">
+                    <div class="msg bot">Salam, Operator. Sovereign environment stabilized. Ready for Command.</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="user-in" placeholder="Execute command..." onkeypress="if(event.key==='Enter') askAI()">
+                    <button onclick="askAI()" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; letter-spacing:2px;">EXEC</button>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <button onclick="toggleTheme()" class="btn-fluid" style="background: transparent; border: 1px solid var(--border); color: var(--primary); font-size: 12px; margin-bottom: 15px;">Cycle UI Theme</button>
+                <button onclick="firebase.auth().signOut()" style="background: none; border: none; color: #444; font-size: 10px; cursor: pointer; letter-spacing: 2px;">TERMINATE SOVEREIGN SESSION</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 1. SOVEREIGN CONFIGURATION (From your screenshots) ---
         const firebaseConfig = {
             apiKey: "AIzaSyBsZbI5aEOM70XgxuysGrlYTZ_vBMf3Fsg",
             authDomain: "ismah-aaa28.firebaseapp.com",
@@ -133,32 +258,57 @@
             appId: "1:46463400864:web:0762edb1dd99aacdc402c5"
         };
 
+        // Initialize Firebase Sentinel
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const provider = new firebase.auth.GoogleAuthProvider();
-        let currentStatus = "IDLE";
+        let currentStatus = "LOCKED";
 
-        function login() { firebase.auth().signInWithPopup(provider); }
+        // --- 2. AUTHENTICATION SHIELD ---
+        function login() { 
+            firebase.auth().signInWithPopup(provider).catch(e => alert("Sovereign Denied: " + e.message)); 
+        }
 
         firebase.auth().onAuthStateChanged(user => {
-            document.getElementById('auth-overlay').style.display = user ? 'none' : 'flex';
-            if (user) { syncCloud(user.uid); }
+            const overlay = document.getElementById('auth-overlay');
+            if (user) {
+                overlay.style.transition = "1s";
+                overlay.style.opacity = "0";
+                setTimeout(() => overlay.style.display = 'none', 1000);
+                establishCloudSync(user.uid);
+            } else {
+                overlay.style.display = 'flex';
+                overlay.style.opacity = "1";
+            }
         });
 
-        function syncCloud(uid) {
-            db.ref('u/'+uid+'/goals').on('value', snap => {
+        // --- 3. CLOUD SYNCHRONIZATION ---
+        function establishCloudSync(uid) {
+            // Sync Spiritual Protocols
+            db.ref('users/' + uid + '/goals').on('value', snap => {
                 const goals = snap.val() || {};
                 ['prayers', 'quran', 'sadaqah'].forEach(id => {
                     const box = document.getElementById('check-' + id);
-                    box.className = goals[id] ? 'check-box active' : 'check-box';
-                    box.parentElement.className = goals[id] ? 'goal-row checked' : 'goal-row';
+                    if (goals[id]) {
+                        box.classList.add('active');
+                        box.parentElement.classList.add('checked');
+                    } else {
+                        box.classList.remove('active');
+                        box.parentElement.classList.remove('checked');
+                    }
                 });
             });
 
-            db.ref('u/'+uid+'/history').limitToLast(10).on('value', snap => {
+            // Sync Venture History
+            db.ref('users/' + uid + '/history').limitToLast(12).on('value', snap => {
                 const logs = snap.val() || {};
-                document.getElementById('history-body').innerHTML = Object.values(logs).reverse().map(l => 
-                    `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:var(--primary)">VERIFIED</td></tr>`
+                const body = document.getElementById('history-body');
+                body.innerHTML = Object.values(logs).reverse().map(l => 
+                    `<tr>
+                        <td><span style="color:var(--primary)">#</span> ${l.type}</td>
+                        <td>${l.time}</td>
+                        <td style="color:#34d399; font-weight:700;">VERIFIED</td>
+                    </tr>`
                 ).join('');
             });
         }
@@ -166,56 +316,134 @@
         function toggleGoal(id) {
             const uid = firebase.auth().currentUser.uid;
             const el = document.getElementById('check-' + id);
-            db.ref('u/'+uid+'/goals/'+id).set(!el.classList.contains('active'));
+            const newState = !el.classList.contains('active');
+            db.ref('users/' + uid + '/goals/' + id).set(newState);
         }
 
         function logVenture() {
             if (currentStatus === "LOCKED") return;
             const uid = firebase.auth().currentUser.uid;
-            db.ref('u/'+uid+'/history').push({ type: "VENTURE_INIT", time: new Date().toLocaleTimeString() });
+            const now = new Date();
+            db.ref('users/' + uid + '/history').push({
+                type: "VENTURE_INIT",
+                time: now.toLocaleTimeString() + " | " + now.toLocaleDateString(),
+                unix: Date.now()
+            });
         }
 
-        function updateSystem() {
+        // --- 4. TEMPORAL LOGIC & TICKER ---
+        function updateSystemState() {
             const now = new Date();
             const hrs = now.getHours();
             const clock = document.getElementById('clock');
             const btn = document.getElementById('gate-btn');
             const ticker = document.getElementById('live-ticker');
+            const status = document.getElementById('p-status');
             
-            clock.innerText = now.toLocaleTimeString();
-            
-            if ((hrs >= 3 && hrs < 10) || (hrs >= 15 && hrs < 22)) {
-                currentStatus = "LIVE";
+            clock.innerText = now.toLocaleTimeString('en-US', { hour12: false });
+
+            // Time Windows: 3am-10am (Invest-In) | 3pm-10pm (Invest-Out)
+            const isIn = (hrs >= 3 && hrs < 10);
+            const isOut = (hrs >= 15 && hrs < 22);
+
+            if (isIn || isOut) {
+                currentStatus = "ACTIVE";
                 btn.className = "btn-fluid";
-                btn.innerText = "Initialize Flow";
-                ticker.innerText = "SYSTEM ACTIVE // FLOW INITIALIZED";
+                btn.innerText = isIn ? "Initialize Invest-In" : "Initialize Invest-Out";
+                status.innerText = "VAULT STATUS: OPEN";
+                status.style.color = "var(--primary)";
+                ticker.innerText = isIn ? "COMMAND: SUHOOR & SKILL FLOW // WINDOW OPEN" : "COMMAND: POST-ASR STRATEGY // WINDOW OPEN";
             } else {
                 currentStatus = "LOCKED";
                 btn.className = "btn-fluid btn-locked";
-                btn.innerText = "Vault Locked";
-                ticker.innerText = "VAULT SECURED // STANDBY MODE";
+                btn.innerText = "Vault Secured";
+                status.innerText = "VAULT STATUS: LOCKED";
+                status.style.color = "";
+                ticker.innerText = "COMMAND: REST & REGENERATE // SYSTEM ON STANDBY";
             }
         }
 
-        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
+        // --- 5. VISUAL PHYSICS & CHARTS ---
+        function initVisualEngine() {
+            // Ripple Generator
+            const ripContainer = document.getElementById('ripples');
+            for(let i=0; i<8; i++) {
+                const r = document.createElement('div');
+                r.className = 'ripple';
+                const size = Math.random() * 400 + 200;
+                r.style.width = r.style.height = size + 'px';
+                r.style.left = Math.random() * 100 + '%';
+                r.style.top = Math.random() * 100 + '%';
+                r.style.animationDelay = (i * 2) + 's';
+                ripContainer.appendChild(r);
+            }
 
-        // Visual Init
-        const rip = document.getElementById('ripples');
-        for(let i=0; i<6; i++) {
-            const r = document.createElement('div'); r.className = 'ripple';
-            r.style.width = r.style.height = Math.random()*300+200+'px';
-            r.style.left = Math.random()*100+'%'; r.style.top = Math.random()*100+'%';
-            r.style.animationDelay = (i*1.5)+'s'; rip.appendChild(r);
+            // Chart System
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        data: [4.2, 5.8, 5.1, 6.3, 6.2, 6.7, 6.84],
+                        borderColor: '#00d4ff',
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#00d4ff',
+                        fill: true,
+                        backgroundColor: 'rgba(0, 212, 255, 0.05)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.2)' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.2)' } }
+                    }
+                }
+            });
         }
 
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: { labels: ['M','T','W','T','F','S','S'], datasets: [{ data: [4.2, 5.1, 4.8, 6.1, 6.4, 6.7, 6.84], borderColor: '#00d4ff', tension: 0.4, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)' }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-        });
+        // --- 6. INTELLIGENCE CHAT ---
+        async function askAI() {
+            const input = document.getElementById('user-in');
+            const val = input.value.trim();
+            if (!val) return;
 
-        setInterval(updateSystem, 1000);
+            addMessage(val, 'user');
+            input.value = '';
+
+            const botMsg = addMessage("Analyzing command...", 'bot');
+            
+            // Simulating internal logic for aesthetic
+            setTimeout(() => {
+                botMsg.innerText = "Command received. Cloud infrastructure is optimal. Proceed with protocol.";
+            }, 1000);
+        }
+
+        function addMessage(text, type) {
+            const flow = document.getElementById('chat-flow');
+            const m = document.createElement('div');
+            m.className = `msg ${type}`;
+            m.innerText = text;
+            flow.appendChild(m);
+            flow.scrollTop = flow.scrollHeight;
+            return m;
+        }
+
+        function toggleTheme() {
+            document.getElementById('main-body').classList.toggle('theme-gold');
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            initVisualEngine();
+            setInterval(updateSystemState, 1000);
+            updateSystemState();
+        };
     </script>
 </body>
 </html>
