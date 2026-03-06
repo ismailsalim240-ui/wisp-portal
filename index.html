@@ -2660,3 +2660,152 @@
     writeToTerm("Integrity: Flux signature matches sovereign baseline.");
     writeToTerm("Intel: Global news aggregator synchronized.");
 </script>
+<style>
+    /* --- SATELLITE & MESH VISUALS --- */
+    .satellite-orbit {
+        width: 100%;
+        height: 220px;
+        background: radial-gradient(circle at center, #0f172a 0%, #000 100%);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .planet-core {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 60px; height: 60px;
+        background: var(--primary);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+        opacity: 0.2;
+    }
+
+    .orbit-ring {
+        position: absolute;
+        top: 50%; left: 50%;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .satellite-node {
+        position: absolute;
+        width: 6px; height: 6px;
+        background: var(--gold);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--gold);
+        offset-path: border-box;
+        animation: orbit-move 12s infinite linear;
+    }
+
+    @keyframes orbit-move {
+        from { offset-distance: 0%; }
+        to { offset-distance: 100%; }
+    }
+
+    .mesh-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 2px;
+        margin-top: 15px;
+    }
+
+    .mesh-cell {
+        height: 15px;
+        background: rgba(0, 212, 255, 0.05);
+        border-radius: 2px;
+        transition: 0.5s;
+    }
+    .mesh-active { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+
+    .uplink-stats {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'JetBrains Mono';
+        font-size: 9px;
+        margin-top: 15px;
+        padding: 10px;
+        background: rgba(255,255,255,0.02);
+        border-radius: 8px;
+    }
+</style>
+
+<script>
+    // --- INJECTING SATELLITE RADAR INTO PULSE TAB ---
+    const pulseSat = document.querySelector('#pulse');
+    const satModule = document.createElement('div');
+    satModule.className = 'module';
+    satModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Sovereign Satellite Mesh (Uplink)</span>
+            <span style="color:var(--primary); font-size:9px;">SAT_ID: WISP-ORB-1</span>
+        </div>
+        <div class="satellite-orbit" id="orbit-viewport">
+            <div class="planet-core"></div>
+            <div class="orbit-ring" style="width:120px; height:120px;">
+                <div class="satellite-node" style="offset-path: ellipse(60px 60px at 50% 50%);"></div>
+            </div>
+            <div class="orbit-ring" style="width:180px; height:180px;">
+                <div class="satellite-node" style="offset-path: ellipse(90px 90px at 50% 50%); animation-duration: 20s; background:var(--primary);"></div>
+            </div>
+        </div>
+        <div class="uplink-stats">
+            <div>SIGNAL: <span style="color:#34d399">98.2%</span></div>
+            <div>LATENCY: <span style="color:var(--gold)">42ms</span></div>
+            <div>STATUS: <span style="color:#34d399">SYNCED</span></div>
+        </div>
+    `;
+    pulseSat.insertBefore(satModule, pulseSat.firstChild);
+
+    // --- INJECTING MESH MATRIX INTO COMMAND TAB ---
+    const commandMesh = document.querySelector('#command');
+    const meshModule = document.createElement('div');
+    meshModule.className = 'module';
+    meshModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Data-Packet Mesh</span></div>
+        <div class="mesh-grid" id="mesh-matrix"></div>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px; text-align:center;">Monitoring 144 recursive data-relay points.</p>
+    `;
+    commandMesh.appendChild(meshModule);
+
+    const meshMatrix = document.getElementById('mesh-matrix');
+    for(let i=0; i<144; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'mesh-cell';
+        meshMatrix.appendChild(cell);
+    }
+
+    // Live Mesh Animation
+    setInterval(() => {
+        const cells = document.querySelectorAll('.mesh-cell');
+        cells.forEach(c => c.classList.remove('mesh-active'));
+        for(let i=0; i<12; i++) {
+            cells[Math.floor(Math.random() * 144)].classList.add('mesh-active');
+        }
+    }, 1500);
+
+    // --- INJECTING TREASURY RESERVE RATIO INTO ASSETS ---
+    const assetsRes = document.querySelector('#assets');
+    const resModule = document.createElement('div');
+    resModule.className = 'module';
+    resModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Basel III Compliance: Reserve Ratio</span></div>
+        <div style="display:flex; align-items:flex-end; gap:5px; height:60px; margin-top:10px;">
+            <div style="flex:1; background:var(--gold); height:100%; border-radius:3px 3px 0 0;"></div>
+            <div style="flex:1; background:var(--primary); height:85%; border-radius:3px 3px 0 0;"></div>
+            <div style="flex:1; background:rgba(255,255,255,0.1); height:40%; border-radius:3px 3px 0 0;"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:8px; margin-top:8px; opacity:0.6;">
+            <span>XAU_BACKED</span><span>LIQUID_EQUITY</span><span>FIAT_BUFFER</span>
+        </div>
+    `;
+    assetsRes.appendChild(resModule);
+
+    // Terminal Expansion
+    writeToTerm("Orbital Link [PHASE_21] established.");
+    writeToTerm("Satellite: WISP-ORB-1 telemetry verified at 98.2%.");
+    writeToTerm("Mesh: 144/144 relay points reporting encrypted handshake.");
+</script>
