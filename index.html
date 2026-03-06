@@ -2392,3 +2392,148 @@
     writeToTerm("Radar: 3 new High-Integrity blips detected in EAC.");
     writeToTerm("Matrix: Trade liquidity finalized for Dubai Hub.");
 </script>
+<style>
+    /* --- QUANTUM-LEVEL DATA VISUALS --- */
+    .quantum-terminal {
+        background: #020617;
+        border: 1px solid var(--primary);
+        border-radius: 12px;
+        padding: 20px;
+        font-family: 'JetBrains Mono';
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .data-waterfall {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        color: var(--primary);
+        font-size: 8px;
+        line-height: 1.2;
+        opacity: 0.15;
+        pointer-events: none;
+        animation: waterfall-scroll 20s linear infinite;
+    }
+
+    @keyframes waterfall-scroll {
+        from { transform: translateY(0); }
+        to { transform: translateY(-50%); }
+    }
+
+    .signal-log-v3 {
+        height: 100%;
+        overflow-y: auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .signal-packet {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        font-size: 10px;
+    }
+
+    .pulse-amber { color: #f59e0b; animation: amber-glow 1s infinite alternate; }
+    @keyframes amber-glow { from { opacity: 0.4; } to { opacity: 1; } }
+
+    .node-map-v2 {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 5px;
+        margin-top: 25px;
+    }
+    .node-pixel {
+        height: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 1px;
+    }
+    .node-pixel.online { background: #34d399; box-shadow: 0 0 5px #34d399; }
+</style>
+
+<script>
+    // --- INJECTING QUANTUM TERMINAL INTO COMMAND TAB ---
+    const commandQuantum = document.querySelector('#command');
+    const quantumModule = document.createElement('div');
+    quantumModule.className = 'module';
+    quantumModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Quantum-Resistant Signal Terminal</span>
+            <span style="color:var(--primary); font-size:9px;">ENCRYPTION: KYBER-1024</span>
+        </div>
+        <div class="quantum-terminal">
+            <div class="data-waterfall" id="waterfall-bg"></div>
+            <div class="signal-log-v3" id="quantum-log">
+                <div class="signal-packet"><span>[INIT]</span><span>SYMMETRIC_HANDSHAKE_START</span></div>
+            </div>
+        </div>
+    `;
+    commandQuantum.appendChild(quantumModule);
+
+    // Generate Waterfall Background Content
+    const waterfall = document.getElementById('waterfall-bg');
+    let streamData = "";
+    for(let i=0; i<100; i++) {
+        streamData += Math.random().toString(16).substring(2, 15) + " " + Math.random().toString(16).substring(2, 15) + "<br>";
+    }
+    waterfall.innerHTML = streamData + streamData; // Double for seamless loop
+
+    // Live Signal Logic
+    const qLog = document.getElementById('quantum-log');
+    const signals = ["RECV_ETHIC_SCAN", "AUTH_WISP_NODE", "SYNC_VAULT_XAU", "PUSH_HALAL_LEDGER", "VERIFY_ZERO_RIBBA"];
+    
+    setInterval(() => {
+        const div = document.createElement('div');
+        div.className = 'signal-packet';
+        const type = signals[Math.floor(Math.random() * signals.length)];
+        const hash = '0x' + Math.random().toString(16).substring(2, 6).toUpperCase();
+        div.innerHTML = `<span>[${type}]</span><span class="pulse-amber">${hash}</span>`;
+        qLog.insertBefore(div, qLog.firstChild);
+        if(qLog.children.length > 15) qLog.removeChild(qLog.lastChild);
+    }, 2000);
+
+    // --- INJECTING NODE MAP V2 INTO PULSE TAB ---
+    const pulseNodeV2 = document.querySelector('#pulse');
+    const nodeV2Module = document.createElement('div');
+    nodeV2Module.className = 'module';
+    nodeV2Module.innerHTML = `
+        <div class="module-header"><span class="module-title">Sovereign Edge Node Distribution</span></div>
+        <div class="node-map-v2" id="pixel-grid"></div>
+        <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:9px; opacity:0.6;">
+            <span>TOTAL_NODES: 100</span>
+            <span>Uptime: 99.999%</span>
+        </div>
+    `;
+    pulseNodeV2.appendChild(nodeV2Module);
+
+    const pixelGrid = document.getElementById('pixel-grid');
+    for(let i=0; i<100; i++) {
+        const pix = document.createElement('div');
+        pix.className = 'node-pixel' + (Math.random() > 0.8 ? ' online' : '');
+        pixelGrid.appendChild(pix);
+    }
+
+    // --- INJECTING TREASURY DEPTH INTO ASSETS ---
+    const assetsDepth = document.querySelector('#assets');
+    const depthModuleV2 = document.createElement('div');
+    depthModuleV2.className = 'module';
+    depthModuleV2.innerHTML = `
+        <div class="module-header"><span class="module-title">Treasury Liquidity Depth (XAU/KES)</span></div>
+        <div style="height:100px; display:flex; align-items:center; justify-content:center;">
+             <div style="width:200px; height:200px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative;">
+                 <div style="width:150px; height:150px; border:1px solid var(--primary); border-radius:50%; opacity:0.3;"></div>
+                 <div style="width:100px; height:100px; border:1px solid var(--gold); border-radius:50%; opacity:0.6;"></div>
+                 <span style="font-size:18px; font-weight:900; color:var(--gold);">$4.2M</span>
+             </div>
+        </div>
+        <p style="font-size:8px; opacity:0.4; margin-top:40px; text-align:center;">Concentrated ethical liquidity in Nairobi-Dubai Corridor.</p>
+    `;
+    assetsDepth.appendChild(depthModuleV2);
+
+    // Final Terminal Updates
+    writeToTerm("Quantum Core [PHASE_19] fully operational.");
+    writeToTerm("Security: Kyber-1024 Post-Quantum Encryption active.");
+    writeToTerm("Treasury: Liquidity depth depth-validated for NBO/DXB.");
+</script>
