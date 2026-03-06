@@ -2,111 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scintillating Wisp | v5.5 Cloud</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <title>Wisp Portal</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
     <style>
-        :root { --primary: #00d4ff; --ink: #000814; --gold: #D4AF37; --surface: rgba(2, 6, 23, 0.85); --border: rgba(0, 212, 255, 0.15); }
-        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; margin: 0; overflow-x: hidden; }
-        .layout { max-width: 1100px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 35px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px; }
-        .btn-fluid { width: 100%; padding: 20px; border-radius: 15px; background: var(--primary); color: #000; font-weight: 700; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
-        #auth-overlay { position: fixed; inset: 0; background: var(--ink); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
-        .goal-row { display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
-        .check-box { width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 5px; }
-        .check-box.active { background: var(--gold); }
-        table { width: 100%; font-size: 12px; border-collapse: collapse; }
-        td { padding: 10px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; }
+        body { background: #000814; color: #00d4ff; font-family: sans-serif; text-align: center; padding: 50px; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid #00d4ff33; border-radius: 20px; padding: 20px; margin: 10px auto; max-width: 400px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; cursor: pointer; background: #00d4ff; border: none; font-weight: bold; border-radius: 10px; }
+        #auth-overlay { position: fixed; inset: 0; background: #000814; display: flex; align-items: center; justify-content: center; z-index: 10; }
     </style>
 </head>
 <body>
-
     <div id="auth-overlay">
-        <h1 style="letter-spacing: 10px;">SCINTILLATING WISP</h1>
-        <button onclick="login()" class="btn-fluid" style="width: 300px;">Unlock via Google</button>
+        <button onclick="firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())" style="width:200px">Login with Google</button>
     </div>
-
-    <div class="layout">
-        <div class="main">
-            <div class="card">
-                <h3 style="color: var(--gold)">Spiritual Protocol</h3>
-                <div class="goal-row" onclick="toggleGoal('prayers')"><span>5 Daily Prayers</span><div id="check-prayers" class="check-box"></div></div>
-                <div class="goal-row" onclick="toggleGoal('quran')"><span>Quran Recitation</span><div id="check-quran" class="check-box"></div></div>
-                <div class="goal-row" onclick="toggleGoal('sadaqah')"><span>Daily Sadaqah</span><div id="check-sadaqah" class="check-box"></div></div>
-            </div>
-            <div class="card">
-                <h3>Venture History</h3>
-                <table><tbody id="history-body"></tbody></table>
-            </div>
-        </div>
-        <div class="side">
-            <div class="card" style="text-align: center;">
-                <div id="clock" style="font-size: 2rem; margin-bottom: 20px;">00:00:00</div>
-                <button onclick="logVenture()" class="btn-fluid">Log Protocol</button>
-            </div>
-            <button onclick="firebase.auth().signOut()" style="background: none; color: gray; border: none; cursor: pointer; width: 100%;">Sign Out</button>
-        </div>
-    </div>
-
+    <h1>SCINTILLATING WISP</h1>
+    <div class="card"><h2 id="clock">00:00:00</h2><button onclick="log()">Log Venture</button></div>
+    <div class="card"><h3>History</h3><div id="hist"></div></div>
     <script>
-        const firebaseConfig = {
+        const config = {
             apiKey: "AIzaSyBsZbI5aEOM70XgxuysGrlYTZ_vBMf3Fsg",
             authDomain: "ismah-aaa28.firebaseapp.com",
             databaseURL: "https://ismah-aaa28-default-rtdb.firebaseio.com",
             projectId: "ismah-aaa28",
-            storageBucket: "ismah-aaa28.firebasestorage.app",
-            messagingSenderId: "46463400864",
             appId: "1:46463400864:web:0762edb1dd99aacdc402c5"
         };
-
-        firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(config);
         const db = firebase.database();
-        const provider = new firebase.auth.GoogleAuthProvider();
-
-        function login() { firebase.auth().signInWithPopup(provider); }
-
-        firebase.auth().onAuthStateChanged(user => {
-            document.getElementById('auth-overlay').style.display = user ? 'none' : 'flex';
-            if (user) { syncData(user.uid); }
+        firebase.auth().onAuthStateChanged(u => {
+            document.getElementById('auth-overlay').style.display = u ? 'none' : 'flex';
+            if(u) db.ref('u/'+u.uid).on('value', s => {
+                const data = s.val() || {};
+                document.getElementById('hist').innerHTML = Object.values(data).reverse().map(l => `<div>${l.t} - ${l.v}</div>`).join('');
+            });
         });
-
-        function syncData(uid) {
-            db.ref('users/' + uid + '/goals').on('value', snap => {
-                const goals = snap.val() || {};
-                ['prayers', 'quran', 'sadaqah'].forEach(g => {
-                    document.getElementById('check-' + g).className = goals[g] ? 'check-box active' : 'check-box';
-                });
-            });
-            db.ref('users/' + uid + '/history').limitToLast(10).on('value', snap => {
-                const logs = snap.val() || {};
-                document.getElementById('history-body').innerHTML = Object.values(logs).reverse().map(l => 
-                    `<tr><td>${l.type}</td><td>${l.time}</td></tr>`
-                ).join('');
-            });
+        function log() {
+            const u = firebase.auth().currentUser;
+            if(u) db.ref('u/'+u.uid).push({v: "INIT_FLOW", t: new Date().toLocaleTimeString()});
         }
-
-        function toggleGoal(id) {
-            const uid = firebase.auth().currentUser.uid;
-            const el = document.getElementById('check-' + id);
-            const newState = !el.classList.contains('active');
-            db.ref('users/' + uid + '/goals/' + id).set(newState);
-        }
-
-        function logVenture() {
-            const uid = firebase.auth().currentUser.uid;
-            db.ref('users/' + uid + '/history').push({
-                type: "VENTURE_INIT",
-                time: new Date().toLocaleTimeString()
-            });
-        }
-
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
     </script>
 </body>
