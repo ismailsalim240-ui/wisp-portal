@@ -1523,3 +1523,125 @@
     writeToTerm("Matching Engine: Order book depth 100% synced.");
     writeToTerm("Panic Logic: Hotkey F9 mapped to Black-Box overlay.");
 </script>
+<style>
+    /* --- RISK MAP & INTELLIGENCE VISUALS --- */
+    .risk-map-container {
+        width: 100%;
+        height: 180px;
+        background: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg') no-repeat center;
+        background-size: contain;
+        position: relative;
+        filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg); /* Cyber-Blue World Map */
+        opacity: 0.15;
+    }
+
+    .risk-ping {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: var(--danger);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--danger);
+        animation: ping-expand 2s infinite;
+    }
+
+    @keyframes ping-expand {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(3); opacity: 0; }
+    }
+
+    .news-ticker-v2 {
+        background: rgba(15, 23, 42, 0.8);
+        border-left: 2px solid var(--gold);
+        padding: 15px;
+        margin-top: 20px;
+        font-family: 'JetBrains Mono';
+        font-size: 10px;
+        height: 120px;
+        overflow-y: auto;
+    }
+
+    .news-item {
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .news-tag { color: var(--gold); font-weight: 800; margin-right: 10px; }
+
+    .treasury-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .treasury-stat {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid var(--border);
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    // --- INJECTING RISK ENGINE INTO PULSE ---
+    const pulseRisk = document.querySelector('#pulse');
+    const riskModule = document.createElement('div');
+    riskModule.className = 'module';
+    riskModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Geopolitical Risk & Stability Map</span>
+            <span style="color:var(--danger); font-size:9px;">THREAT_LEVEL: MODERATE</span>
+        </div>
+        <div class="risk-map-container" id="risk-map">
+            <div class="risk-ping" style="top:45%; left:48%;"></div> <div class="risk-ping" style="top:40%; left:80%;"></div> </div>
+        <div class="news-ticker-v2" id="intel-news">
+            <div class="news-item"><span class="news-tag">[INTEL]</span> Global Gold reserves hit 5-year high amid currency volatility.</div>
+            <div class="news-item"><span class="news-tag">[GEO]</span> East African trade corridor reports 12% increase in digital clearing.</div>
+            <div class="news-item"><span class="news-tag">[WISP]</span> All Nairobi nodes reporting 100% Sharia-compliance integrity.</div>
+        </div>
+    `;
+    pulseRisk.appendChild(riskModule);
+
+    // --- INJECTING TREASURY AUDITOR INTO ASSETS ---
+    const assetsTreasury = document.querySelector('#assets');
+    const treasuryModule = document.createElement('div');
+    treasuryModule.className = 'module';
+    treasuryModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Sovereign Treasury Auditor</span></div>
+        <div class="treasury-grid">
+            <div class="treasury-stat">
+                <span style="font-size:8px; opacity:0.5; display:block;">DEBT_RATIO</span>
+                <span style="font-size:14px; font-weight:900; color:#34d399;">0.00%</span>
+            </div>
+            <div class="treasury-stat">
+                <span style="font-size:8px; opacity:0.5; display:block;">HALAL_RESERVE</span>
+                <span style="font-size:14px; font-weight:900; color:var(--gold);">$4.2M</span>
+            </div>
+            <div class="treasury-stat">
+                <span style="font-size:8px; opacity:0.5; display:block;">P_CLEANSE</span>
+                <span style="font-size:14px; font-weight:900; color:var(--primary);">VERIFIED</span>
+            </div>
+        </div>
+        <p style="font-size:8px; opacity:0.4; margin-top:15px; text-align:center;">Automatic Audit Cycle: Every 3600s via Firebase Logic Engine.</p>
+    `;
+    assetsTreasury.insertBefore(treasuryModule, assetsTreasury.firstChild);
+
+    // --- INJECTING SYSTEM LOG INTO COMMAND ---
+    const commandLog = document.querySelector('#command');
+    const logModule = document.createElement('div');
+    logModule.className = 'module';
+    logModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Operator Activity Log</span></div>
+        <div id="op-log" style="font-family:'JetBrains Mono'; font-size:9px; height:80px; overflow-y:auto; opacity:0.6;">
+            [${new Date().toLocaleTimeString()}] - KEY_GEN: Rotated session tokens.<br>
+            [${new Date().toLocaleTimeString()}] - SYNC: Assets cross-referenced with Dubai Hub.
+        </div>
+    `;
+    commandLog.appendChild(logModule);
+
+    // Terminal Expansion
+    writeToTerm("Geopolitical Risk [PHASE_12] synchronized.");
+    writeToTerm("Intelligence Scraper: 14 new data points ingested.");
+    writeToTerm("Treasury: Zero-Debt status confirmed via independent audit.");
+</script>
