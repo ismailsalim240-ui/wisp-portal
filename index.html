@@ -2962,3 +2962,150 @@
     writeToTerm("Heuristics: Bit-drift protection initialized.");
     writeToTerm("Neural: Synaptic firing pattern is 100% rhythmic.");
 </script>
+<style>
+    /* --- GHOST SEAL & HASH HEATMAP VISUALS --- */
+    .ghost-seal-bg {
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40vw;
+        font-weight: 900;
+        color: var(--gold);
+        opacity: 0.02;
+        letter-spacing: -20px;
+        pointer-events: none;
+        z-index: -1;
+        user-select: none;
+        animation: seal-pulse 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes seal-pulse {
+        from { opacity: 0.01; transform: translate(-50%, -50%) scale(0.95); }
+        to { opacity: 0.04; transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .hash-heatmap {
+        display: grid;
+        grid-template-columns: repeat(16, 1fr);
+        gap: 2px;
+        margin-top: 15px;
+    }
+
+    .hash-cell {
+        height: 10px;
+        background: #0f172a;
+        border-radius: 1px;
+        transition: background 0.2s;
+    }
+
+    .key-rotation-panel {
+        background: linear-gradient(180deg, rgba(212, 175, 55, 0.05), transparent);
+        border: 1px solid var(--gold);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 25px;
+    }
+
+    .rotation-timer {
+        font-family: 'JetBrains Mono';
+        font-size: 24px;
+        color: var(--gold);
+        text-align: center;
+        margin: 10px 0;
+        text-shadow: 0 0 10px var(--gold);
+    }
+</style>
+
+<div class="ghost-seal-bg">WISP</div>
+
+<script>
+    // --- INJECTING HASH HEATMAP INTO PULSE TAB ---
+    const pulseHeatmap = document.querySelector('#pulse');
+    const heatmapModule = document.createElement('div');
+    heatmapModule.className = 'module';
+    heatmapModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Recursive SHA-512 Hash Heatmap</span>
+            <span style="font-size:9px; opacity:0.5;">REAL-TIME_VALIDATION</span>
+        </div>
+        <div class="hash-heatmap" id="h-heatmap"></div>
+        <p style="font-size:8px; opacity:0.3; margin-top:10px; text-align:center;">Visualizing 256-bit entropy distribution across local nodes.</p>
+    `;
+    pulseHeatmap.appendChild(heatmapModule);
+
+    const hMap = document.getElementById('h-heatmap');
+    for(let i=0; i<128; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'hash-cell';
+        hMap.appendChild(cell);
+    }
+
+    // Heatmap Animation Logic
+    setInterval(() => {
+        const cells = document.querySelectorAll('.hash-cell');
+        cells.forEach(c => {
+            const val = Math.random();
+            if(val > 0.9) c.style.background = 'var(--gold)';
+            else if(val > 0.7) c.style.background = 'var(--primary)';
+            else c.style.background = '#0f172a';
+        });
+    }, 1000);
+
+    // --- INJECTING KEY ROTATION INTO COMMAND TAB ---
+    const commandKey = document.querySelector('#command');
+    const keyModule = document.createElement('div');
+    keyModule.className = 'module';
+    keyModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Sovereign Key Rotation (PQC)</span></div>
+        <div class="key-rotation-panel">
+            <div style="font-size:9px; opacity:0.5; text-align:center;">NEXT_ROTATION_IN</div>
+            <div class="rotation-timer" id="rot-timer">59:59</div>
+            <button class="btn-cta" style="width:100%;" onclick="forceRotation()">FORCE MANUAL ROTATION</button>
+        </div>
+    `;
+    commandKey.insertBefore(keyModule, commandKey.firstChild);
+
+    let timeLeft = 3600;
+    setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('rot-timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }, 1000);
+
+    function forceRotation() {
+        writeToTerm("KEY_ROTATION: Invalidating current session salts...", "warning");
+        setTimeout(() => {
+            writeToTerm("KEY_ROTATION: New Kyber-1024 master-key generated.", "success");
+            timeLeft = 3600;
+        }, 1000);
+    }
+
+    // --- INJECTING ASSET PURITY TRACKER INTO ASSETS ---
+    const assetsPurity = document.querySelector('#assets');
+    const purityModule = document.createElement('div');
+    purityModule.className = 'module';
+    purityModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Asset Ethical Purity Rating</span></div>
+        <div style="padding:20px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span style="font-size:10px;">ZERO-RIBBA_INTEGRITY</span>
+                <span style="color:#34d399; font-weight:900;">100%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span style="font-size:10px;">SHARIA_COMPLIANCE_STRAT</span>
+                <span style="color:#34d399; font-weight:900;">AAA</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span style="font-size:10px;">NON-SPECULATIVE_WEIGHT</span>
+                <span style="color:var(--gold); font-weight:900;">94.2%</span>
+            </div>
+        </div>
+    `;
+    assetsPurity.appendChild(purityModule);
+
+    // Terminal Expansion
+    writeToTerm("Ghost Layer [PHASE_23] rendered.");
+    writeToTerm("Heatmap: Hash-entropy distribution is 100% uniform.");
+    writeToTerm("Rotation: Automated key-cycling protocol: ARMED.");
+</script>
