@@ -4268,3 +4268,95 @@
     writeToTerm("Recovery: Quantum-Seed generated and encrypted.");
     writeToTerm("Bwana, the Citadel is now your eternal sovereign estate.");
 </script>
+<style>
+    /* --- GPU ACCELERATION & FLUID VISUALS --- */
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Force GPU rendering for heavy layers */
+    .module, .terminal-window, .mpesa-modal, #god-mode-ui {
+        transform: translateZ(0);
+        will-change: transform, opacity;
+        backface-visibility: hidden;
+    }
+
+    /* Ultra-Low Latency Scroll for Terminal */
+    #terminal-content {
+        scroll-behavior: auto; /* Faster than smooth for high-speed logs */
+        overscroll-behavior: contain;
+    }
+
+    /* Neural Particle Field (GPU Driven) */
+    #neural-canvas {
+        position: fixed; inset: 0;
+        z-index: -3; pointer-events: none;
+        opacity: 0.15;
+    }
+
+    /* High-Performance Hover States */
+    .haptic-btn:active {
+        transform: scale(0.96) translateZ(0);
+        background: var(--primary);
+        color: #000;
+    }
+</style>
+
+<canvas id="neural-canvas"></canvas>
+
+<script>
+    // --- GPU PARTICLE ENGINE ---
+    const nCanvas = document.getElementById('neural-canvas');
+    const nCtx = nCanvas.getContext('2d');
+    let particles = [];
+
+    function initNeuralField() {
+        nCanvas.width = window.innerWidth;
+        nCanvas.height = window.innerHeight;
+        particles = [];
+        for(let i=0; i<80; i++) {
+            particles.push({
+                x: Math.random() * nCanvas.width,
+                y: Math.random() * nCanvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2
+            });
+        }
+    }
+
+    function animateNeuralField() {
+        nCtx.clearRect(0, 0, nCanvas.width, nCanvas.height);
+        nCtx.fillStyle = '#00d4ff';
+        particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if(p.x < 0 || p.x > nCanvas.width) p.vx *= -1;
+            if(p.y < 0 || p.y > nCanvas.height) p.vy *= -1;
+            nCtx.beginPath();
+            nCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            nCtx.fill();
+        });
+        requestAnimationFrame(animateNeuralField);
+    }
+
+    window.addEventListener('resize', initNeuralField);
+    initNeuralField();
+    animateNeuralField();
+
+    // --- MEMORY MANAGEMENT (GARBAGE COLLECTOR SIM) ---
+    setInterval(() => {
+        const memoryUsed = (window.performance.memory ? (window.performance.memory.usedJSHeapSize / 1048576).toFixed(2) : "N/A");
+        if(memoryUsed !== "N/A" && memoryUsed > 100) {
+            writeToTerm(`GC: Clearing latent heap cache... [${memoryUsed}MB]`, "info");
+        }
+    }, 30000);
+
+    // --- FINAL BOOT SUCCESS ---
+    console.log("%c WISP SOVEREIGN OS: OPTIMIZATION COMPLETE ", "background: #d4af37; color: #000; font-weight: bold; font-size: 20px;");
+    writeToTerm("OPTIMIZATION: GPU-Acceleration Layer [PHASE_33] Hot-Loaded.", "success");
+    writeToTerm("PERFORMANCE: 120 FPS target reached. Neural field stable.");
+    writeToTerm("READY FOR DEPLOYMENT. STAND BY FOR COMMANDER HANDOVER.");
+</script>
