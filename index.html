@@ -6,13 +6,24 @@
     <title>Wisp Command | Sentinel Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); 
+    </script>
+
     <style>
         :root {
             --primary: #00d4ff;
             --primary-glow: rgba(0, 212, 255, 0.3);
             --ink: #000814;
             --glass: rgba(255, 255, 255, 0.03);
+            --glass-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(0, 212, 255, 0.1);
+            --border-hover: rgba(0, 212, 255, 0.4);
             --surface: rgba(2, 6, 23, 0.8);
             --gold: #D4AF37;
         }
@@ -22,13 +33,14 @@
             --primary-glow: rgba(212, 175, 55, 0.3);
             --ink: #050505;
             --border: rgba(212, 175, 55, 0.15);
+            --border-hover: rgba(212, 175, 55, 0.5);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
         
         body {
             background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden; min-height: 100vh;
+            overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;
         }
 
         /* Task Ticker Styling */
@@ -43,20 +55,52 @@
         .ripple { position: absolute; border: 1px solid var(--primary); border-radius: 50%; animation: ripple-effect 8s infinite linear; opacity: 0; pointer-events: none; }
         @keyframes ripple-effect { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.1; } 100% { transform: scale(2.5); opacity: 0; } }
 
-        .layout { max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10; }
-        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .layout { max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
+        .nav-controls { display: flex; gap: 10px; align-items: center; }
+        
         .theme-btn { background: var(--glass); border: 1px solid var(--border); color: #fff; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 10px; letter-spacing: 2px; }
+        .theme-btn:hover { background: var(--glass-hover); border-color: var(--border-hover); box-shadow: 0 0 10px var(--primary-glow); }
+        
         .card { background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 30px; backdrop-filter: blur(25px); margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .card:hover { border-color: rgba(255,255,255,0.1); }
+
         .chart-controls { display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end; }
         .chart-btn { background: transparent; border: 1px solid var(--border); color: var(--primary); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 10px; }
+        .chart-btn:hover { background: var(--glass-hover); }
         .chart-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        
         .pulse-val { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
         .timer-val { font-family: 'JetBrains Mono'; font-size: 3rem; font-weight: 300; letter-spacing: -2px; margin: 15px 0; }
-        .btn-fluid { width: 100%; padding: 20px; border-radius: 18px; font-weight: 700; cursor: pointer; letter-spacing: 3px; border: none; text-transform: uppercase; margin-top: 10px; background: linear-gradient(90deg, var(--primary), #0077b6); color: #000; }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 20px; max-width: 500px; max-height: 80vh; overflow-y: auto; font-size: 13px; line-height: 1.6; }
+        
+        .btn-fluid { width: 100%; padding: 20px; border-radius: 18px; font-weight: 700; cursor: pointer; letter-spacing: 3px; border: none; text-transform: uppercase; margin-top: 10px; background: linear-gradient(90deg, var(--primary), #0077b6); color: #000; box-shadow: 0 4px 15px var(--primary-glow); }
+        .btn-fluid:hover:not(.btn-locked) { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; box-shadow: none; }
+        
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 20px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; font-size: 13px; line-height: 1.6; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--primary); font-size: 20px; cursor: pointer; background: none; border: none; }
+        
         .sub-tag { font-size: 9px; letter-spacing: 4px; opacity: 0.5; text-transform: uppercase; }
+
+        /* Professional Footer Styling */
+        .pro-footer {
+            margin-top: 20px; padding: 30px; background: var(--surface); border-top: 1px solid var(--border);
+            border-radius: 30px 30px 0 0; backdrop-filter: blur(25px);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+        }
+        .contact-info { display: flex; gap: 20px; flex-wrap: wrap; }
+        .contact-link { 
+            display: flex; align-items: center; gap: 8px; color: #cbd5e1; text-decoration: none; 
+            font-size: 12px; font-weight: 500; padding: 10px 15px; border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid transparent; transition: 0.3s;
+        }
+        .contact-link:hover { color: var(--primary); background: rgba(255, 255, 255, 0.05); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 10px var(--primary-glow); }
+
+        .contact-icon { font-size: 16px; }
+
+        @media(max-width: 600px){ .pro-footer { flex-direction: column; text-align: center; } .contact-info { justify-content: center; } }
     </style>
 </head>
 <body id="main-body">
@@ -70,7 +114,10 @@
                 <h1 style="font-size: 18px; letter-spacing: 6px; font-weight: 700;">SCINTILLATING WISP</h1>
                 <p class="sub-tag">Fluid Venture Portal • March 2026</p>
             </div>
-            <div style="display: flex; gap: 10px;">
+            <div class="nav-controls">
+                <button class="theme-btn" title="Profile">👤</button>
+                <button class="theme-btn" title="Notifications">🔔</button>
+                <div style="width: 1px; height: 20px; background: var(--border); margin: 0 5px;"></div>
                 <button class="theme-btn" onclick="toggleTheme()">SWITCH THEME</button>
                 <button class="theme-btn" onclick="toggleModal()">📜 T&C</button>
             </div>
@@ -101,8 +148,24 @@
         </div>
     </div>
 
+    <div class="pro-footer layout" style="margin-bottom: 0; max-width: 1000px;">
+        <div style="text-align: left;">
+            <div style="font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--primary);">SENTINEL SUPPORT</div>
+            <div class="sub-tag" style="margin-top: 5px;">Venture Intelligence • 2026</div>
+        </div>
+        <div class="contact-info">
+            <a href="mailto:Ismailsalim240@gmail.com" class="contact-link" aria-label="Send Email">
+                <span class="contact-icon">📧</span> Ismailsalim240@gmail.com
+            </a>
+            <a href="https://wa.me/25493837381" class="contact-link" target="_blank" aria-label="WhatsApp Support">
+                <span class="contact-icon">💬</span> +254 938 37381
+            </a>
+        </div>
+    </div>
+
     <div class="modal" id="tc-modal" onclick="toggleModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="toggleModal()">×</button>
             <h2 style="margin-bottom: 20px; color: var(--primary);">Terms & Conditions</h2>
             <p>1. <strong>Sharia Compliance:</strong> Strictly No Ribba (Interest).</p><br>
             <p>2. <strong>Temporal Windows:</strong> Respect Invest-In (3am-10am) and Invest-Out (3pm-10pm).</p><br>
