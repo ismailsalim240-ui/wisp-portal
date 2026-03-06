@@ -4,177 +4,278 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp | Command Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --gold: #D4AF37;
             --deep-blue: #020617;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(212, 175, 55, 0.15);
+            --ink: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(212, 175, 55, 0.12);
             --text-main: #E2E8F0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 
         body {
-            background-color: var(--deep-blue);
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--ink) 80%);
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             display: flex; flex-direction: column; align-items: center;
-            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--deep-blue) 80%);
-            min-height: 100vh;
-            overflow-x: hidden;
+            min-height: 100vh; overflow-x: hidden;
+            background-attachment: fixed;
         }
 
-        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.2); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; border-bottom: 1px solid var(--glass-border); }
-        .ticker { display: inline-block; white-space: nowrap; animation: marquee 40s linear infinite; }
+        /* --- Silent Water Aesthetic --- */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.02; pointer-events: none; z-index: 1;
+        }
+
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.5); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; border-bottom: 1px solid var(--glass-border); z-index: 10; }
+        .ticker { display: inline-block; white-space: nowrap; animation: marquee 60s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        header { text-align: center; padding: 60px 20px 20px 20px; }
-        .logo-aura { font-size: 3.5rem; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); margin-bottom: 10px; }
+        header { text-align: center; padding: 60px 0 40px 0; transition: 1s; }
+        .logo-aura { font-size: 4rem; text-shadow: 0 0 40px rgba(212, 175, 55, 0.3); margin-bottom: 10px; cursor: default; }
 
-        .container { width: 92%; max-width: 460px; padding-bottom: 120px; opacity: 0; transform: translateY(30px); transition: 1.5s ease; }
+        .container { width: 92%; max-width: 480px; padding-bottom: 120px; opacity: 0; transform: translateY(20px); transition: 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
         .container.visible { opacity: 1; transform: translateY(0); }
 
-        .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 25px; backdrop-filter: blur(20px); margin-bottom: 20px; transition: 0.5s; }
-        .glass-card:hover { border-color: var(--gold); transform: scale(1.01); }
+        .glass-card { 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); 
+            border-radius: 35px; padding: 30px; backdrop-filter: blur(40px); 
+            margin-bottom: 25px; transition: 0.7s; position: relative; overflow: hidden;
+        }
+        .glass-card:hover { border-color: rgba(212, 175, 55, 0.4); transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
 
-        .yield-val { font-size: 2rem; font-weight: 700; color: #2ecc71; }
-        .timer-display { font-size: 2.2rem; font-weight: 300; margin: 15px 0; letter-spacing: 2px; }
+        .yield-val { font-size: 2.4rem; font-weight: 700; color: #34d399; text-shadow: 0 0 20px rgba(52, 211, 153, 0.2); }
+        .timer-display { font-size: 2.6rem; font-weight: 300; margin: 20px 0; letter-spacing: 5px; color: #fff; font-family: 'JetBrains Mono', monospace; }
 
-        .action-btn { display: block; width: 100%; padding: 20px; border-radius: 15px; text-align: center; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; border: none; cursor: pointer; transition: 0.3s; }
-        .btn-gold { background: var(--gold); color: #000; box-shadow: 0 10px 30px rgba(212,175,55,0.2); }
-        .btn-locked { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.1); pointer-events: none; }
+        .action-btn { 
+            width: 100%; padding: 22px; border-radius: 20px; border: none;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 4px; font-size: 0.75rem;
+            cursor: pointer; transition: 0.4s;
+        }
+        .btn-gold { background: var(--gold); color: #000; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2); }
+        .btn-gold:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .btn-locked { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.15); pointer-events: none; border: 1px solid rgba(255,255,255,0.05); }
 
-        .progress-track { height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin: 15px 0; }
-        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 1.2s ease; }
+        /* Progress System */
+        .progress-track { height: 6px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin: 20px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* Chat System */
-        .chat-trigger { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; z-index: 100; }
-        .chat-window { display: none; position: fixed; bottom: 105px; right: 30px; width: 320px; height: 400px; background: #050a18; border: 1px solid var(--glass-border); border-radius: 25px; flex-direction: column; overflow: hidden; z-index: 100; }
-        #chatBody { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.75rem; display: flex; flex-direction: column; gap: 10px; }
-        .ai-msg { border-left: 2px solid var(--gold); padding: 8px; background: rgba(255,255,255,0.05); border-radius: 0 10px 10px 0; }
-        .user-msg { align-self: flex-end; padding: 8px; background: var(--gold); color: #000; border-radius: 10px 10px 0 10px; font-weight: bold; }
+        /* Intelligence UI */
+        .chat-trigger { position: fixed; bottom: 40px; right: 30px; width: 70px; height: 70px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; cursor: pointer; box-shadow: 0 20px 40px rgba(0,0,0,0.4); transition: 0.3s; }
+        .chat-trigger:hover { transform: scale(1.1) rotate(15deg); }
+        
+        .chat-window { 
+            display: none; position: fixed; bottom: 125px; right: 30px; 
+            width: 360px; height: 500px; background: #080c1d; 
+            border: 1px solid var(--glass-border); border-radius: 30px; 
+            flex-direction: column; overflow: hidden; z-index: 1000; 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.7); 
+        }
+        #chatBody { flex: 1; padding: 25px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 15px; }
+        .msg { padding: 15px; border-radius: 20px; max-width: 85%; line-height: 1.5; font-size: 0.8rem; }
+        .ai-msg { background: rgba(255,255,255,0.03); border-left: 3px solid var(--gold); align-self: flex-start; color: #ccd6f6; }
+        .user-msg { background: var(--gold); color: #000; align-self: flex-end; font-weight: 700; }
+        
+        .chat-input-area { padding: 20px; border-top: 1px solid var(--glass-border); display: flex; gap: 12px; background: rgba(0,0,0,0.2); }
+        #chatInput { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; color: white; padding: 12px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <div class="ticker-wrap"><div class="ticker">&bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; VENTURE PULSE: STABLE &nbsp;&nbsp; &bull; NO-RIBBA PROTOCOL ACTIVE &nbsp;&nbsp;</div></div>
+    <div class="ticker-wrap">
+        <div class="ticker">
+            &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; VENTURE PULSE: STABLE &nbsp;&nbsp; &bull; NO-RIBBA PROTOCOL: MANDATORY &nbsp;&nbsp; &bull; ETHICAL ASSET MONITORING: LIVE &nbsp;&nbsp;
+        </div>
+    </div>
 
-    <header><div class="logo-aura">🌙</div><h1 style="letter-spacing: 8px; font-size: 1.1rem;">WISP COMMAND</h1></header>
+    <header>
+        <div class="logo-aura">🌙</div>
+        <h1 style="letter-spacing: 12px; font-size: 1.3rem; font-weight: 700; opacity: 0.9;">WISP COMMAND</h1>
+    </header>
 
     <div class="container" id="main-ui">
+        
         <div class="glass-card">
-            <div style="display: flex; justify-content: space-between;">
-                <div><div class="yield-val">+12.8%</div><div style="font-size: 0.5rem; opacity: 0.5;">WEEKLY GROWTH</div></div>
-                <div style="text-align: right; font-size: 0.6rem; color: var(--gold);">● ETHICAL VENTURE</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 25px; align-items: flex-start;">
+                <div>
+                    <div class="yield-val">+12.8%</div>
+                    <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-top: 5px;">Weekly Venture Pulse</div>
+                </div>
+                <div style="text-align: right; font-size: 0.65rem; line-height: 1.8;">
+                    <div style="color: var(--gold); font-weight: 700;">● SHARIA COMPLIANT</div>
+                    <div style="opacity: 0.5;">● ETHICAL GROWTH</div>
+                </div>
             </div>
-            <canvas id="pulseChart" style="margin-top:15px;"></canvas>
+            <div style="height: 120px; width: 100%;">
+                <canvas id="pulseChart"></canvas>
+            </div>
         </div>
 
         <div class="glass-card" style="text-align: center;">
-            <div id="status" style="font-size: 0.55rem; letter-spacing: 3px; opacity: 0.6;">PORTAL SECURED</div>
-            <div id="timer" class="timer-display">SYNCING...</div>
-            <button class="action-btn btn-locked" id="action-link">Portal Locked</button>
+            <div id="status" style="font-size: 0.65rem; letter-spacing: 5px; opacity: 0.5; font-weight: 700;">PORTAL SECURED</div>
+            <div id="timer" class="timer-display">00:00:00</div>
+            <button class="action-btn btn-locked" id="action-btn">Initialize Portal</button>
         </div>
 
         <div class="glass-card">
-            <div style="font-size: 0.6rem; opacity: 0.7;">DAILY DISCIPLINE FLOW</div>
+            <div style="font-size: 0.65rem; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px; font-weight: 700;">DAILY DISCIPLINE FLOW</div>
             <div class="progress-track"><div id="p-bar" class="progress-fill"></div></div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                <button onclick="runProgress()" style="background:rgba(255,255,255,0.02); color:white; border:1px solid var(--glass-border); padding:10px; border-radius:10px; font-size:0.5rem; cursor:pointer;">PRAYER</button>
-                <button onclick="runProgress()" style="background:rgba(255,255,255,0.02); color:white; border:1px solid var(--glass-border); padding:10px; border-radius:10px; font-size:0.5rem; cursor:pointer;">SKILL</button>
-                <button onclick="runProgress()" style="background:rgba(255,255,255,0.02); color:white; border:1px solid var(--glass-border); padding:10px; border-radius:10px; font-size:0.5rem; cursor:pointer;">GIVING</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px;">
+                <button onclick="runProgress('prayer')" style="background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--glass-border); padding: 18px; border-radius: 15px; font-size: 0.6rem; cursor: pointer; font-weight: 700;">PRAYER</button>
+                <button onclick="runProgress('skill')" style="background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--glass-border); padding: 18px; border-radius: 15px; font-size: 0.6rem; cursor: pointer; font-weight: 700;">SKILL</button>
+                <button onclick="runProgress('giving')" style="background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--glass-border); padding: 18px; border-radius: 15px; font-size: 0.6rem; cursor: pointer; font-weight: 700;">GIVING</button>
             </div>
         </div>
+
     </div>
 
     <div class="chat-trigger" onclick="toggleChat()">✨</div>
     <div id="chatWindow" class="chat-window">
-        <div style="background: var(--gold); color: #000; padding: 12px; font-weight: 700; font-size: 0.7rem;">INTELLIGENCE v4.0</div>
-        <div id="chatBody"><div class="ai-msg">Salam, Operator. Standing by.</div></div>
-        <div style="padding: 10px; border-top: 1px solid var(--glass-border); display: flex;">
-            <input type="text" id="chatInput" placeholder="Command..." style="flex:1; background:transparent; border:none; color:white; outline:none; font-size:0.8rem;">
-            <button onclick="sendMessage()" style="background:var(--gold); border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">➔</button>
+        <div style="background: var(--gold); color: #000; padding: 18px; font-weight: 800; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="letter-spacing: 2px;">INTELLIGENCE v4.0-PRO</span>
+            <span onclick="toggleChat()" style="cursor:pointer; font-size: 1.2rem;">×</span>
+        </div>
+        <div id="chatBody">
+            <div class="msg ai-msg">Salam, Operator. Venture architecture is stable. Management standing by for instructions.</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Enter command..." autocomplete="off">
+            <button onclick="sendMessage()" style="background: var(--gold); border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; font-weight: 900;">➔</button>
         </div>
     </div>
 
-    <script>
-        window.onload = () => { document.getElementById('main-ui').classList.add('visible'); renderChart(); };
+    <footer style="text-align: center; padding: 40px; font-size: 0.6rem; letter-spacing: 4px; opacity: 0.3; line-height: 2;">
+        &copy; 2026 SCINTILLATING WISP<br>
+        ETHICAL VENTURE ARCHITECTURE
+    </footer>
 
+    <script>
+        // 1. Initial Launch
+        window.onload = () => { 
+            document.getElementById('main-ui').classList.add('visible'); 
+            renderChart();
+            updateScoreUI();
+        };
+
+        // 2. Venture Pulse Chart
         function renderChart() {
             const ctx = document.getElementById('pulseChart').getContext('2d');
-            new Chart(ctx, { type: 'line', data: { labels: [1,2,3,4,5], datasets: [{ data: [10,15,12,18,20], borderColor: '#D4AF37', fill: false, tension: 0.4 }] }, options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
+            const gradient = ctx.createLinearGradient(0, 0, 0, 120);
+            gradient.addColorStop(0, 'rgba(212, 175, 55, 0.2)');
+            gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['', '', '', '', '', '', '', '', '', ''],
+                    datasets: [{
+                        data: [18, 22, 19, 28, 25, 34, 31, 40, 38, 45],
+                        borderColor: '#D4AF37',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: true,
+                        backgroundColor: gradient,
+                        tension: 0.4
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            });
         }
 
-        // TIMER FIX: Correctly identifies Friday and the Window
-        function updateTimer() {
-            const now = new Date();
-            const day = now.getDay(); // 5 = Friday
-            const hrs = now.getHours();
-            const btn = document.getElementById('action-link');
-            const status = document.getElementById('status');
-            const timer = document.getElementById('timer');
-
-            // Friday Window: 3:00 AM to 10:00 AM
-            if (day === 5 && hrs >= 3 && hrs < 10) {
-                status.innerText = "WINDOW ACTIVE";
-                status.style.color = "#2ecc71";
-                btn.className = "action-btn btn-gold";
-                btn.innerText = "INITIALIZE";
-                timer.innerText = "LIVE";
-            } else {
-                let next = new Date();
-                let daysUntilFriday = (5 - day + 7) % 7;
-                if (day === 5 && hrs >= 10) daysUntilFriday = 7;
-                
-                next.setDate(now.getDate() + daysUntilFriday);
-                next.setHours(3, 0, 0, 0);
-                
-                const diff = next - now;
-                const d = Math.floor(diff / 86400000), h = Math.floor((diff / 3600000) % 24), m = Math.floor((diff / 60000) % 60), s = Math.floor((diff / 1000) % 60);
-                timer.innerText = `${d}D ${h}H ${m}M ${s}S`;
-            }
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-
-        // Discipline Logic
-        let score = parseInt(localStorage.getItem('wisp-score') || 0);
-        function runProgress() {
-            score = (score >= 100) ? 0 : score + 11.2;
-            document.getElementById('p-bar').style.width = score + '%';
-            localStorage.setItem('wisp-score', score);
-        }
-        document.getElementById('p-bar').style.width = score + '%';
-
-        function toggleChat() { const w = document.getElementById('chatWindow'); w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; }
-
+        // 3. AI Intelligence (Gemini Integration)
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const body = document.getElementById('chatBody');
-            if (!input.value.trim()) return;
-            
-            const uMsg = document.createElement('div'); uMsg.className = 'user-msg'; uMsg.innerText = input.value;
-            body.appendChild(uMsg);
-            
-            const key = localStorage.getItem('gemini_key') || prompt("Enter Gemini API Key:");
-            if (key) localStorage.setItem('gemini_key', key);
+            const text = input.value.trim();
+            if(!text) return;
 
-            const aMsg = document.createElement('div'); aMsg.className = 'ai-msg'; aMsg.innerText = "Syncing...";
-            body.appendChild(aMsg);
-            
+            // User Message
+            const uDiv = document.createElement('div'); uDiv.className = 'msg user-msg'; uDiv.innerText = text;
+            body.appendChild(uDiv); input.value = '';
+
+            // Auth Check
+            let key = localStorage.getItem('gemini_key');
+            if(!key) {
+                key = prompt("Secure Connection Required. Enter Gemini API Key:");
+                if(key) localStorage.setItem('gemini_key', key); else return;
+            }
+
+            // AI Response (Syncing State)
+            const aDiv = document.createElement('div'); aDiv.className = 'msg ai-msg'; aDiv.innerText = 'Synchronizing...';
+            body.appendChild(aDiv); body.scrollTop = body.scrollHeight;
+
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Persona: Wisp Intelligence. Elite, Sharia-compliant. User: " + input.value }] }] })
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: "Context: You are Wisp Intelligence v4.0. You serve the 'Operator'. Persona: Elite, professional, mysterious. Core Directive: Advocate only for Sharia-compliant, interest-free (Ribba-free) ethical business. User Instruction: " + text }] }]
+                    })
                 });
-                const data = await res.json();
-                aMsg.innerText = data.candidates[0].content.parts[0].text;
-            } catch (e) { aMsg.innerText = "Error: Key required."; }
-            input.value = ""; body.scrollTop = body.scrollHeight;
+                const data = await response.json();
+                aDiv.innerText = data.candidates[0].content.parts[0].text;
+            } catch (e) { aDiv.innerText = "Connection failed. Please verify management credentials (API Key)."; }
+            body.scrollTop = body.scrollHeight;
         }
+
+        function toggleChat() { const c = document.getElementById('chatWindow'); c.style.display = (c.style.display === 'flex') ? 'none' : 'flex'; }
+
+        // 4. Persistence & Discipline Logic
+        let score = parseFloat(localStorage.getItem('wisp_score') || 0);
+        function runProgress() {
+            score = (score >= 100) ? 0 : score + 11.2;
+            localStorage.setItem('wisp_score', score);
+            updateScoreUI();
+        }
+        function updateScoreUI() {
+            document.getElementById('p-bar').style.width = score + '%';
+        }
+
+        // 5. Advanced Timer Logic (Fixed for Friday Window)
+        function refreshPortal() {
+            const now = new Date();
+            const day = now.getDay(); // 5 = Friday
+            const hrs = now.getHours();
+            const btn = document.getElementById('action-btn'), pill = document.getElementById('status'), timer = document.getElementById('timer');
+
+            // Friday Window: 3 AM to 10 AM
+            if (day === 5 && hrs >= 3 && hrs < 10) {
+                pill.innerText = "WINDOW ACTIVE"; pill.style.color = "#2ecc71";
+                btn.className = "action-btn btn-gold"; btn.innerText = "INITIALIZE";
+                timer.innerText = "LIVE";
+            } else {
+                // Calculate time until next Friday at 3:00 AM
+                let next = new Date();
+                let daysToFriday = (5 - day + 7) % 7;
+                
+                // If it is Friday but after 10 AM, look for NEXT Friday
+                if (day === 5 && hrs >= 10) daysToFriday = 7;
+                // If today is not Friday, and daysToFriday is 0, it means it's a week away (shouldn't happen with %7)
+                if (daysToFriday === 0 && day !== 5) daysToFriday = 7;
+
+                next.setDate(now.getDate() + daysToFriday);
+                next.setHours(3, 0, 0, 0);
+
+                let ms = next - now;
+                let d = Math.floor(ms / 86400000), h = Math.floor((ms / 3600000) % 24), m = Math.floor((ms / 60000) % 60), s = Math.floor((ms / 1000) % 60);
+                timer.innerText = `${d}D ${h}H ${m}M ${s}S`;
+                
+                pill.innerText = "PORTAL SECURED"; pill.style.color = "";
+                btn.className = "action-btn btn-locked"; btn.innerText = "PORTAL LOCKED";
+            }
+        }
+        setInterval(refreshPortal, 1000); refreshPortal();
     </script>
 </body>
 </html>
