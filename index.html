@@ -2537,3 +2537,126 @@
     writeToTerm("Security: Kyber-1024 Post-Quantum Encryption active.");
     writeToTerm("Treasury: Liquidity depth depth-validated for NBO/DXB.");
 </script>
+<style>
+    /* --- BOOT OVERLAY & SYSTEM GRAPH VISUALS --- */
+    #boot-sequence {
+        position: fixed; inset: 0; background: #000; z-index: 100000;
+        display: flex; flex-direction: column; padding: 50px;
+        font-family: 'JetBrains Mono'; font-size: 12px; color: var(--primary);
+        overflow: hidden; pointer-events: none; transition: opacity 1s ease;
+    }
+    
+    .boot-line { margin-bottom: 4px; opacity: 0; transform: translateX(-10px); }
+    .boot-active { animation: boot-fade 0.1s forwards; }
+    
+    @keyframes boot-fade { 
+        to { opacity: 1; transform: translateX(0); } 
+    }
+
+    .integrity-graph {
+        width: 100%; height: 120px;
+        background: rgba(0, 212, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        margin-top: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .graph-svg-line {
+        fill: none; stroke: var(--primary); stroke-width: 2;
+        stroke-dasharray: 1000; stroke-dashoffset: 1000;
+        animation: draw-graph 10s linear infinite;
+    }
+
+    @keyframes draw-graph { 
+        to { stroke-dashoffset: 0; } 
+    }
+
+    .news-aggregator {
+        height: 200px; overflow-y: auto;
+        border-left: 2px solid var(--gold);
+        padding-left: 15px; margin-top: 20px;
+    }
+</style>
+
+<div id="boot-sequence"></div>
+
+<script>
+    // --- INITIALIZING NEURAL BOOT SEQUENCE ---
+    const bootContainer = document.getElementById('boot-sequence');
+    const bootLogs = [
+        "INITIALIZING SOVEREIGN_WISP_OS V4.2...",
+        "CHECKING KERNEL INTEGRITY...",
+        "MOUNTING ENCRYPTED_VAULT_NBO_01...",
+        "ESTABLISHING ZERO-RIBBA PROTOCOL...",
+        "SYNCING WITH DUBAI_GOLD_ORACLE...",
+        "NEURAL_HANDSHAKE: [SUCCESS]",
+        "BIOMETRIC_CHECK: [COMMANDER_VERIFIED]",
+        "BYPASSING PUBLIC_GATEWAY...",
+        "UPLINK_STABLE: 1.2 GBPS",
+        "WELCOME, BWANA. SYSTEM IS LIVE."
+    ];
+
+    let delay = 0;
+    bootLogs.forEach((text, i) => {
+        const line = document.createElement('div');
+        line.className = 'boot-line';
+        line.innerText = `> ${text}`;
+        bootContainer.appendChild(line);
+        setTimeout(() => { line.classList.add('boot-active'); }, delay);
+        delay += 300;
+    });
+
+    setTimeout(() => { 
+        bootContainer.style.opacity = '0';
+        setTimeout(() => { bootContainer.style.display = 'none'; }, 1000);
+    }, delay + 1000);
+
+    // --- INJECTING INTEGRITY GRAPH INTO PULSE ---
+    const pulseIntegrity = document.querySelector('#pulse');
+    const graphModule = document.createElement('div');
+    graphModule.className = 'module';
+    graphModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Recursive Integrity Flux</span></div>
+        <div class="integrity-graph">
+            <svg width="100%" height="100%" preserveAspectRatio="none">
+                <path d="M0,80 Q50,20 100,80 T200,80 T300,40 T400,90 T500,20 T600,80" class="graph-svg-line" />
+            </svg>
+        </div>
+    `;
+    pulseIntegrity.appendChild(graphModule);
+
+    // --- INJECTING NEWS AGGREGATOR INTO SIDEBAR ---
+    const sidebarNews = document.querySelector('.intel-column');
+    const newsAggModule = document.createElement('div');
+    newsAggModule.className = 'module';
+    newsAggModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Sovereign Intel</span></div>
+        <div class="news-aggregator" id="news-feed">
+            <div class="news-item"><span style="color:var(--gold)">[XAU]</span> Central banks increase gold reserves by 14%.</div>
+            <div class="news-item"><span style="color:var(--primary)">[TECH]</span> Quantum-resistant encryption becomes UAE standard.</div>
+            <div class="news-item"><span style="color:var(--gold)">[EAC]</span> Nairobi corridor trade volume up 22% in Q1.</div>
+        </div>
+    `;
+    sidebarNews.appendChild(newsAggModule);
+
+    // --- INJECTING CAPITAL RATIO INTO ASSETS ---
+    const assetsRatio = document.querySelector('#assets');
+    const ratioModule = document.createElement('div');
+    ratioModule.className = 'module';
+    ratioModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Capital Adequacy Ratio (CAR)</span></div>
+        <div style="padding:20px; text-align:center;">
+            <div style="font-size:32px; font-weight:900; color:#34d399;">100%</div>
+            <p style="font-size:9px; opacity:0.5; text-transform:uppercase;">Zero-Debt / Fully Collateralized</p>
+            <div class="liquidity-bar" style="margin-top:15px;"><div class="liquidity-fill" style="width:100%; background:#34d399;"></div></div>
+        </div>
+    `;
+    assetsRatio.insertBefore(ratioModule, assetsRatio.children[2]);
+
+    // Final Terminal Updates
+    writeToTerm("OS Boot [PHASE_20] completed in 4.2s.");
+    writeToTerm("Integrity: Flux signature matches sovereign baseline.");
+    writeToTerm("Intel: Global news aggregator synchronized.");
+</script>
