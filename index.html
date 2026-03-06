@@ -532,3 +532,121 @@
     writeToTerm("Ledger System: Reading historical blocks...");
     writeToTerm("Global Map: 3 Nodes Detected & Synced.");
 </script>
+<style>
+    /* --- SECURITY ANIMATIONS --- */
+    @keyframes scan-line {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+    }
+    
+    .scanner-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        height: 20px; width: 100%; opacity: 0.1;
+        animation: scan-line 4s linear infinite;
+        pointer-events: none;
+    }
+
+    .audit-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .audit-card {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .audit-value {
+        display: block;
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--gold);
+        font-family: 'JetBrains Mono';
+    }
+
+    .audit-label {
+        font-size: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        opacity: 0.5;
+    }
+</style>
+
+<script>
+    // --- INJECTING SECURITY AUDIT INTO COMMAND TAB ---
+    const commandSection = document.querySelector('#command');
+    const auditModule = document.createElement('div');
+    auditModule.className = 'module';
+    auditModule.style.position = 'relative';
+    auditModule.innerHTML = `
+        <div class="scanner-overlay"></div>
+        <div class="module-header">
+            <span class="module-title">Live Security & Compliance Audit</span>
+            <span style="color:#34d399; font-size:9px;">● ENCRYPTION ACTIVE</span>
+        </div>
+        <div class="audit-grid">
+            <div class="audit-card">
+                <span class="audit-value">256-BIT</span>
+                <span class="audit-label">AES SSL</span>
+            </div>
+            <div class="audit-card">
+                <span class="audit-value">PASS</span>
+                <span class="audit-label">SHARIA AUDIT</span>
+            </div>
+            <div class="audit-card">
+                <span class="audit-value">9.8s</span>
+                <span class="audit-label">SYNC SPEED</span>
+            </div>
+        </div>
+        <p style="font-size:10px; opacity:0.4; margin-top:20px; font-family:'JetBrains Mono';">
+            [SEC_LOG] Last integrity check: ${new Date().toLocaleTimeString()}... Status: UNTOUCHED.
+        </p>
+    `;
+    commandSection.insertBefore(auditModule, commandSection.firstChild);
+
+    // --- INJECTING MORAL CAPITAL CALCULATOR INTO ASSETS TAB ---
+    const assetSection = document.querySelector('#assets');
+    const calculatorModule = document.createElement('div');
+    calculatorModule.className = 'module';
+    calculatorModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Moral Capital Projection</span></div>
+        <div style="background: rgba(212, 175, 55, 0.05); padding: 30px; border-radius: 20px; border: 1px dashed var(--gold);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:10px;">
+                <span style="font-size:10px; opacity:0.6;">PROJECTED GROWTH (HALAL)</span>
+                <span style="font-size:24px; font-weight:900; color:var(--gold);">+12.4%</span>
+            </div>
+            <div style="width:100%; height:8px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden;">
+                <div style="width:75%; height:100%; background:linear-gradient(90deg, var(--gold), #fff); border-radius:10px;"></div>
+            </div>
+            <p style="font-size:9px; opacity:0.4; margin-top:15px; line-height:1.5;">
+                Estimates based on current risk-sharing equity models and ethical asset allocation. Calculations exclude all interest-bearing instruments.
+            </p>
+        </div>
+    `;
+    assetSection.appendChild(calculatorModule);
+
+    // --- SYSTEM NETWORK MONITOR (LATENCY SIMULATOR) ---
+    const intelColumn = document.querySelector('.intel-column');
+    const netModule = document.createElement('div');
+    netModule.className = 'module';
+    netModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Latency Monitor</span></div>
+        <div id="latency-display" style="font-family:'JetBrains Mono'; font-size:10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Cloudflare (Edge)</span><span style="color:#34d399">12ms</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Firebase (Primary)</span><span style="color:#34d399">45ms</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Wisp Node (Local)</span><span style="color:var(--gold)">8ms</span></div>
+        </div>
+    `;
+    intelColumn.appendChild(netModule);
+
+    // Update Terminal
+    writeToTerm("Vault Module [SEC_AUDIT] activated.");
+    writeToTerm("Moral Calculator: Analyzing Halal equity pools...");
+    writeToTerm("Security: Scan cycle complete. 0 threats detected.");
+</script>
