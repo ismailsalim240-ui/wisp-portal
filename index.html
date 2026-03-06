@@ -2135,3 +2135,135 @@
     writeToTerm("Bridge: L2 Liquidity Tunnel established to Dubai Hub.");
     writeToTerm("Entropy: System noise within sub-zero tolerance.");
 </script>
+<style>
+    /* --- WHALE TRACKER & SIGNAL VISUALS --- */
+    .whale-log {
+        height: 150px;
+        overflow-y: auto;
+        background: rgba(0,0,0,0.6);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 15px;
+        font-family: 'JetBrains Mono';
+        font-size: 9px;
+    }
+
+    .whale-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .signal-matrix {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .signal-cell {
+        background: rgba(0, 212, 255, 0.03);
+        border: 1px solid var(--border);
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .signal-indicator {
+        width: 100%;
+        height: 3px;
+        background: #1e293b;
+        margin-top: 8px;
+        position: relative;
+    }
+    .signal-fill {
+        position: absolute;
+        height: 100%;
+        background: var(--primary);
+        box-shadow: 0 0 5px var(--primary);
+    }
+
+    .alert-pulse-red {
+        color: #ef4444;
+        animation: text-pulse 1.5s infinite;
+    }
+    @keyframes text-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+
+<script>
+    // --- INJECTING WHALE TRACKER INTO ASSETS TAB ---
+    const assetsWhale = document.querySelector('#assets');
+    const whaleModule = document.createElement('div');
+    whaleModule.className = 'module';
+    whaleModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Global XAU Whale Tracker</span>
+            <span class="alert-pulse-red" style="font-size:9px;">● LARGE_MOVE_DETECTED</span>
+        </div>
+        <div class="whale-log" id="whale-list">
+            <div class="whale-row"><span style="color:var(--gold);">[INBOUND]</span> 500kg XAU → London Vault <span style="opacity:0.5;">02:14 UTC</span></div>
+            <div class="whale-row"><span style="color:var(--primary);">[INTERNAL]</span> 120kg XAU → Dubai Sync <span style="opacity:0.5;">01:45 UTC</span></div>
+            <div class="whale-row"><span style="color:var(--gold);">[INBOUND]</span> 1,200kg XAU → Swiss Deep-Vault <span style="opacity:0.5;">01:10 UTC</span></div>
+        </div>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px; text-align:right;">Tracking 24 Institutional Vault Gateways.</p>
+    `;
+    assetsWhale.appendChild(whaleModule);
+
+    // --- INJECTING INGRESS SIGNALS INTO COMMAND TAB ---
+    const commandSignals = document.querySelector('#command');
+    const signalModule = document.createElement('div');
+    signalModule.className = 'module';
+    signalModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Ingress Signal Matrix</span></div>
+        <div class="signal-matrix">
+            <div class="signal-cell">
+                <span style="font-size:8px; opacity:0.5; display:block;">GEO_STABILITY</span>
+                <span style="font-size:12px; font-weight:700;">HIGH</span>
+                <div class="signal-indicator"><div class="signal-fill" style="width:85%;"></div></div>
+            </div>
+            <div class="signal-cell">
+                <span style="font-size:8px; opacity:0.5; display:block;">NODE_TRUST</span>
+                <span style="font-size:12px; font-weight:700;">99.9%</span>
+                <div class="signal-indicator"><div class="signal-fill" style="width:99%;"></div></div>
+            </div>
+            <div class="signal-cell">
+                <span style="font-size:8px; opacity:0.5; display:block;">ETHIC_SCORE</span>
+                <span style="font-size:12px; font-weight:700;">MAX</span>
+                <div class="signal-indicator"><div class="signal-fill" style="width:100%; background:var(--gold);"></div></div>
+            </div>
+            <div class="signal-cell">
+                <span style="font-size:8px; opacity:0.5; display:block;">LOAD_BAL</span>
+                <span style="font-size:12px; font-weight:700;">OPT</span>
+                <div class="signal-indicator"><div class="signal-fill" style="width:40%;"></div></div>
+            </div>
+        </div>
+    `;
+    commandSignals.insertBefore(signalModule, commandSignals.children[1]);
+
+    // --- INJECTING HASH VALIDATOR INTO SIDEBAR ---
+    const sidebarHash = document.querySelector('.intel-column');
+    const hashModule = document.createElement('div');
+    hashModule.className = 'module';
+    hashModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Recursive Hash Validator</span></div>
+        <div style="font-family:'JetBrains Mono'; font-size:9px; background:rgba(0,0,0,0.3); padding:10px; border-radius:5px; border-left:2px solid var(--primary);">
+            <div style="margin-bottom:5px;">BLOCK_HASH: <span style="color:var(--primary)" id="live-hash">0x7F...22</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>INTEGRITY:</span><span style="color:#34d399">100.00%</span></div>
+        </div>
+    `;
+    sidebarHash.appendChild(hashModule);
+
+    // Live Hash Generator Logic
+    setInterval(() => {
+        const hex = '0123456789ABCDEF';
+        let hash = '0x';
+        for(let i=0; i<6; i++) hash += hex[Math.floor(Math.random() * 16)];
+        document.getElementById('live-hash').innerText = hash + '...';
+    }, 4000);
+
+    // Terminal Expansion
+    writeToTerm("Whale Intel [PHASE_17] activated.");
+    writeToTerm("Ingress Matrix: Scanning global trade signals...");
+    writeToTerm("Validator: Recursive merkle-tree audit passed.");
+</script>
