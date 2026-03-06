@@ -5,145 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp | Command Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --gold: #D4AF37;
             --deep-blue: #020617;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(212, 175, 55, 0.15);
+            --ink: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(212, 175, 55, 0.1);
             --text-main: #E2E8F0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--deep-blue);
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--ink) 80%);
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             display: flex; flex-direction: column; align-items: center;
-            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--deep-blue) 80%);
             min-height: 100vh;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            background-attachment: fixed;
         }
 
-        @keyframes drift {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(0.5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        /* Water Drift Animation */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.01) 50%, transparent 55%);
+            background-size: 200% 200%;
+            animation: water-drift 20s linear infinite;
+            z-index: -1;
         }
 
-        @keyframes ripple-glow {
-            0% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
-            50% { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
-            100% { border-color: var(--glass-border); box-shadow: 0 0 0px rgba(212,175,55,0); }
+        @keyframes water-drift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
         }
 
-        .container { 
-            width: 92%; 
-            max-width: 460px; 
-            padding-bottom: 120px; 
-            opacity: 0; 
-            transform: translateY(30px); 
-            transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1); 
-        }
-        
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.4); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; border-bottom: 1px solid var(--glass-border); }
+        .ticker { display: inline-block; white-space: nowrap; animation: marquee 60s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        header { text-align: center; padding: 60px 0; }
+        .logo-aura { font-size: 4rem; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+
+        .container { width: 92%; max-width: 460px; padding-bottom: 100px; opacity: 0; transform: translateY(20px); transition: 1.5s ease; }
         .container.visible { opacity: 1; transform: translateY(0); }
 
         .glass-card { 
-            background: var(--glass-bg); 
-            border: 1px solid var(--glass-border); 
-            border-radius: 24px; 
-            padding: 25px; 
-            backdrop-filter: blur(20px); 
-            margin-bottom: 20px; 
-            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: drift 8s ease-in-out infinite; 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); 
+            border-radius: 32px; padding: 28px; backdrop-filter: blur(30px); 
+            margin-bottom: 20px; transition: 0.5s; position: relative;
         }
+        .glass-card:hover { border-color: rgba(212, 175, 55, 0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 
-        .glass-card:hover {
-            animation: ripple-glow 3s infinite;
-            transform: scale(1.01);
+        .yield-val { font-size: 2.2rem; font-weight: 700; color: #34d399; }
+        .timer-display { font-size: 2.5rem; font-weight: 300; margin: 15px 0; letter-spacing: 4px; }
+
+        .btn-main { 
+            width: 100%; padding: 20px; border-radius: 18px; border: none;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem;
+            cursor: pointer; transition: 0.3s;
         }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn-locked { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); pointer-events: none; }
 
-        header { text-align: center; padding: 60px 20px 20px 20px; animation: drift 10s ease-in-out infinite; }
-        .logo-aura { font-size: 3.5rem; text-shadow: 0 0 30px rgba(212, 175, 55, 0.3); margin-bottom: 10px; }
+        /* Progress Bar */
+        .progress-track { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin: 15px 0; }
+        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 1s cubic-bezier(0.22, 1, 0.36, 1); }
 
-        .yield-val { font-size: 2rem; font-weight: 700; color: #2ecc71; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
-        .timer-display { font-size: 2.2rem; font-weight: 300; margin: 15px 0; color: #fff; letter-spacing: 2px; }
-        
-        .action-btn { 
-            display: block; width: 100%; padding: 20px; border-radius: 15px; 
-            text-align: center; text-decoration: none; font-weight: 700; 
-            text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; 
-            transition: 0.5s; margin-top: 15px; border: none; cursor: pointer;
-        }
-        .btn-gold { background: var(--gold); color: #000; box-shadow: 0 10px 30px rgba(212,175,55,0.15); }
-        .btn-locked { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.2); pointer-events: none; border: 1px solid rgba(255,255,255,0.05); }
-
-        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(0,0,0,0.2); padding: 12px 0; font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; border-bottom: 1px solid var(--glass-border); }
-        .ticker { display: inline-block; white-space: nowrap; animation: marquee 40s linear infinite; opacity: 0.6; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        .progress-track { height: 4px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; margin: 15px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #fff); width: 0%; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* Chat Window */
+        .chat-trigger { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; cursor: pointer; }
+        .chat-window { display: none; position: fixed; bottom: 110px; right: 30px; width: 340px; height: 450px; background: #050a18; border: 1px solid var(--glass-border); border-radius: 24px; flex-direction: column; overflow: hidden; z-index: 1000; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        #chatBody { flex: 1; padding: 20px; overflow-y: auto; font-size: 0.8rem; display: flex; flex-direction: column; gap: 12px; }
+        .msg { padding: 12px; border-radius: 15px; max-width: 85%; line-height: 1.4; }
+        .ai-msg { background: rgba(255,255,255,0.05); border-left: 2px solid var(--gold); align-self: flex-start; }
+        .user-msg { background: var(--gold); color: #000; align-self: flex-end; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="ticker-wrap">
         <div class="ticker">
-            &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; MARKET PULSE: STABLE &nbsp;&nbsp; &bull; VENTURE ARCHITECTURE: ETHICAL &nbsp;&nbsp; &bull; ASSETS DEPLOYED &nbsp;&nbsp;
+            &bull; SILENT MANAGEMENT ACTIVE &nbsp;&nbsp; &bull; VENTURE PULSE: STABLE &nbsp;&nbsp; &bull; NO-RIBBA PROTOCOL: ACTIVE &nbsp;&nbsp; &bull; ETHICAL ASSETS DEPLOYED &nbsp;&nbsp;
         </div>
     </div>
 
     <header>
         <div class="logo-aura">🌙</div>
-        <h1 style="letter-spacing: 8px; font-size: 1.1rem; opacity: 0.9;">WISP COMMAND</h1>
+        <h1 style="letter-spacing: 10px; font-size: 1.2rem; font-weight: 700;">WISP COMMAND</h1>
     </header>
 
     <div class="container" id="main-ui">
+        
         <div class="glass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                 <div>
-                    <div id="yield-display" class="yield-val">+12.8%</div>
-                    <div style="font-size: 0.55rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5;">Weekly Growth</div>
+                    <div class="yield-val">+12.8%</div>
+                    <div style="font-size: 0.6rem; text-transform: uppercase; opacity: 0.5;">Weekly Venture Growth</div>
                 </div>
-                <div style="text-align: right; font-size: 0.65rem; line-height: 1.8;">
-                    <div style="color: var(--gold);">● AI INFRASTRUCTURE</div>
-                    <div style="opacity: 0.6;">● ETHICAL ASSETS</div>
+                <div style="text-align: right; font-size: 0.6rem; color: var(--gold);">
+                    <div>● SHARIA COMPLIANT</div>
+                    <div style="opacity: 0.6; color: white;">● RIBBA-FREE CERTIFIED</div>
                 </div>
             </div>
+            <canvas id="pulseChart" height="100"></canvas>
         </div>
 
         <div class="glass-card" style="text-align: center;">
-            <div id="status" style="font-size: 0.55rem; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px;">PORTAL SECURED</div>
+            <div id="status" style="font-size: 0.6rem; letter-spacing: 4px; opacity: 0.6;">PORTAL SECURED</div>
             <div id="timer" class="timer-display">0D 0H 0M 0S</div>
-            <div class="action-btn btn-locked" id="action-link">Portal Locked</div>
+            <button class="btn-main btn-locked" id="action-btn">Initialize</button>
         </div>
 
         <div class="glass-card">
-            <div style="font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 15px; opacity: 0.7;">DAILY DISCIPLINE FLOW</div>
+            <div style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.7; margin-bottom: 10px;">DAILY DISCIPLINE FLOW</div>
             <div class="progress-track"><div id="p-bar" class="progress-fill"></div></div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">PRAYER</button>
-                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">SKILL</button>
-                <button onclick="runProgress()" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 12px; font-size: 0.55rem; cursor: pointer;">GIVING</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px;">
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.03); color: white; border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; font-size: 0.6rem; cursor: pointer;">PRAYER</button>
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.03); color: white; border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; font-size: 0.6rem; cursor: pointer;">SKILL</button>
+                <button onclick="runProgress()" style="background: rgba(255,255,255,0.03); color: white; border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; font-size: 0.6rem; cursor: pointer;">GIVING</button>
             </div>
+        </div>
+
+    </div>
+
+    <div class="chat-trigger" onclick="toggleChat()">✨</div>
+    <div id="chatWindow" class="chat-window">
+        <div style="background: var(--gold); color: #000; padding: 15px; font-weight: 700; font-size: 0.7rem; display: flex; justify-content: space-between;">
+            <span>INTELLIGENCE v4.0-PRO</span>
+            <span onclick="toggleChat()" style="cursor:pointer">×</span>
+        </div>
+        <div id="chatBody">
+            <div class="msg ai-msg">Salam, Operator. Management standing by for ethical venture instructions.</div>
+        </div>
+        <div style="padding: 15px; border-top: 1px solid var(--glass-border); display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Enter command..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px; color: white; padding: 10px; font-size: 0.8rem; outline: none;">
+            <button onclick="sendMessage()" style="background: var(--gold); border: none; padding: 10px; border-radius: 10px; cursor: pointer;">SEND</button>
         </div>
     </div>
 
-    <footer style="text-align: center; padding: 40px 20px; font-size: 0.7rem; letter-spacing: 1px; opacity: 0.5; line-height: 2;">
-        <p>ismailsalim240@gmail.com</p>
-        <p>TEL: +254 [YOUR NUMBER]</p>
-        <p style="margin-top: 10px;">&copy; 2026 SCINTILLATING WISP</p>
+    <footer style="text-align: center; padding: 40px; font-size: 0.6rem; letter-spacing: 4px; opacity: 0.3;">
+        &copy; 2026 SCINTILLATING WISP<br>
+        ismailsalim240@gmail.com
     </footer>
 
     <script>
-        // Fade in UI
-        window.onload = () => { setTimeout(() => { document.getElementById('main-ui').classList.add('visible'); }, 300); };
+        // 1. Reveal UI
+        window.onload = () => { document.getElementById('main-ui').classList.add('visible'); renderChart(); };
 
-        // Progress Bar Math (Saves to your local browser)
+        // 2. Chart Logic (Venture Pulse)
+        function renderChart() {
+            const ctx = document.getElementById('pulseChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10],
+                    datasets: [{
+                        label: 'Venture Pulse',
+                        data: [12, 19, 15, 25, 22, 30, 28, 35, 33, 40],
+                        borderColor: '#D4AF37',
+                        borderWidth: 2,
+                        fill: true,
+                        backgroundColor: 'rgba(212, 175, 55, 0.05)',
+                        tension: 0.4
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+            });
+        }
+
+        // 3. AI Assistant Logic (Gemini API)
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const body = document.getElementById('chatBody');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // User Bubble
+            const uDiv = document.createElement('div'); uDiv.className = 'msg user-msg'; uDiv.innerText = text;
+            body.appendChild(uDiv); input.value = '';
+
+            // Ask for API key if missing
+            let key = localStorage.getItem('gemini_key');
+            if(!key) {
+                key = prompt("Enter Gemini API Key to activate Intelligence:");
+                if(key) localStorage.setItem('gemini_key', key); else return;
+            }
+
+            // AI Bubble (Thinking)
+            const aDiv = document.createElement('div'); aDiv.className = 'msg ai-msg'; aDiv.innerText = 'Syncing...';
+            body.appendChild(aDiv); body.scrollTop = body.scrollHeight;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: "System: You are Wisp Intelligence. Act as an ethical, elite management assistant for an 'Operator'. Strictly follow Islamic business ethics. User says: " + text }] }]
+                    })
+                });
+                const data = await res.json();
+                aDiv.innerText = data.candidates[0].content.parts[0].text;
+            } catch (e) { aDiv.innerText = "Connection lost. Verify API key."; }
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function toggleChat() { const c = document.getElementById('chatWindow'); c.style.display = (c.style.display === 'flex') ? 'none' : 'flex'; }
+
+        // 4. Progress Logic
         let score = parseInt(localStorage.getItem('wisp-score') || 0);
         function runProgress() {
             score = (score >= 100) ? 0 : score + 11.2;
@@ -152,23 +222,20 @@
         }
         document.getElementById('p-bar').style.width = score + '%';
 
-        // Timer Logic
+        // 5. Timer Logic
         function refresh() {
             const now = new Date();
-            const day = now.getDay(), hrs = now.getHours();
-            const btn = document.getElementById('action-link'), pill = document.getElementById('status'), timer = document.getElementById('timer');
-
-            if (day === 5 && hrs >= 3 && hrs < 10) {
+            const btn = document.getElementById('action-btn'), pill = document.getElementById('status'), timer = document.getElementById('timer');
+            if (now.getDay() === 5 && now.getHours() >= 3 && now.getHours() < 10) {
                 pill.innerText = "WINDOW ACTIVE"; pill.style.color = "#2ecc71";
-                btn.className = "action-btn btn-gold"; btn.innerText = "INITIALIZE";
-                timer.innerText = "LIVE";
+                btn.className = "btn-main btn-gold"; btn.innerText = "INITIALIZE"; timer.innerText = "LIVE";
             } else {
                 let next = new Date();
                 let dDays = (5 - now.getDay() + 7) % 7;
                 if(now.getDay() === 5 && now.getHours() >= 10) dDays = 7;
                 next.setDate(now.getDate() + dDays); next.setHours(3,0,0,0);
                 let ms = next - now;
-                let d = Math.floor(ms / 86400000), h = Math.floor((ms / 3600000) % 24), m = Math.floor((ms / 60000) % 60), s = Math.floor((ms / 1000) % 60);
+                let d = Math.floor(ms/86400000), h = Math.floor((ms/3600000)%24), m = Math.floor((ms/60000)%60), s = Math.floor((ms/1000)%60);
                 timer.innerText = `${d}D ${h}H ${m}M ${s}S`;
             }
         }
