@@ -3692,3 +3692,113 @@
     writeToTerm("WELCOME TO THE FUTURE OF SOVEREIGN FINANCE, BWANA.");
     writeToTerm("Wisp-Core is now independent and self-sustaining.");
 </script>
+<style>
+    /* --- M-PESA GATEWAY VISUALS --- */
+    .mpesa-modal {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 350px; background: #fff; border-radius: 20px;
+        padding: 30px; z-index: 10000002; display: none;
+        box-shadow: 0 0 50px rgba(0,0,0,0.5); color: #333;
+        font-family: 'Inter', sans-serif; text-align: center;
+    }
+    .mpesa-logo-gate { width: 120px; margin-bottom: 20px; }
+    .mpesa-input {
+        width: 100%; padding: 15px; margin: 10px 0;
+        border: 2px solid #eee; border-radius: 10px; font-size: 18px;
+        font-weight: 700; text-align: center; outline: none;
+    }
+    .mpesa-input:focus { border-color: #34d399; }
+    .btn-mpesa {
+        background: #34d399; color: white; border: none;
+        width: 100%; padding: 15px; border-radius: 10px;
+        font-weight: 900; cursor: pointer; transition: 0.3s;
+    }
+    .btn-mpesa:hover { background: #2bb37f; }
+    
+    .stk-waiting {
+        display: none; flex-direction: column; align-items: center;
+    }
+    .spinner {
+        width: 40px; height: 40px; border: 4px solid #f3f3f3;
+        border-top: 4px solid #34d399; border-radius: 50%;
+        animation: spin 1s linear infinite; margin-bottom: 20px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Floating M-PESA Icon in Assets */
+    .mpesa-trigger {
+        background: #34d399; color: white; padding: 10px 20px;
+        border-radius: 8px; display: inline-flex; align-items: center;
+        gap: 10px; cursor: pointer; margin-top: 15px; font-weight: 700;
+    }
+</style>
+
+<div id="mpesa-gate" class="mpesa-modal">
+    <div id="mpesa-form-step">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" class="mpesa-logo-gate" alt="M-Pesa">
+        <p style="font-size: 12px; color: #666;">Enter amount to deposit into XAU Vault</p>
+        <input type="number" id="deposit-amt" class="mpesa-input" placeholder="KES 0.00">
+        <button class="btn-mpesa" onclick="triggerSTKPush()">DEPOSIT NOW</button>
+        <p style="font-size: 10px; margin-top: 15px; color: #999;" onclick="closeMpesa()">Cancel Transaction</p>
+    </div>
+
+    <div id="mpesa-wait-step" class="stk-waiting">
+        <div class="spinner"></div>
+        <h3 style="margin-bottom:10px;">Requesting STK Push...</h3>
+        <p style="font-size: 12px; color: #666;">Please check your phone and enter your <b>M-PESA PIN</b> to authorize the transaction.</p>
+    </div>
+</div>
+
+<script>
+    // --- INJECTING TRIGGER INTO ASSETS TAB ---
+    const assetsMpesa = document.querySelector('#assets');
+    const mpesaModule = document.createElement('div');
+    mpesaModule.className = 'module';
+    mpesaModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Mobile Liquidity Gateway</span></div>
+        <p style="font-size:10px; opacity:0.6;">Convert local fiat to gold-backed assets instantly.</p>
+        <div class="mpesa-trigger" onclick="openMpesa()">
+            <span style="font-size:16px;">+</span> DEPOSIT VIA M-PESA
+        </div>
+    `;
+    assetsMpesa.insertBefore(mpesaModule, assetsMpesa.firstChild);
+
+    function openMpesa() {
+        document.getElementById('mpesa-gate').style.display = 'block';
+        writeToTerm("MPESA_GATE: Initializing Daraja API handshake...", "info");
+    }
+
+    function closeMpesa() {
+        document.getElementById('mpesa-gate').style.display = 'none';
+        document.getElementById('mpesa-form-step').style.display = 'block';
+        document.getElementById('mpesa-wait-step').style.display = 'none';
+    }
+
+    function triggerSTKPush() {
+        const amt = document.getElementById('deposit-amt').value;
+        if(!amt || amt <= 0) {
+            alert("Please enter a valid amount");
+            return;
+        }
+
+        // Switch to waiting UI
+        document.getElementById('mpesa-form-step').style.display = 'none';
+        document.getElementById('mpesa-wait-step').style.display = 'flex';
+        
+        writeToTerm(`MPESA_GATE: Sending STK Push for KES ${amt} to +2547XXXXX...`, "warning");
+
+        // Simulate the Wait for User PIN
+        setTimeout(() => {
+            writeToTerm("MPESA_GATE: Callback received. Payment Success.", "success");
+            writeToTerm(`VAULT_SYNC: ${amt} KES converted to XAU units.`, "success");
+            
+            // Visual feedback
+            alert(`Success! KES ${amt} has been deposited and secured in your Zero-Ribba vault.`);
+            closeMpesa();
+            
+            // Update UI Balance (Simulated increase)
+            const mainBal = document.querySelector('.main-balance-val');
+            if(mainBal) mainBal.innerText = (parseFloat(mainBal.innerText) + 0.005).toFixed(3);
+        }, 5000); // 5 second simulation of user typing PIN
+    }
+</script>
