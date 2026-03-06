@@ -356,3 +356,75 @@
     </script>
 </body>
 </html>
+<div id="global-ticker" style="position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.9); border-top: 1px solid var(--gold); padding: 8px; z-index: 9000; font-family: 'JetBrains Mono'; font-size: 10px; overflow: hidden; white-space: nowrap; color: var(--gold); letter-spacing: 2px;">
+    <div id="ticker-content" style="display: inline-block; animation: ticker-scroll 40s linear infinite;">
+        SYSTEM STATUS: OPTIMAL // ETHICAL CAPITAL: $4,209,112.00 (+2.4%) // GOLD SPOT: $2,154.20 // NO-RIBBA COMPLIANCE: 100% // RAMADHAN PROTOCOL: ACTIVE // WISP COMMAND NODE: KENYA-NORTH // 
+        SYSTEM STATUS: OPTIMAL // ETHICAL CAPITAL: $4,209,112.00 (+2.4%) // GOLD SPOT: $2,154.20 // NO-RIBBA COMPLIANCE: 100% // RAMADHAN PROTOCOL: ACTIVE // WISP COMMAND NODE: KENYA-NORTH //
+    </div>
+</div>
+
+<style>
+    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    
+    /* Extra spacing for the new modules */
+    .extension-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .stat-pill {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    // This script dynamically expands your "Assets" tab with heavy data
+    const assetsContainer = document.querySelector('#assets');
+    assetsContainer.innerHTML = `
+        <div class="module">
+            <div class="module-header"><span class="module-title">Venture Portfolio Simulator</span></div>
+            <div class="extension-grid">
+                <div class="card" style="margin-bottom:0; background: rgba(0,0,0,0.2);">
+                    <h4 style="font-size: 10px; color: var(--gold); margin-bottom: 20px;">ACTIVE HOLDINGS</h4>
+                    <div class="stat-pill"><span>Real Estate (Leasing)</span><span style="color:#34d399">$12,400</span></div>
+                    <div class="stat-pill"><span>Trade Finance</span><span style="color:#34d399">$8,150</span></div>
+                    <div class="stat-pill"><span>Tech Equity</span><span style="color:#34d399">$15,000</span></div>
+                </div>
+                <div class="card" style="margin-bottom:0; background: rgba(0,0,0,0.2);">
+                    <h4 style="font-size: 10px; color: var(--gold); margin-bottom: 20px;">SYSTEM DIAGNOSTICS</h4>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display:flex; justify-content:space-between; font-size:9px; margin-bottom:5px;"><span>NODE LATENCY</span><span>14ms</span></div>
+                        <div style="width:100%; height:2px; background:#1e293b;"><div style="width:14%; height:100%; background:var(--primary);"></div></div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display:flex; justify-content:space-between; font-size:9px; margin-bottom:5px;"><span>CLOUD UPTIME</span><span>99.99%</span></div>
+                        <div style="width:100%; height:2px; background:#1e293b;"><div style="width:99%; height:100%; background:var(--gold);"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module">
+            <div class="module-header"><span class="module-title">Sharia-Compliance Log</span></div>
+            <div id="compliance-log" style="font-family:'JetBrains Mono'; font-size:11px; color:#64748b;">
+                [07:00:01] - Scanning transaction logs for interest-bearing signatures...<br>
+                [07:00:05] - 0 signatures found. Compliance status: SECURE.<br>
+                [07:01:00] - Re-verifying asset backing for Tech Equity pool...<br>
+                [07:01:02] - Physical asset verification successful.
+            </div>
+        </div>
+    `;
+
+    // Adding more logic to the terminal
+    writeToTerm("Extension Module [ASSET_SIM] loaded successfully.");
+    writeToTerm("Ticker Engine [v2.4] online.");
+</script>
