@@ -2809,3 +2809,156 @@
     writeToTerm("Satellite: WISP-ORB-1 telemetry verified at 98.2%.");
     writeToTerm("Mesh: 144/144 relay points reporting encrypted handshake.");
 </script>
+<style>
+    /* --- SELF-HEALING & SYNAPSE VISUALS --- */
+    .repair-terminal {
+        background: #020617;
+        border: 1px solid #34d399; /* Green for healing */
+        border-radius: 12px;
+        padding: 20px;
+        font-family: 'JetBrains Mono';
+        height: 250px;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .repair-line {
+        font-size: 9px;
+        margin-bottom: 5px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .repair-tag { color: #34d399; font-weight: 800; }
+    .repair-action { color: var(--text-dim); }
+
+    .synapse-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        height: 100px;
+        padding: 20px;
+        gap: 5px;
+    }
+
+    .synapse-node {
+        flex: 1;
+        background: rgba(0, 212, 255, 0.1);
+        border-radius: 4px;
+        position: relative;
+        transition: 0.2s;
+    }
+
+    .synapse-firing {
+        background: var(--primary);
+        box-shadow: 0 0 15px var(--primary);
+        animation: fire-pulse 1s infinite alternate;
+    }
+
+    @keyframes fire-pulse {
+        from { opacity: 0.3; }
+        to { opacity: 1; }
+    }
+
+    .entropy-gauge {
+        width: 100%;
+        height: 10px;
+        background: #1e293b;
+        border-radius: 5px;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+
+    .entropy-fill-fast {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--gold));
+        width: 12%;
+        animation: entropy-drift 4s infinite ease-in-out;
+    }
+
+    @keyframes entropy-drift {
+        0%, 100% { width: 12%; }
+        50% { width: 45%; }
+    }
+</style>
+
+<script>
+    // --- INJECTING REPAIR TERMINAL INTO COMMAND TAB ---
+    const commandRepair = document.querySelector('#command');
+    const repairModule = document.createElement('div');
+    repairModule.className = 'module';
+    repairModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Heuristic Self-Healing Terminal</span>
+            <span style="color:#34d399; font-size:9px;">INTEGRITY: 100.00%</span>
+        </div>
+        <div class="repair-terminal" id="repair-log">
+            <div class="repair-line"><span class="repair-tag">[FIXED]</span><span class="repair-action">Bit-drift detected in Dubai_Vault_A1. Corrected.</span></div>
+        </div>
+    `;
+    commandRepair.appendChild(repairModule);
+
+    // Live Repair Logic
+    const rLog = document.getElementById('repair-log');
+    const repairs = [
+        "Optimizing ledger fragment 0x44A...",
+        "Rotating Kyber-1024 entropy seed...",
+        "Patching latent API latency in Nairobi-Hub...",
+        "Verifying Zakat-Logic decimal precision...",
+        "Recalibrating Gold-Parity oracle delay..."
+    ];
+
+    setInterval(() => {
+        const line = document.createElement('div');
+        line.className = 'repair-line';
+        const action = repairs[Math.floor(Math.random() * repairs.length)];
+        line.innerHTML = `<span class="repair-tag">[FIXED]</span><span class="repair-action">${action}</span>`;
+        rLog.insertBefore(line, rLog.firstChild);
+        if(rLog.children.length > 10) rLog.removeChild(rLog.lastChild);
+    }, 4000);
+
+    // --- INJECTING SYNAPSE MONITOR INTO PULSE TAB ---
+    const pulseSynapse = document.querySelector('#pulse');
+    const synapseModule = document.createElement('div');
+    synapseModule.className = 'module';
+    synapseModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Neural Synapse Firing Health</span></div>
+        <div class="synapse-container" id="synapse-grid"></div>
+        <p style="font-size:8px; opacity:0.4; text-align:center;">Real-time synaptic load across Wisp Core.</p>
+    `;
+    pulseSynapse.appendChild(synapseModule);
+
+    const sGrid = document.getElementById('synapse-grid');
+    for(let i=0; i<15; i++) {
+        const node = document.createElement('div');
+        node.className = 'synapse-node';
+        node.style.height = (Math.random() * 80 + 20) + '%';
+        sGrid.appendChild(node);
+    }
+
+    setInterval(() => {
+        const nodes = sGrid.querySelectorAll('.synapse-node');
+        nodes.forEach(n => {
+            n.classList.toggle('synapse-firing', Math.random() > 0.7);
+            n.style.height = (Math.random() * 80 + 20) + '%';
+        });
+    }, 800);
+
+    // --- INJECTING ENTROPY GAUGE INTO SIDEBAR ---
+    const sidebarEntropyGauge = document.querySelector('.intel-column');
+    const gaugeModule = document.createElement('div');
+    gaugeModule.className = 'module';
+    gaugeModule.innerHTML = `
+        <div class="module-header"><span class="module-title">System Randomness (Entropy)</span></div>
+        <div class="entropy-gauge"><div class="entropy-fill-fast"></div></div>
+        <div style="display:flex; justify-content:space-between; font-size:8px; margin-top:5px; opacity:0.5;">
+            <span>STABLE</span><span>DANGER_DRIFT</span>
+        </div>
+    `;
+    sidebarEntropyGauge.appendChild(gaugeModule);
+
+    // Terminal Expansion
+    writeToTerm("Self-Healing [PHASE_22] active.");
+    writeToTerm("Heuristics: Bit-drift protection initialized.");
+    writeToTerm("Neural: Synaptic firing pattern is 100% rhythmic.");
+</script>
