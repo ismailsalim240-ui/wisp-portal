@@ -4,254 +4,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wisp Command | Sentinel Flow</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX'); 
-    </script>
 
     <style>
         :root {
             --primary: #00d4ff;
             --primary-glow: rgba(0, 212, 255, 0.3);
             --ink: #000814;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(0, 212, 255, 0.1);
-            --border-hover: rgba(0, 212, 255, 0.4);
             --surface: rgba(2, 6, 23, 0.8);
-            --gold: #D4AF37;
         }
 
-        .theme-gold {
-            --primary: #D4AF37;
-            --primary-glow: rgba(212, 175, 55, 0.3);
-            --ink: #050505;
-            --border: rgba(212, 175, 55, 0.15);
-            --border-hover: rgba(212, 175, 55, 0.5);
-        }
+        .theme-gold { --primary: #D4AF37; --primary-glow: rgba(212, 175, 55, 0.3); --border: rgba(212, 175, 55, 0.2); }
+        .theme-emerald { --primary: #10b981; --primary-glow: rgba(16, 185, 129, 0.3); --border: rgba(16, 185, 129, 0.2); }
+        .theme-ruby { --primary: #f43f5e; --primary-glow: rgba(244, 63, 94, 0.3); --border: rgba(244, 63, 94, 0.2); }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.5s ease; }
+        body { background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
         
-        body {
-            background: var(--ink); color: #f8fafc; font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;
-        }
+        /* News Ticker */
+        .news-wrap { width: 100%; background: #000; border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 10px 0; z-index: 2000; position: sticky; top: 0; }
+        .news-content { display: inline-block; padding-left: 100%; font-family: 'JetBrains Mono'; font-size: 10px; color: var(--primary); letter-spacing: 2px; animation: scroll 25s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* Task Ticker Styling */
-        .task-ticker {
-            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
-            padding: 10px 0; text-align: center; font-family: 'JetBrains Mono';
-            font-size: 10px; letter-spacing: 3px; color: var(--primary);
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
-        }
+        .layout { max-width: 600px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; backdrop-filter: blur(15px); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .sub-tag { font-size: 9px; letter-spacing: 3px; opacity: 0.6; text-transform: uppercase; font-weight: 700; }
+        
+        .btn-fluid { width: 100%; padding: 18px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; background: var(--primary); color: #000; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; }
 
-        .water-bg { position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%); overflow: hidden; }
-        .ripple { position: absolute; border: 1px solid var(--primary); border-radius: 50%; animation: ripple-effect 8s infinite linear; opacity: 0; pointer-events: none; }
-        @keyframes ripple-effect { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.1; } 100% { transform: scale(2.5); opacity: 0; } }
+        .comment-list { max-height: 250px; overflow-y: auto; margin: 15px 0; }
+        .comment-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 3px solid var(--primary); font-size: 13px; }
+        .comment-item small { display: block; font-size: 9px; opacity: 0.5; margin-top: 4px; }
 
-        .layout { max-width: 1000px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 10; flex: 1; width: 100%; }
-        
-        .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
-        .nav-controls { display: flex; gap: 10px; align-items: center; }
-        
-        .theme-btn { background: var(--glass); border: 1px solid var(--border); color: #fff; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 10px; letter-spacing: 2px; }
-        .theme-btn:hover { background: var(--glass-hover); border-color: var(--border-hover); box-shadow: 0 0 10px var(--primary-glow); }
-        
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 30px; backdrop-filter: blur(25px); margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .card:hover { border-color: rgba(255,255,255,0.1); }
-
-        .chart-controls { display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end; }
-        .chart-btn { background: transparent; border: 1px solid var(--border); color: var(--primary); padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 10px; }
-        .chart-btn:hover { background: var(--glass-hover); }
-        .chart-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
-        
-        .pulse-val { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
-        .timer-val { font-family: 'JetBrains Mono'; font-size: 3rem; font-weight: 300; letter-spacing: -2px; margin: 15px 0; }
-        
-        .btn-fluid { width: 100%; padding: 20px; border-radius: 18px; font-weight: 700; cursor: pointer; letter-spacing: 3px; border: none; text-transform: uppercase; margin-top: 10px; background: linear-gradient(90deg, var(--primary), #0077b6); color: #000; box-shadow: 0 4px 15px var(--primary-glow); }
-        .btn-fluid:hover:not(.btn-locked) { filter: brightness(1.2); transform: translateY(-2px); }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #334155; cursor: not-allowed; box-shadow: none; }
-        
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 20px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; font-size: 13px; line-height: 1.6; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--primary); font-size: 20px; cursor: pointer; background: none; border: none; }
-        
-        .sub-tag { font-size: 9px; letter-spacing: 4px; opacity: 0.5; text-transform: uppercase; }
-
-        /* Professional Footer Styling */
-        .pro-footer {
-            margin-top: 20px; padding: 30px; background: var(--surface); border-top: 1px solid var(--border);
-            border-radius: 30px 30px 0 0; backdrop-filter: blur(25px);
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
-        }
-        .contact-info { display: flex; gap: 20px; flex-wrap: wrap; }
-        .contact-link { 
-            display: flex; align-items: center; gap: 8px; color: #cbd5e1; text-decoration: none; 
-            font-size: 12px; font-weight: 500; padding: 10px 15px; border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02); border: 1px solid transparent; transition: 0.3s;
-        }
-        .contact-link:hover { color: var(--primary); background: rgba(255, 255, 255, 0.05); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 10px var(--primary-glow); }
-
-        .contact-icon { font-size: 16px; }
-
-        @media(max-width: 600px){ .pro-footer { flex-direction: column; text-align: center; } .contact-info { justify-content: center; } }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #000; border: 1px solid var(--primary); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
     </style>
 </head>
-<body id="main-body">
-    <div class="task-ticker" id="live-ticker">SYNCHRONIZING SENTINEL...</div>
+<body>
 
-    <div class="water-bg" id="ripples"></div>
+    <div class="news-wrap">
+        <div class="news-content" id="news-ticker">SYSTEM ONLINE • SECURE VENTURE PORTAL ACTIVE • NEW RECORDS RECORDED IN MARCH 2026</div>
+    </div>
 
     <div class="layout">
-        <header class="nav-header">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h1 style="font-size: 18px; letter-spacing: 6px; font-weight: 700;">SCINTILLATING WISP</h1>
-                <p class="sub-tag">Fluid Venture Portal • March 2026</p>
+                <h1 style="font-size: 14px; letter-spacing: 3px;">SCINTILLATING WISP</h1>
+                <div id="theme-label" class="sub-tag" style="color: var(--primary);">CYBER BLUE</div>
             </div>
-            <div class="nav-controls">
-                <button class="theme-btn" title="Profile">👤</button>
-                <button class="theme-btn" title="Notifications">🔔</button>
-                <div style="width: 1px; height: 20px; background: var(--border); margin: 0 5px;"></div>
-                <button class="theme-btn" onclick="toggleTheme()">SWITCH THEME</button>
-                <button class="theme-btn" onclick="toggleModal()">📜 T&C</button>
-            </div>
+            <div class="sub-tag" style="color: #10b981;">● <span id="user-count">1</span> ONLINE</div>
         </header>
 
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                <div><span class="sub-tag">Venture Pulse</span><div class="pulse-val" id="pulse-display">+6.84%</div></div>
-                <div class="chart-controls">
-                    <button class="chart-btn" onclick="updateChart('H', this)">H</button>
-                    <button class="chart-btn active" onclick="updateChart('D', this)">D</button>
-                    <button class="chart-btn" onclick="updateChart('M', this)">M</button>
-                </div>
+        <div class="card" style="text-align: center;">
+            <span class="sub-tag">Total Capital Secured</span>
+            <div style="font-family: 'JetBrains Mono'; font-size: 1.8rem; font-weight: 700; color: #fff; margin: 10px 0;">
+                KSH <span id="total-capital">1,450,200</span>
             </div>
-            <div style="height: 250px;"><canvas id="mainChart"></canvas></div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-            <div class="card" style="margin-bottom: 0; padding: 20px; text-align: center;"><span class="sub-tag">Prayers</span><div style="font-size: 1.5rem; margin-top: 5px;">54</div></div>
-            <div class="card" style="margin-bottom: 0; padding: 20px; text-align: center;"><span class="sub-tag">Skills</span><div style="font-size: 1.5rem; margin-top: 5px;">21</div></div>
-            <div class="card" style="margin-bottom: 0; padding: 20px; text-align: center;"><span class="sub-tag">Giving</span><div style="font-size: 1.5rem; margin-top: 5px;">7</div></div>
+            <div style="height: 150px;"><canvas id="mainChart"></canvas></div>
         </div>
 
         <div class="card" style="text-align: center;">
-            <div id="p-status" class="sub-tag" style="margin-bottom: 10px;">Vault Secured</div>
-            <div class="timer-val" id="clock">00:00:00:00</div>
-            <button id="gate-btn" class="btn-fluid btn-locked">Portal Locked</button>
+            <div id="p-status" class="sub-tag">Vault Secured</div>
+            <div id="clock" style="font-family: 'JetBrains Mono'; font-size: 2rem; margin: 10px 0;">00:00:00</div>
+            <button id="gate-btn" class="btn-fluid btn-locked">Locked</button>
+        </div>
+
+        <div class="card">
+            <span class="sub-tag">Community Live Feed</span>
+            <div class="comment-list" id="comment-list"></div>
+            <textarea id="com-input" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border); padding:10px; color:#fff; border-radius:8px; margin-bottom:10px;" placeholder="Message..." rows="2"></textarea>
+            <button class="btn-fluid" style="padding: 12px; font-size: 10px;" id="post-btn">SEND MESSAGE</button>
         </div>
     </div>
 
-    <div class="pro-footer layout" style="margin-bottom: 0; max-width: 1000px;">
-        <div style="text-align: left;">
-            <div style="font-size: 14px; font-weight: 600; letter-spacing: 2px; color: var(--primary);">SENTINEL SUPPORT</div>
-            <div class="sub-tag" style="margin-top: 5px;">Venture Intelligence • 2026</div>
-        </div>
-        <div class="contact-info">
-            <a href="mailto:Ismailsalim240@gmail.com" class="contact-link" aria-label="Send Email">
-                <span class="contact-icon">📧</span> Ismailsalim240@gmail.com
-            </a>
-            <a href="https://wa.me/25493837381" class="contact-link" target="_blank" aria-label="WhatsApp Support">
-                <span class="contact-icon">💬</span> +254 938 37381
-            </a>
+    <div class="modal" id="invest-modal">
+        <div class="modal-content">
+            <span class="sub-tag" style="color: var(--primary);">Gateway</span>
+            <h2 style="margin: 20px 0;">MIN KSH. 100</h2>
+            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span id="p-num" style="font-family:'JetBrains Mono'; font-weight:700;">0793837381</span>
+                <button id="copy-btn" style="background:var(--primary); border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">COPY</button>
+            </div>
+            <button class="btn-fluid" id="close-modal">EXIT</button>
         </div>
     </div>
 
-    <div class="modal" id="tc-modal" onclick="toggleModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="toggleModal()">×</button>
-            <h2 style="margin-bottom: 20px; color: var(--primary);">Terms & Conditions</h2>
-            <p>1. <strong>Sharia Compliance:</strong> Strictly No Ribba (Interest).</p><br>
-            <p>2. <strong>Temporal Windows:</strong> Respect Invest-In (3am-10am) and Invest-Out (3pm-10pm).</p><br>
-            <p>3. <strong>Ethical Growth:</strong> Weekly growth capped at 7%.</p><br>
-            <button class="btn-fluid" onclick="toggleModal()">Accept & Close</button>
-        </div>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue, query, limitToLast, remove, update, onDisconnect, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    <script>
-        // --- Task Ticker Engine ---
-        function updateTaskTicker() {
-            const hrs = new Date().getHours();
-            const ticker = document.getElementById('live-ticker');
-            let task = "";
-
-            if (hrs >= 3 && hrs < 5) task = "COMMAND: TAHAJJUD & SUHOOR // INVEST-IN ACTIVE";
-            else if (hrs >= 5 && hrs < 6) task = "COMMAND: FAJR PRAYER // SPIRITUAL ALIGNMENT";
-            else if (hrs >= 6 && hrs < 10) task = "COMMAND: SKILL DEVELOPMENT // INVEST-IN ACTIVE";
-            else if (hrs >= 10 && hrs < 13) task = "COMMAND: DEEP WORK // VENTURE SCALING";
-            else if (hrs >= 13 && hrs < 14) task = "COMMAND: DHUHR PRAYER // RESET STATE";
-            else if (hrs >= 14 && hrs < 16) task = "COMMAND: ASY-PULSE // VENTURE OVERSIGHT";
-            else if (hrs >= 16 && hrs < 18) task = "COMMAND: ASR PRAYER // REFLECTIVE GIVING";
-            else if (hrs >= 18 && hrs < 19) task = "COMMAND: IFTAR // MAGHRIB PRAYER";
-            else if (hrs >= 19 && hrs < 21) task = "COMMAND: ISHA & TARAWIH // INVEST-OUT ACTIVE";
-            else if (hrs >= 21 && hrs < 22) task = "COMMAND: FINAL REVIEW // INVEST-OUT CLOSING";
-            else task = "COMMAND: REST & REGENERATE // VAULT SECURED";
-
-            ticker.innerText = task;
-        }
-        setInterval(updateTaskTicker, 60000); updateTaskTicker();
-
-        // --- Water Ripples ---
-        const rippleContainer = document.getElementById('ripples');
-        for(let i=0; i<5; i++) {
-            const r = document.createElement('div'); r.className = 'ripple';
-            r.style.width = r.style.height = Math.random() * 400 + 200 + 'px';
-            r.style.left = Math.random() * 100 + '%'; r.style.top = Math.random() * 100 + '%';
-            r.style.animationDelay = (i * 2) + 's'; rippleContainer.appendChild(r);
-        }
-
-        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
-        function toggleModal() { const m = document.getElementById('tc-modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
-
-        // --- Chart Engine (Capped at 7%) ---
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        const chartData = {
-            H: [6.1, 6.2, 6.15, 6.3, 6.5, 6.4, 6.6],
-            D: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84],
-            M: [2.1, 3.5, 4.2, 5.1, 5.8, 6.3, 6.7]
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsZi5aE0N78Xgxuy sGrlYT", 
+            authDomain: "ismah-aaa28.firebaseapp.com",
+            projectId: "ismah-aaa28",
+            databaseURL: "https://ismah-aaa28-default-rtdb.firebaseio.com",
+            storageBucket: "ismah-aaa28.appspot.com",
+            messagingSenderId: "46463400864",
+            appId: "1:46463400864:web:1a9b0fa225f9c081c402c5"
         };
-        const chartLabels = { H: ['1pm','2pm','3pm','4pm','5pm','6pm','7pm'], D: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], M: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr'] };
 
-        let myChart = new Chart(ctx, {
-            type: 'line',
-            data: { labels: chartLabels.D, datasets: [{ data: chartData.D, borderColor: '#00d4ff', borderWidth: 2, pointRadius: 4, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)', tension: 0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#475569', font: { size: 10 } } }, y: { ticks: { color: '#475569', font: { size: 10 } } } } }
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const ADMIN_PASS = "2220";
+
+        // --- Presence ---
+        const conRef = ref(db, 'connections');
+        onValue(ref(db, '.info/connected'), (snap) => {
+            if(snap.val()) {
+                const c = push(conRef);
+                onDisconnect(c).remove();
+                set(c, true);
+            }
+        });
+        onValue(conRef, (snap) => document.getElementById('user-count').innerText = snap.size || 1);
+
+        // --- Capital Growth ---
+        let capital = 1450200;
+        setInterval(() => {
+            capital += Math.floor(Math.random() * 200);
+            document.getElementById('total-capital').innerText = capital.toLocaleString();
+        }, 5000);
+
+        // --- Comments & Admin ---
+        const comRef = ref(db, 'comments');
+        document.getElementById('post-btn').onclick = () => {
+            const val = document.getElementById('com-input').value;
+            if(val.trim()){
+                push(comRef, { text: val, user: "User_"+Math.floor(Math.random()*999), verified: false });
+                document.getElementById('com-input').value = '';
+            }
+        };
+
+        onValue(query(comRef, limitToLast(15)), (snap) => {
+            const list = document.getElementById('comment-list');
+            list.innerHTML = '';
+            snap.forEach(s => {
+                const d = s.val();
+                const id = s.key;
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `${d.text} <small>${d.user} ${d.verified ? '<span style="color:var(--primary)">☑</span>':''} • Admin</small>`;
+                div.onclick = () => {
+                    const act = prompt("Action: 'D' (Delete) or 'V' (Verify)");
+                    const p = prompt("Password:");
+                    if(p === ADMIN_PASS){
+                        if(act?.toUpperCase()==='D') remove(ref(db, `comments/${id}`));
+                        if(act?.toUpperCase()==='V') update(ref(db, `comments/${id}`), {verified:true});
+                    }
+                };
+                list.prepend(div);
+            });
         });
 
-        function updateChart(type, btn) {
-            document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('pulse-display').innerText = `+${chartData[type][6]}%`;
-            myChart.data.labels = chartLabels[type]; myChart.data.datasets[0].data = chartData[type]; myChart.update();
-        }
-
-        // --- Portal Clock ---
-        function runClock() {
-            const now = new Date(); const hrs = now.getHours();
-            const clock = document.getElementById('clock'); const btn = document.getElementById('gate-btn'); const status = document.getElementById('p-status');
-            const isIn = (hrs >= 3 && hrs < 10); const isOut = (hrs >= 15 && hrs < 22);
-
-            if (isIn || isOut) {
-                status.innerText = isIn ? "Invest-In Open" : "Invest-Out Open";
-                status.style.color = "#34d399"; clock.innerText = "LIVE";
-                btn.className = "btn-fluid"; btn.innerText = isIn ? "Initialize In-Flow" : "Initialize Out-Flow";
+        // --- Interface ---
+        setInterval(() => {
+            const h = new Date().getHours();
+            const b = document.getElementById('gate-btn');
+            const s = document.getElementById('p-status');
+            const active = (h >= 3 && h < 10) || (h >= 15 && h < 22);
+            document.getElementById('clock').innerText = active ? "LIVE" : "LOCKED";
+            if(active){
+                b.className = "btn-fluid"; b.innerText = "Initialize Flow";
+                s.innerText = "Portal Open"; s.style.color = "#10b981";
             } else {
-                let target = new Date();
-                if (hrs < 3) target.setHours(3, 0, 0, 0);
-                else if (hrs >= 10 && hrs < 15) target.setHours(15, 0, 0, 0);
-                else { target.setDate(now.getDate() + 1); target.setHours(3, 0, 0, 0); }
-                const ms = target - now; const h = Math.floor(ms / 3600000); const m = Math.floor((ms % 3600000) / 60000); const s = Math.floor((ms % 60000) / 1000);
-                clock.innerText = `00:${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                status.innerText = "Vault Secured"; status.style.color = ""; btn.className = "btn-fluid btn-locked"; btn.innerText = "Locked";
+                b.className = "btn-fluid btn-locked"; b.innerText = "Locked";
+                s.innerText = "Vault Secured"; s.style.color = "";
             }
-        }
-        setInterval(runClock, 1000); runClock();
+        }, 1000);
+
+        const themes = [{c:'', l:'CYBER BLUE'}, {c:'theme-gold', l:'GOLD'}, {c:'theme-emerald', l:'EMERALD'}, {c:'theme-ruby', l:'RUBY'}];
+        let tIdx = 0;
+        setInterval(() => {
+            document.body.classList.remove(...themes.map(t=>t.c).filter(c=>c));
+            tIdx = (tIdx+1)%themes.length;
+            if(themes[tIdx].c) document.body.classList.add(themes[tIdx].c);
+            document.getElementById('theme-label').innerText = themes[tIdx].l;
+        }, 60000);
+
+        document.getElementById('gate-btn').onclick = () => { if(!document.getElementById('gate-btn').classList.contains('btn-locked')) document.getElementById('invest-modal').style.display='flex'; };
+        document.getElementById('close-modal').onclick = () => document.getElementById('invest-modal').style.display='none';
+        document.getElementById('copy-btn').onclick = (e) => { navigator.clipboard.writeText("0793837381"); e.target.innerText="DONE"; setTimeout(()=>e.target.innerText="COPY", 2000); };
+
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctx, { type: 'line', data: { labels: [1,2,3,4,5,6], datasets: [{ data: [4,5,4.2,6,5.5,6.8], borderColor: '#00d4ff', tension: 0.4, fill: true, backgroundColor: 'rgba(0,212,255,0.05)' }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } });
     </script>
 </body>
 </html>
