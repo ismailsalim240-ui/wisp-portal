@@ -2267,3 +2267,128 @@
     writeToTerm("Ingress Matrix: Scanning global trade signals...");
     writeToTerm("Validator: Recursive merkle-tree audit passed.");
 </script>
+<style>
+    /* --- RADAR & REGIONAL SIGNAL VISUALS --- */
+    .radar-scanner {
+        width: 260px;
+        height: 260px;
+        margin: 20px auto;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, rgba(10, 20, 40, 0.8) 100%);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .radar-beam {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 150%; height: 150%;
+        background: conic-gradient(from 0deg, transparent 70%, rgba(0, 212, 255, 0.4) 100%);
+        transform-origin: top left;
+        animation: radar-spin 6s linear infinite;
+    }
+
+    @keyframes radar-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .blip {
+        position: absolute;
+        width: 6px; height: 6px;
+        background: var(--gold);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--gold);
+        animation: blip-fade 2s infinite;
+    }
+
+    @keyframes blip-fade {
+        0%, 100% { opacity: 0; transform: scale(0.5); }
+        50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .regional-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .region-card {
+        padding: 15px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        position: relative;
+    }
+
+    .depth-indicator {
+        font-family: 'JetBrains Mono';
+        font-size: 8px;
+        color: var(--primary);
+        letter-spacing: 1px;
+    }
+</style>
+
+<script>
+    // --- INJECTING VENTURE RADAR INTO COMMAND TAB ---
+    const commandRadar = document.querySelector('#command');
+    const radarModule = document.createElement('div');
+    radarModule.className = 'module';
+    radarModule.style.textAlign = 'center';
+    radarModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Regional Venture Proximity Radar</span>
+            <span style="font-size:9px; color:var(--gold);">SCANNING_EAC_CORRIDOR</span>
+        </div>
+        <div class="radar-scanner">
+            <div class="radar-beam"></div>
+            <div class="blip" style="top:30%; left:45%; animation-delay: 0.5s;"></div> <div class="blip" style="top:60%; left:70%; animation-delay: 1.2s;"></div> <div class="blip" style="top:40%; left:20%; animation-delay: 2s;"></div> </div>
+        <div style="display:flex; justify-content:space-around; font-size:9px; margin-top:10px; opacity:0.6;">
+            <span>ACTIVE_OPPS: 14</span>
+            <span>MEAN_YIELD: 12.4%</span>
+            <span>SHARIA_SCORE: 100</span>
+        </div>
+    `;
+    commandRadar.appendChild(radarModule);
+
+    // --- INJECTING REGIONAL TRADE SIGNALS INTO ASSETS ---
+    const assetsTrade = document.querySelector('#assets');
+    const tradeModule = document.createElement('div');
+    tradeModule.className = 'module';
+    tradeModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Trade-Signal Liquidity Matrix</span></div>
+        <div class="regional-grid">
+            <div class="region-card">
+                <span class="depth-indicator">KENYA_RESERVE</span>
+                <div style="font-size:16px; font-weight:900; margin:5px 0;">$1.2M</div>
+                <div style="height:4px; width:80%; background:var(--primary); border-radius:2px;"></div>
+            </div>
+            <div class="region-card">
+                <span class="depth-indicator">UAE_OFFSHORE</span>
+                <div style="font-size:16px; font-weight:900; margin:5px 0;">$2.8M</div>
+                <div style="height:4px; width:100%; background:var(--gold); border-radius:2px;"></div>
+            </div>
+        </div>
+    `;
+    assetsTrade.insertBefore(tradeModule, assetsTrade.children[1]);
+
+    // --- INJECTING NODE-DENSITY MONITOR INTO SIDEBAR ---
+    const sidebarDensity = document.querySelector('.intel-column');
+    const densityModule = document.createElement('div');
+    densityModule.className = 'module';
+    densityModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Spectral Node Density</span></div>
+        <div style="height:60px; display:flex; align-items:flex-end; gap:3px;">
+            ${Array(20).fill(0).map(() => `<div style="flex:1; background:var(--primary); opacity:${Math.random()}; height:${Math.random()*100}%;"></div>`).join('')}
+        </div>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px;">Frequency: 4.2GHz // Spread: Global</p>
+    `;
+    sidebarDensity.appendChild(densityModule);
+
+    // Terminal Expansion
+    writeToTerm("Venture Intelligence [PHASE_18] operational.");
+    writeToTerm("Radar: 3 new High-Integrity blips detected in EAC.");
+    writeToTerm("Matrix: Trade liquidity finalized for Dubai Hub.");
+</script>
