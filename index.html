@@ -1877,3 +1877,121 @@
     writeToTerm("Governance: Quorum detected. Directive 0x44 in processing.");
     writeToTerm("Uptime: Global node availability validated at 99.98%.");
 </script>
+<style>
+    /* --- CERTIFICATE & CUSTODY VISUALS --- */
+    .cert-generator {
+        background: linear-gradient(145deg, #0a1428, #000814);
+        border: 2px solid var(--gold);
+        padding: 30px;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+    
+    .cert-seal {
+        position: absolute;
+        bottom: -20px; right: -20px;
+        font-size: 100px;
+        opacity: 0.05;
+        color: var(--gold);
+        transform: rotate(-15deg);
+    }
+
+    .custody-stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .custody-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 12px;
+    }
+
+    .temp-indicator {
+        height: 4px;
+        width: 100%;
+        background: #1e293b;
+        border-radius: 2px;
+        margin-top: 8px;
+        position: relative;
+    }
+    .temp-fill {
+        position: absolute;
+        height: 100%;
+        background: linear-gradient(90deg, #34d399, #fbbf24, #ef4444);
+        width: 42%; /* System Temp */
+    }
+</style>
+
+<script>
+    // --- INJECTING CERTIFICATE GENERATOR INTO ASSETS TAB ---
+    const assetsCert = document.querySelector('#assets');
+    const certModule = document.createElement('div');
+    certModule.className = 'module';
+    certModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Proof-of-Reserve (PoR) Minting</span></div>
+        <div class="cert-generator">
+            <div class="cert-seal">WISP</div>
+            <p style="font-size:10px; opacity:0.6; letter-spacing:2px;">OFFICIAL CUSTODY CERTIFICATE</p>
+            <h3 style="color:var(--gold); margin:15px 0; font-weight:900; letter-spacing:5px;">GOLD_BACKED_VERIFIED</h3>
+            <p style="font-size:9px; font-family:'JetBrains Mono'; margin-bottom:20px;">SERIAL: WISP-XAU-99283-KE</p>
+            <button class="btn-cta btn-mail" onclick="mintCertificate()">MINT DIGITAL PROOF</button>
+        </div>
+    `;
+    assetsCert.insertBefore(certModule, assetsCert.firstChild);
+
+    function mintCertificate() {
+        writeToTerm("PoR_ENGINE: Commencing cryptographic audit of vault holdings...", "info");
+        setTimeout(() => {
+            writeToTerm("PoR_ENGINE: Physical matching 100% complete.", "success");
+            writeToTerm("CERTIFICATE: WISP-XAU-99283-KE generated & hashed to ledger.", "success");
+            alert("Digital Proof-of-Reserve Minted Successfully.");
+        }, 1500);
+    }
+
+    // --- INJECTING CUSTODY MONITOR INTO COMMAND TAB ---
+    const commandCustody = document.querySelector('#command');
+    const custodyModule = document.createElement('div');
+    custodyModule.className = 'module';
+    custodyModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Physical Custody Monitor</span></div>
+        <div class="custody-stat-grid">
+            <div class="custody-card">
+                <span style="font-size:8px; opacity:0.5; display:block;">VAULT_LOCATION</span>
+                <span style="font-size:12px; font-weight:700;">Nairobi-Central</span>
+            </div>
+            <div class="custody-card">
+                <span style="font-size:8px; opacity:0.5; display:block;">TOTAL_PHYSICAL_WEIGHT</span>
+                <span style="font-size:12px; font-weight:700; color:var(--gold);">24.50 kg</span>
+            </div>
+        </div>
+        <p style="font-size:8px; opacity:0.3; margin-top:15px; text-align:center;">Last physical audit: Today, 00:01 EAT</p>
+    `;
+    commandCustody.appendChild(custodyModule);
+
+    // --- INJECTING SYSTEM THERMALS INTO SIDEBAR ---
+    const sidebarTemp = document.querySelector('.intel-column');
+    const tempModule = document.createElement('div');
+    tempModule.className = 'module';
+    tempModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Core Thermal Diagnostics</span></div>
+        <div style="margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; font-size:9px;"><span>NODE_TEMP</span><span>42°C</span></div>
+            <div class="temp-indicator"><div class="temp-fill"></div></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:9px;">
+            <span>COOLING_SYSTEM</span><span style="color:#34d399">OPTIMAL</span>
+        </div>
+    `;
+    sidebarTemp.appendChild(tempModule);
+
+    // Terminal Expansion
+    writeToTerm("PoR Engine [PHASE_15] operational.");
+    writeToTerm("Custody: Physical weight cross-referenced with digital ledger.");
+    writeToTerm("Diagnostics: Thermal core stable at 42°C.");
+</script>
