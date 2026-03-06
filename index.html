@@ -1995,3 +1995,143 @@
     writeToTerm("Custody: Physical weight cross-referenced with digital ledger.");
     writeToTerm("Diagnostics: Thermal core stable at 42°C.");
 </script>
+<style>
+    /* --- REBALANCER & BRIDGE VISUALS --- */
+    .rebalance-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .rebalance-node {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border);
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        transition: 0.3s;
+    }
+    .rebalance-node.active-trade { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+
+    .bridge-container {
+        padding: 20px;
+        background: linear-gradient(90deg, rgba(0, 212, 255, 0.05), transparent);
+        border-radius: 15px;
+        margin-top: 20px;
+        position: relative;
+        border-left: 3px solid var(--primary);
+    }
+
+    .bridge-line-anim {
+        width: 100%;
+        height: 2px;
+        background: rgba(0, 212, 255, 0.1);
+        margin: 10px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .bridge-pulse {
+        position: absolute;
+        width: 40px;
+        height: 100%;
+        background: var(--primary);
+        box-shadow: 0 0 15px var(--primary);
+        animation: bridge-flow 2s infinite linear;
+    }
+
+    @keyframes bridge-flow {
+        0% { left: -40px; }
+        100% { left: 100%; }
+    }
+
+    .entropy-label {
+        font-size: 8px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-top: 10px;
+        display: block;
+    }
+</style>
+
+<script>
+    // --- INJECTING PORTFOLIO REBALANCER INTO ASSETS TAB ---
+    const assetsRebalance = document.querySelector('#assets');
+    const rebalanceModule = document.createElement('div');
+    rebalanceModule.className = 'module';
+    rebalanceModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title">Automated Asset Rebalancer</span>
+            <span style="color:#34d399; font-size:9px;">MODE: AUTO-HALAL</span>
+        </div>
+        <div class="rebalance-grid">
+            <div class="rebalance-node active-trade">
+                <span style="font-size:8px; opacity:0.5; display:block;">GOLD</span>
+                <span style="font-size:12px; font-weight:900;">70.2%</span>
+            </div>
+            <div class="rebalance-node">
+                <span style="font-size:8px; opacity:0.5; display:block;">EQUITY</span>
+                <span style="font-size:12px; font-weight:900;">19.8%</span>
+            </div>
+            <div class="rebalance-node">
+                <span style="font-size:8px; opacity:0.5; display:block;">CASH</span>
+                <span style="font-size:12px; font-weight:900;">10.0%</span>
+            </div>
+        </div>
+        <button class="haptic-btn" style="margin-top:15px; border-color:var(--primary); color:var(--primary);" onclick="triggerRebalance()">EXECUTE REBALANCE DRIFT</button>
+    `;
+    assetsRebalance.appendChild(rebalanceModule);
+
+    function triggerRebalance() {
+        writeToTerm("REBALANCER: Analyzing market drift in Nairobi/London corridor...", "info");
+        setTimeout(() => {
+            writeToTerm("REBALANCER: Adjusting Gold weight [+0.2%] to maintain Zero-Ribba ratio.", "success");
+            writeToTerm("REBALANCER: Portfolios synchronized across all 12 nodes.", "success");
+        }, 1200);
+    }
+
+    // --- INJECTING CROSS-NODE BRIDGE INTO PULSE TAB ---
+    const pulseBridge = document.querySelector('#pulse');
+    const bridgeModule = document.createElement('div');
+    bridgeModule.className = 'module';
+    bridgeModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Global Liquidity Bridge (L2)</span></div>
+        <div class="bridge-container">
+            <div style="display:flex; justify-content:space-between; font-size:10px;">
+                <span>ORIGIN: NBO-NODE-01</span>
+                <span>DEST: DXB-VAULT-04</span>
+            </div>
+            <div class="bridge-line-anim"><div class="bridge-pulse"></div></div>
+            <div style="font-size:9px; opacity:0.5; font-family:'JetBrains Mono';">
+                SECURE_TUNNEL: AES-GCM-256 // FRAGMENT_ID: 0xCC22
+            </div>
+        </div>
+    `;
+    pulseBridge.appendChild(bridgeModule);
+
+    // --- INJECTING ENTROPY MONITOR INTO SIDEBAR ---
+    const sidebarEntropy = document.querySelector('.intel-column');
+    const entropyModule = document.createElement('div');
+    entropyModule.className = 'module';
+    entropyModule.innerHTML = `
+        <div class="module-header"><span class="module-title">System Entropy Monitor</span></div>
+        <div style="font-family:'JetBrains Mono'; font-size:14px; font-weight:900; color:var(--primary);">
+            <span id="entropy-val">0.00042</span> <small style="font-size:8px; opacity:0.5;">ΔS</small>
+        </div>
+        <span class="entropy-label">Computational Noise Floor</span>
+        <div class="temp-indicator" style="margin-top:10px;"><div class="temp-fill" style="width:15%; background:var(--primary);"></div></div>
+    `;
+    sidebarEntropy.appendChild(entropyModule);
+
+    // Dynamic Entropy Update
+    setInterval(() => {
+        const val = (Math.random() * 0.0009).toFixed(5);
+        document.getElementById('entropy-val').innerText = val;
+    }, 3000);
+
+    // Terminal Expansion
+    writeToTerm("Strategic Layer [PHASE_16] integrated.");
+    writeToTerm("Bridge: L2 Liquidity Tunnel established to Dubai Hub.");
+    writeToTerm("Entropy: System noise within sub-zero tolerance.");
+</script>
