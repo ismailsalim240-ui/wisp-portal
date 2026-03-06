@@ -1412,3 +1412,114 @@
     writeToTerm("Murabaha: Contract hashing algorithm: SHA-3/256.");
     writeToTerm("Stealth: GUI Blur-Redaction system: ARMED.");
 </script>
+<style>
+    /* --- PANIC OVERLAY & ORDER BOOK VISUALS --- */
+    #panic-overlay {
+        position: fixed; inset: 0; background: #000; z-index: 99999;
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        font-family: 'JetBrains Mono'; color: #1e293b; text-align: center;
+    }
+    
+    .order-book {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .order-entry { background: var(--ink); padding: 8px; font-size: 9px; display: flex; justify-content: space-between; }
+    .order-bid { color: #34d399; }
+    .order-ask { color: #ef4444; }
+
+    .sandbox-input {
+        width: 100%;
+        background: rgba(0,0,0,0.8);
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        padding: 15px;
+        border-radius: 10px;
+        font-family: 'JetBrains Mono';
+        font-size: 11px;
+        margin-top: 15px;
+    }
+</style>
+
+<div id="panic-overlay">
+    <div style="font-size: 40px; margin-bottom: 20px;">⚙️</div>
+    <h1 style="letter-spacing: 5px;">SYSTEM UPDATE IN PROGRESS</h1>
+    <p style="opacity: 0.5;">Estimated time remaining: 42 minutes... Please do not disconnect.</p>
+</div>
+
+<script>
+    // --- INJECTING PANIC SWITCH INTO SIDEBAR ---
+    const sidebarPanic = document.querySelector('.intel-column');
+    const panicModule = document.createElement('div');
+    panicModule.className = 'module';
+    panicModule.style.borderColor = 'var(--danger)';
+    panicModule.innerHTML = `
+        <div class="module-header"><span class="module-title" style="color:var(--danger);">Security: Breach Protocol</span></div>
+        <button onclick="togglePanic()" class="btn-cta" style="background:var(--danger); color:#fff; border:none;">ACTIVATE PANIC SWITCH (F9)</button>
+        <p style="font-size:8px; opacity:0.4; margin-top:10px; text-align:center;">Instantly masks all sovereign data with a dummy system update screen.</p>
+    `;
+    sidebarPanic.insertBefore(panicModule, sidebarPanic.firstChild);
+
+    function togglePanic() {
+        const overlay = document.getElementById('panic-overlay');
+        overlay.style.display = 'flex';
+        writeToTerm("PANIC_PROTOCOL: DATA_REDACTED_INSTANTLY", "error");
+    }
+
+    // Escape listener for Panic Mode
+    window.addEventListener('keydown', (e) => {
+        if(e.key === 'F9') togglePanic();
+        if(e.key === 'Escape') document.getElementById('panic-overlay').style.display = 'none';
+    });
+
+    // --- INJECTING GLOBAL ORDER BOOK INTO ASSETS ---
+    const assetsOrder = document.querySelector('#assets');
+    const bookModule = document.createElement('div');
+    bookModule.className = 'module';
+    bookModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Musharakah Liquidity Order Book</span></div>
+        <div class="order-book">
+            <div class="order-entry order-bid"><span>2.40 XAU</span><span>$2,154.20</span></div>
+            <div class="order-entry order-ask"><span>1.15 XAU</span><span>$2,155.10</span></div>
+            <div class="order-entry order-bid"><span>0.80 XAU</span><span>$2,153.90</span></div>
+            <div class="order-entry order-ask"><span>5.00 XAU</span><span>$2,156.00</span></div>
+        </div>
+        <div style="font-size:8px; opacity:0.3; margin-top:10px;">MATCHING ENGINE: WISP-CORE-NYI</div>
+    `;
+    assetsOrder.appendChild(bookModule);
+
+    // --- INJECTING ENCRYPTED SANDBOX INTO COMMAND ---
+    const commandSandbox = document.querySelector('#command');
+    const sandboxModule = document.createElement('div');
+    sandboxModule.className = 'module';
+    sandboxModule.innerHTML = `
+        <div class="module-header"><span class="module-title">Secure Peer-to-Peer Sandbox</span></div>
+        <div id="sandbox-display" style="height:100px; overflow-y:auto; font-family:'JetBrains Mono'; font-size:10px; color:var(--text-dim);">
+            [14:46] SYSTEM: Connection established via Nairobi-North-Edge.<br>
+            [14:46] NODE: Handshake verified.
+        </div>
+        <input type="text" class="sandbox-input" placeholder="ENCRYPT MESSAGE..." onkeydown="sendSandbox(event)">
+    `;
+    commandSandbox.appendChild(sandboxModule);
+
+    function sendSandbox(e) {
+        if(e.key === 'Enter' && e.target.value.trim()) {
+            const display = document.getElementById('sandbox-display');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            display.innerHTML += `<br>[${time}] <span style="color:var(--primary)">OP:</span> ${e.target.value}`;
+            e.target.value = '';
+            display.scrollTop = display.scrollHeight;
+            writeToTerm("P2P_PACKET: SENT_ENCRYPTED", "info");
+        }
+    }
+
+    // Terminal Expansion
+    writeToTerm("Citadel Phase [11] fully merged.");
+    writeToTerm("Matching Engine: Order book depth 100% synced.");
+    writeToTerm("Panic Logic: Hotkey F9 mapped to Black-Box overlay.");
+</script>
