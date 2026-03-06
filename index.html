@@ -4014,3 +4014,138 @@
             <svg width="100%" height="100%" style="position:absolute; opacity:0.1;">
                 <line x1="55%" y1="60%" x2="60%" y2="45%" stroke="var(--primary)" stroke-width="1" />
                 <line x1="60%" y1="45%" x2="48%" y2="35%" stroke="var(--primary)" stroke-width="
+<style>
+    /* --- WITHDRAWAL UI VISUALS --- */
+    .withdrawal-module {
+        background: linear-gradient(180deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .outgress-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .outgress-card {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .outgress-card:hover {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    .withdraw-input-group {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .withdraw-amt-input {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid var(--gold);
+        color: var(--gold);
+        font-size: 24px;
+        font-family: 'JetBrains Mono';
+        text-align: center;
+        width: 80%;
+        outline: none;
+    }
+
+    .slippage-indicator {
+        font-size: 9px;
+        color: #ef4444;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Withdrawal Animation Overlay */
+    #withdraw-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+        z-index: 10000005; display: none;
+        flex-direction: column; align-items: center; justify-content: center;
+        font-family: 'JetBrains Mono';
+    }
+</style>
+
+<div id="withdraw-overlay">
+    <div class="spinner" style="border-top-color: #ef4444;"></div>
+    <h2 id="withdraw-status" style="color: #ef4444; margin-top: 20px;">INITIATING LIQUIDATION</h2>
+    <p id="withdraw-subtext" style="font-size: 12px; opacity: 0.6;">Converting XAU to KES via Dubai Liquidity Bridge...</p>
+</div>
+
+<script>
+    // --- INJECTING WITHDRAWAL MODULE INTO ASSETS TAB ---
+    const assetsWithdraw = document.querySelector('#assets');
+    const withdrawModule = document.createElement('div');
+    withdrawModule.className = 'module withdrawal-module';
+    withdrawModule.innerHTML = `
+        <div class="module-header">
+            <span class="module-title" style="color:#ef4444;">Asset Liquidation (Outgress)</span>
+            <span style="font-size:9px; color:#ef4444;">CHANNEL: SECURE_OUT</span>
+        </div>
+        
+        <div class="withdraw-input-group">
+            <span style="font-size:10px; opacity:0.5; display:block;">AMOUNT TO WITHDRAW (XAU)</span>
+            <input type="number" id="withdraw-val" class="withdraw-amt-input" placeholder="0.000">
+            <span class="slippage-indicator">Current Liquidation Spread: 0.02%</span>
+        </div>
+
+        <div class="outgress-grid">
+            <div class="outgress-card" onclick="processWithdrawal('MPESA')">
+                <span style="font-size:10px; font-weight:900; color:#34d399;">M-PESA</span>
+                <p style="font-size:8px; opacity:0.5; margin-top:5px;">Instant Settlement</p>
+            </div>
+            <div class="outgress-card" onclick="processWithdrawal('BANK')">
+                <span style="font-size:10px; font-weight:900; color:var(--primary);">RTGS BANK</span>
+                <p style="font-size:8px; opacity:0.5; margin-top:5px;">2-Hour Clearance</p>
+            </div>
+        </div>
+    `;
+    assetsWithdraw.appendChild(withdrawModule);
+
+    function processWithdrawal(method) {
+        const amt = document.getElementById('withdraw-val').value;
+        if(!amt || amt <= 0) {
+            alert("Please enter a valid XAU amount to liquidate.");
+            return;
+        }
+
+        const overlay = document.getElementById('withdraw-overlay');
+        const status = document.getElementById('withdraw-status');
+        const subtext = document.getElementById('withdraw-subtext');
+
+        overlay.style.display = 'flex';
+        writeToTerm(`OUTGRESS: Liquidating ${amt} XAU via ${method} channel...`, "warning");
+
+        setTimeout(() => {
+            status.innerText = "AUTHENTICATING BIOMETRICS";
+            subtext.innerText = "Verifying Sovereign Key Signature...";
+        }, 2000);
+
+        setTimeout(() => {
+            status.innerText = "SETTLING KES FUNDS";
+            status.style.color = "#34d399";
+            subtext.innerText = `Transferring KES to ${method} Gateway...`;
+        }, 4000);
+
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            writeToTerm(`OUTGRESS: ${method} Settlement Complete. Funds Dispatched.`, "success");
+            alert(`Liquidation Successful. KES has been sent to your ${method} account.`);
+            
+            // Reset amount
+            document.getElementById('withdraw-val').value = "";
+        }, 6500);
+    }
+</script>
