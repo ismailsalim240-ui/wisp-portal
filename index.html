@@ -1,511 +1,923 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Fragrant Flowers Blossom - HD Player</title>
-   <script src="https://cdn.tailwindcss.com"></script>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-   <style>
-       body {
-           font-family: 'Inter', sans-serif;
-           background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-           color: #e2e8f0;
-           overflow-x: hidden;
-       }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS | Premium Tech & Ethical Finance</title>
+    
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#022c22',
+                            900: '#064e3b',
+                            800: '#065f46',
+                            700: '#047857',
+                            600: '#059669',
+                            500: '#10b981',
+                            400: '#34d399',
+                            300: '#6ee7b7',
+                            200: '#a7f3d0',
+                            100: '#d1fae5',
+                            50: '#ecfdf5',
+                        },
+                        gold: {
+                            500: '#f59e0b',
+                            400: '#fbbf24',
+                            300: '#fcd34d',
+                            200: '#fde68a',
+                            100: '#fef3c7',
+                        },
+                        charcoal: {
+                            950: '#030712',
+                            900: '#111827',
+                            800: '#1f2937',
+                            700: '#374151',
+                            600: '#4b5563',
+                            500: '#6b7280',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NEXUS Premium",
+        "url": "https://nexus-premium.com",
+        "logo": "https://nexus-premium.com/logo.png",
+        "sameAs": [
+            "https://facebook.com/nexuspremium",
+            "https://instagram.com/nexuspremium"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+254-XXX-XXXX",
+            "contactType": "customer service"
+        }
+    }
+    </script>
 
-       /* Custom Scrollbar */
-       ::-webkit-scrollbar {
-           width: 8px;
-       }
-       ::-webkit-scrollbar-track {
-           background: #0f172a; 
-       }
-       ::-webkit-scrollbar-thumb {
-           background: #3b82f6; 
-           border-radius: 4px;
-       }
-       ::-webkit-scrollbar-thumb:hover {
-           background: #60a5fa; 
-       }
-
-       /* Glassmorphism Utilities */
-       .glass {
-           background: rgba(30, 41, 59, 0.7);
-           backdrop-filter: blur(12px);
-           -webkit-backdrop-filter: blur(12px);
-           border: 1px solid rgba(255, 255, 255, 0.1);
-       }
-
-       .glass-panel {
-           background: rgba(15, 23, 42, 0.85);
-           backdrop-filter: blur(16px);
-           border-left: 1px solid rgba(255, 255, 255, 0.05);
-       }
-
-       /* Range Slider Styling */
-       input[type=range] {
-           -webkit-appearance: none; 
-           background: transparent; 
-       }
-       input[type=range]::-webkit-slider-thumb {
-           -webkit-appearance: none;
-           height: 16px;
-           width: 16px;
-           border-radius: 50%;
-           background: #3b82f6;
-           cursor: pointer;
-           margin-top: -6px; 
-           box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-       }
-       input[type=range]::-webkit-slider-runnable-track {
-           width: 100%;
-           height: 4px;
-           cursor: pointer;
-           background: #475569;
-           border-radius: 2px;
-       }
-       
-       /* Animations */
-       @keyframes fadeIn {
-           from { opacity: 0; transform: translateY(10px); }
-           to { opacity: 1; transform: translateY(0); }
-       }
-       .animate-fade-in {
-           animation: fadeIn 0.5s ease-out forwards;
-       }
-
-       .playlist-item.active {
-           background: rgba(59, 130, 246, 0.2);
-           border-left: 4px solid #3b82f6;
-       }
-
-       /* Loader */
-       .loader {
-           border: 4px solid rgba(255, 255, 255, 0.1);
-           border-left-color: #3b82f6;
-           border-radius: 50%;
-           width: 40px;
-           height: 40px;
-           animation: spin 1s linear infinite;
-       }
-       @keyframes spin {
-           0% { transform: rotate(0deg); }
-           100% { transform: rotate(360deg); }
-       }
-   </style>
+    <style>
+        /* Critical CSS Inline for Performance */
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .gold-border {
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .emerald-glow {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Loading skeleton animation */
+        .skeleton {
+            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative">
+<body class="bg-charcoal-950 text-gray-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
 
-   <!-- Notification Bar -->
-   <div id="notification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 opacity-0 translate-y-[-20px]">
-       <div class="bg-blue-600/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-lg border border-blue-400/30 flex items-center gap-3">
-           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-           <span id="notification-text" class="font-medium text-sm">Notification</span>
-       </div>
-   </div>
+    <!-- IP-Based Currency Detection (Simulated) -->
+    <script>
+        // Simulated IP detection - in production this would be server-side
+        window.userLocation = {
+            country: 'KE', // Default to Kenya, would be detected server-side
+            currency: 'KES',
+            rate: 1 // Conversion rate
+        };
+        
+        // Check browser language/location hints
+        if (navigator.language.includes('en-US') || Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America')) {
+            window.userLocation = { country: 'US', currency: 'USD', rate: 0.0077 };
+        } else if (navigator.language.includes('ar') || Intl.DateTimeFormat().resolvedOptions().timeZone.includes('Dubai')) {
+            window.userLocation = { country: 'AE', currency: 'AED', rate: 0.028 };
+        }
+    </script>
 
-   <!-- Main Container -->
-   <main class="w-full max-w-6xl glass rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row animate-fade-in h-[85vh] md:h-[800px]">
-       
-       <!-- Left Side: Video Player Area -->
-       <div class="flex-1 flex flex-col relative bg-black">
-           
-           <!-- Video Info Header (Overlay) -->
-           <div class="absolute top-0 left-0 w-full p-6 z-20 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
-               <div class="flex justify-between items-start">
-                   <div>
-                       <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight drop-shadow-md">Fragrant Flowers Blossom</h1>
-                       <p id="current-episode-title" class="text-blue-300 text-sm md:text-base mt-1 font-medium drop-shadow-sm">Episode 1 - Rintaro and Kaori</p>
-                   </div>
-                   <div class="flex items-center gap-2 pointer-events-auto">
-                       <span class="px-2 py-1 bg-blue-600/80 backdrop-blur text-xs font-bold rounded text-white border border-blue-400/30">HD</span>
-                       <span id="quality-badge" class="px-2 py-1 bg-white/10 backdrop-blur text-xs font-bold rounded text-white border border-white/20">1080p</span>
-                   </div>
-               </div>
-           </div>
+    <!-- Social Proof Popup (Hidden by default, shown via JS) -->
+    <div id="social-proof" class="fixed bottom-4 left-4 z-50 transform translate-y-32 transition-transform duration-500 max-w-sm">
+        <div class="glass-effect gold-border rounded-lg p-4 shadow-2xl flex items-start gap-3 animate-fade-in">
+            <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm text-gray-300"><span id="sp-name">Someone in Dubai</span> just purchased</p>
+                <p class="text-emerald-400 font-semibold text-sm mt-0.5" id="sp-product">Premium Wireless Earbuds</p>
+                <p class="text-xs text-gray-500 mt-1" id="sp-time">2 minutes ago</p>
+            </div>
+            <button onclick="closeSocialProof()" class="text-gray-500 hover:text-white">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
 
-           <!-- Video Element -->
-           <div class="relative flex-1 bg-black flex items-center justify-center group" id="video-container">
-               <!-- Loading Spinner -->
-               <div id="video-loader" class="absolute z-10 hidden">
-                   <div class="loader"></div>
-               </div>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 glass-effect border-b border-gray-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-gold-400 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">N</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-serif font-bold tracking-tight text-white">NEXUS</h1>
+                        <p class="text-xs text-emerald-400 tracking-widest uppercase">Premium & Ethical</p>
+                    </div>
+                </div>
 
-               <video id="main-video" class="w-full h-full object-contain" poster="https://images.unsplash.com/photo-1490750967868-58cb75069ed6?q=80&w=2070&auto=format&fit=crop">
-                   <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                   Your browser does not support the video tag.
-               </video>
+                <!-- Desktop Mega Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white flex items-center gap-1 py-2 transition-colors">
+                            Shop
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Mega Menu Dropdown -->
+                        <div class="absolute top-full left-0 w-96 glass-effect border border-gray-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 p-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="#tech" class="block p-3 rounded-lg hover:bg-gray-800 transition-colors">
+                                    <h4 class="text-emerald-400 font-semibold mb-1">Tech & Lifestyle</h4>
+                                    <p class="text-xs text-gray-400">Premium electronics curated for excellence</p>
+                                </a>
+                                <a href="#finance" class="block p-3 rounded-lg hover:bg-gray-800 transition-colors">
+                                    <h4 class="text-gold-400 font-semibold mb-1">Finance Hub</h4>
+                                    <p class="text-xs text-gray-400">Ethical investment guides & consulting</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#finance" class="text-gray-300 hover:text-emerald-400 transition-colors">Ethical Finance</a>
+                    <a href="#consulting" class="text-gray-300 hover:text-emerald-400 transition-colors">Consulting</a>
+                    <a href="#members" class="text-gray-300 hover:text-emerald-400 transition-colors">Member Area</a>
+                </div>
 
-               <!-- Big Play Button (Center) -->
-               <div id="big-play-btn" class="absolute z-10 cursor-pointer transition-transform hover:scale-110 active:scale-95">
-                   <div class="w-20 h-20 bg-blue-600/90 rounded-full flex items-center justify-center backdrop-blur-sm shadow-[0_0_30px_rgba(37,99,235,0.5)] border border-white/20">
-                       <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                   </div>
-               </div>
+                <!-- Right Side Actions -->
+                <div class="flex items-center gap-4">
+                    <!-- Currency Switcher -->
+                    <div class="relative">
+                        <select id="currency-switcher" onchange="updateCurrency(this.value)" class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-emerald-500">
+                            <option value="KES">KES (KSh)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="AED">AED (د.إ)</option>
+                        </select>
+                    </div>
 
-               <!-- Custom Controls Overlay -->
-               <div id="controls-overlay" class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4 md:p-6 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-                   
-                   <!-- Progress Bar -->
-                   <div class="relative w-full h-1.5 bg-gray-600 rounded-full cursor-pointer mb-4 group/progress" id="progress-container">
-                       <div id="progress-fill" class="absolute top-0 left-0 h-full bg-blue-500 rounded-full w-0 relative">
-                           <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover/progress:opacity-100 transition-opacity"></div>
-                       </div>
-                       <div id="hover-time" class="absolute top-[-25px] text-xs text-white bg-black/80 px-2 py-1 rounded opacity-0 pointer-events-none transform -translate-x-1/2">00:00</div>
-                   </div>
+                    <!-- Cart -->
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-300 hover:text-white transition-colors group">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center transform scale-0 transition-transform duration-200">0</span>
+                    </button>
 
-                   <!-- Buttons Row -->
-                   <div class="flex justify-between items-center">
-                       <div class="flex items-center gap-4">
-                           <!-- Play/Pause -->
-                           <button id="play-pause-btn" class="text-white hover:text-blue-400 transition-colors focus:outline-none">
-                               <svg id="icon-play" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                               <svg id="icon-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                           </button>
+                    <!-- Auth -->
+                    <button onclick="toggleAuthModal()" class="hidden md:block bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white px-6 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg shadow-emerald-900/50">
+                        Sign In
+                    </button>
 
-                           <!-- Volume -->
-                           <div class="flex items-center gap-2 group/volume">
-                               <button id="mute-btn" class="text-white hover:text-blue-400 transition-colors">
-                                   <svg id="icon-vol-high" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                                   <svg id="icon-vol-mute" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-                               </button>
-                               <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" class="w-0 overflow-hidden group-hover/volume:w-24 transition-all duration-300 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer">
-                           </div>
+                    <!-- Mobile Menu Button -->
+                    <button class="lg:hidden text-gray-300" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                           <!-- Time -->
-                           <div class="text-xs md:text-sm font-mono text-gray-300 select-none">
-                               <span id="current-time">00:00</span> / <span id="duration">00:00</span>
-                           </div>
-                       </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden hidden glass-effect border-t border-gray-800">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#tech" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Tech Shop</a>
+                <a href="#finance" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Ethical Finance</a>
+                <a href="#consulting" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Consulting</a>
+                <a href="#members" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Member Area</a>
+            </div>
+        </div>
+    </nav>
 
-                       <div class="flex items-center gap-4">
-                           <!-- Settings/Quality (Visual Only for this demo) -->
-                           <button class="text-white hover:text-blue-400 transition-colors" title="Settings">
-                               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                           </button>
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%2310b981\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+        </div>
 
-                           <!-- Fullscreen -->
-                           <button id="fullscreen-btn" class="text-white hover:text-blue-400 transition-colors focus:outline-none">
-                               <svg id="icon-fullscreen" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                               <svg id="icon-exit-fullscreen" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
-                           </button>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8 animate-slide-up">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/50 border border-emerald-700/50 text-emerald-400 text-sm font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Ethical Finance Meets Premium Tech
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-7xl font-serif font-bold leading-tight">
+                        Elevate Your <br>
+                        <span class="gradient-text">Lifestyle & Wealth</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-400 max-w-lg leading-relaxed">
+                        Discover curated premium technology and master ethical wealth building through our Islamic finance consulting platform.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#tech" class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg shadow-emerald-900/50 flex items-center gap-2">
+                            Shop Collection
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                        <a href="#consulting" class="border border-gray-600 hover:border-gold-400 text-gray-300 hover:text-gold-400 px-8 py-4 rounded-full font-semibold transition-all duration-200 flex items-center gap-2">
+                            Book Consultation
+                        </a>
+                    </div>
 
-       <!-- Right Side: Playlist Sidebar -->
-       <div id="playlist-sidebar" class="w-full md:w-80 glass-panel flex flex-col transition-all duration-300 absolute md:relative z-30 h-full transform translate-x-full md:translate-x-0">
-           <div class="p-5 border-b border-white/10 flex justify-between items-center bg-slate-900/50">
-               <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                   <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                   Episodes
-               </h2>
-               <button id="close-playlist-mobile" class="md:hidden text-gray-400 hover:text-white">
-                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-               </button>
-           </div>
-           
-           <div class="flex-1 overflow-y-auto p-3 space-y-2" id="playlist-container">
-               <!-- Playlist items injected by JS -->
-           </div>
-       </div>
-   </main>
+                    <!-- Trust Badges -->
+                    <div class="pt-8 flex items-center gap-6 text-gray-500 text-sm">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            SSL Secured
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                                <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            M-Pesa Enabled
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Shariah Compliant
+                        </div>
+                    </div>
+                </div>
 
-   <!-- Toggle Playlist Button (Floating for Mobile/Desktop) -->
-   <button id="toggle-playlist-btn" class="fixed bottom-8 right-8 md:bottom-auto md:top-8 md:right-8 z-40 bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95 border border-blue-400/50 backdrop-blur-sm">
-       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-   </button>
+                <!-- Hero Image/Visual -->
+                <div class="relative lg:h-[600px] flex items-center justify-center">
+                    <div class="relative w-full max-w-md aspect-square">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-emerald-600/30 to-gold-500/30 rounded-3xl transform rotate-6"></div>
+                        <div class="absolute inset-0 bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-700">
+                            <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=800&auto=format&fit=crop&q=80" alt="Premium Tech" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-charcoal-950 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <div class="glass-effect rounded-xl p-4 border border-gray-700">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm text-gray-400">Featured Product</span>
+                                        <span class="text-gold-400 font-bold" data-price="12999">KES 12,999</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-white">Premium Noise-Canceling Headphones</h3>
+                                    <button onclick="addToCart('Premium Headphones', 12999)" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-   <script>
-       // --- Data ---
-       const episodes = [
-           { id: 1, title: "Rintaro and Kaori", duration: "24:15", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", thumb: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=500&auto=format&fit=crop&q=60" },
-           { id: 2, title: "The Scent of Rain", duration: "23:40", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", thumb: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=500&auto=format&fit=crop&q=60" },
-           { id: 3, title: "Blossoms in the Wind", duration: "24:05", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", thumb: "https://images.unsplash.com/photo-1490750967868-58cb75069ed6?w=500&auto=format&fit=crop&q=60" },
-           { id: 4, title: "Memories of Kyoto", duration: "23:55", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", thumb: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=500&auto=format&fit=crop&q=60" },
-           { id: 5, title: "The Garden's Secret", duration: "24:20", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", thumb: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=500&auto=format&fit=crop&q=60" },
-           { id: 6, title: "Tea Ceremony", duration: "23:30", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", thumb: "https://images.unsplash.com/photo-1531969179221-3926e727d704?w=500&auto=format&fit=crop&q=60" },
-           { id: 7, title: "Autumn Leaves", duration: "24:00", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", thumb: "https://images.unsplash.com/photo-1507371341162-763b5e419408?w=500&auto=format&fit=crop&q=60" },
-           { id: 8, title: "Winter's End", duration: "24:45", src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", thumb: "https://images.unsplash.com/photo-1484313544071-4d6d46527bf8?w=500&auto=format&fit=crop&q=60" },
-       ];
+    <!-- Tech Shop Section -->
+    <section id="tech" class="py-20 bg-charcoal-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4">Curated Tech Collection</h2>
+                    <p class="text-gray-400">Premium electronics sourced globally, delivered locally</p>
+                </div>
+                <div class="hidden md:flex gap-2">
+                    <button class="px-4 py-2 rounded-full bg-emerald-600 text-white text-sm">All</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm transition-colors">Audio</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm transition-colors">Smart Home</button>
+                    <button class="px-4 py-2 rounded-full bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm transition-colors">Accessories</button>
+                </div>
+            </div>
 
-       // --- Elements ---
-       const video = document.getElementById('main-video');
-       const playPauseBtn = document.getElementById('play-pause-btn');
-       const bigPlayBtn = document.getElementById('big-play-btn');
-       const iconPlay = document.getElementById('icon-play');
-       const iconPause = document.getElementById('icon-pause');
-       const progressContainer = document.getElementById('progress-container');
-       const progressFill = document.getElementById('progress-fill');
-       const currentTimeEl = document.getElementById('current-time');
-       const durationEl = document.getElementById('duration');
-       const fullscreenBtn = document.getElementById('fullscreen-btn');
-       const iconFullscreen = document.getElementById('icon-fullscreen');
-       const iconExitFullscreen = document.getElementById('icon-exit-fullscreen');
-       const videoContainer = document.getElementById('video-container');
-       const playlistContainer = document.getElementById('playlist-container');
-       const playlistSidebar = document.getElementById('playlist-sidebar');
-       const togglePlaylistBtn = document.getElementById('toggle-playlist-btn');
-       const closePlaylistMobile = document.getElementById('close-playlist-mobile');
-       const currentEpisodeTitle = document.getElementById('current-episode-title');
-       const volumeSlider = document.getElementById('volume-slider');
-       const muteBtn = document.getElementById('mute-btn');
-       const iconVolHigh = document.getElementById('icon-vol-high');
-       const iconVolMute = document.getElementById('icon-vol-mute');
-       const hoverTime = document.getElementById('hover-time');
-       const notification = document.getElementById('notification');
-       const notificationText = document.getElementById('notification-text');
-       const videoLoader = document.getElementById('video-loader');
+            <!-- Product Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+                <!-- Products injected via JS -->
+            </div>
 
-       let currentEpisodeIndex = 0;
-       let isPlaylistOpen = false; // Mobile state
+            <!-- Shipping Calculator -->
+            <div class="mt-16 glass-effect rounded-2xl p-8 border border-gray-800">
+                <h3 class="text-xl font-semibold text-white mb-6 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Smart Shipping Calculator
+                </h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Your Location (Detected)</label>
+                        <input type="text" id="shipping-location" value="Nairobi, Kenya" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Delivery Method</label>
+                        <select id="shipping-method" onchange="calculateShipping()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+                            <option value="standard">Standard (7-15 days)</option>
+                            <option value="express">Express (5-10 days)</option>
+                            <option value="premium">Premium (3-7 days)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <div class="w-full bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700">
+                            <span class="text-sm text-gray-400">Estimated Cost:</span>
+                            <span id="shipping-cost" class="text-xl font-bold text-emerald-400 ml-2">KES 450</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-       // --- Initialization ---
-       function init() {
-           renderPlaylist();
-           loadEpisode(0);
-           setupEventListeners();
-       }
+    <!-- Ethical Finance Hub -->
+    <section id="finance" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-charcoal-950 to-emerald-950/20"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-emerald-400 font-semibold tracking-wider uppercase text-sm">Ethical Wealth Building</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mt-4 mb-6">Islamic Finance & Consulting</h2>
+                <p class="text-gray-400 text-lg">Shariah-compliant investment strategies, business blueprints, and personalized consulting for the modern Muslim entrepreneur.</p>
+            </div>
 
-       // --- Core Functions ---
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Digital Product 1 -->
+                <div class="glass-effect rounded-2xl overflow-hidden border border-gray-800 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="h-48 bg-gradient-to-br from-emerald-800 to-charcoal-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\' fill=\'%2310b981\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E\')] opacity-20"></div>
+                        <svg class="w-20 h-20 text-emerald-400 relative z-10 transform group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-white">Halal Business Blueprint</h3>
+                            <span class="text-gold-400 font-bold" data-price="4999">KES 4,999</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Complete guide to starting a Shariah-compliant business in Kenya. Includes legal frameworks, funding sources, and marketing strategies.</p>
+                        <ul class="text-sm text-gray-300 space-y-2 mb-6">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                120+ Page PDF (Watermarked)
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Financial Templates
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Lifetime Updates
+                            </li>
+                        </ul>
+                        <button onclick="buyDigital('Halal Business Blueprint', 4999)" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white py-3 rounded-lg font-semibold transition-all duration-200">
+                            Purchase & Download
+                        </button>
+                    </div>
+                </div>
 
-       function showNotification(message) {
-           notificationText.textContent = message;
-           notification.classList.remove('opacity-0', 'translate-y-[-20px]');
-           setTimeout(() => {
-               notification.classList.add('opacity-0', 'translate-y-[-20px]');
-           }, 3000);
-       }
+                <!-- Consulting Card -->
+                <div class="glass-effect rounded-2xl overflow-hidden border border-gold-500/30 relative">
+                    <div class="absolute top-0 right-0 bg-gold-500 text-charcoal-950 text-xs font-bold px-3 py-1 rounded-bl-lg">POPULAR</div>
+                    <div class="h-48 bg-gradient-to-br from-gold-900/50 to-charcoal-900 flex items-center justify-center">
+                        <svg class="w-20 h-20 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-white">1-on-1 Consultation</h3>
+                            <span class="text-gold-400 font-bold" data-price="15000">KES 15,000</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Personalized 60-minute session with our certified Islamic finance advisor. Discuss investments, business structure, or wealth management.</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <div class="w-2 h-2 rounded-full bg-gold-400"></div>
+                                <span>Google Calendar Integration</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <div class="w-2 h-2 rounded-full bg-gold-400"></div>
+                                <span>Zoom/Meet Link Auto-generated</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-300">
+                                <div class="w-2 h-2 rounded-full bg-gold-400"></div>
+                                <span>Follow-up Email Summary</span>
+                            </div>
+                        </div>
 
-       function formatTime(seconds) {
-           const m = Math.floor(seconds / 60);
-           const s = Math.floor(seconds % 60);
-           return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-       }
+                        <button onclick="bookConsultation()" class="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-charcoal-950 py-3 rounded-lg font-bold transition-all duration-200">
+                            Book Session
+                        </button>
+                    </div>
+                </div>
 
-       function loadEpisode(index) {
-           currentEpisodeIndex = index;
-           const ep = episodes[index];
-           
-           video.src = ep.src;
-           video.poster = ep.thumb; // Optional: use thumb as poster
-           currentEpisodeTitle.textContent = `Episode ${ep.id} - ${ep.title}`;
-           
-           // Update playlist UI
-           document.querySelectorAll('.playlist-item').forEach((item, i) => {
-               if (i === index) {
-                   item.classList.add('active');
-                   item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-               } else {
-                   item.classList.remove('active');
-               }
-           });
+                <!-- Member Area Teaser -->
+                <div id="members" class="glass-effect rounded-2xl overflow-hidden border border-gray-800 flex flex-col justify-center items-center p-8 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/10 to-transparent"></div>
+                    <div class="w-16 h-16 rounded-full bg-emerald-900/50 flex items-center justify-center mb-4 relative z-10">
+                        <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 relative z-10">Member's Area</h3>
+                    <p class="text-gray-400 text-sm mb-6 relative z-10">Access your purchased guides, invoices, and scheduled calls in one secure location.</p>
+                    <button onclick="toggleAuthModal()" class="border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white px-6 py-2 rounded-full font-medium transition-all duration-200 relative z-10">
+                        Login to Access
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-           video.load();
-           showNotification(`Playing: ${ep.title}`);
-           
-           // Reset UI
-           iconPlay.classList.remove('hidden');
-           iconPause.classList.add('hidden');
-           bigPlayBtn.style.display = 'flex';
-           progressFill.style.width = '0%';
-           currentTimeEl.textContent = '00:00';
-       }
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-charcoal-900 border-l border-gray-800 transform translate-x-full transition-transform duration-300 z-50 shadow-2xl">
+        <div class="flex flex-col h-full">
+            <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-white">Your Cart</h2>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Cart items injected here -->
+                <div class="text-center text-gray-500 mt-10">
+                    <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
 
-       function renderPlaylist() {
-           playlistContainer.innerHTML = '';
-           episodes.forEach((ep, index) => {
-               const item = document.createElement('div');
-               item.className = `playlist-item p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white/5 flex gap-3 items-center group`;
-               item.innerHTML = `
-                   <div class="relative w-24 h-14 flex-shrink-0 rounded overflow-hidden">
-                       <img src="${ep.thumb}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" alt="Thumbnail">
-                       <div class="absolute bottom-1 right-1 bg-black/80 text-[10px] px-1 rounded text-white">${ep.duration}</div>
-                       <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                           <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                       </div>
-                   </div>
-                   <div class="flex-1 min-w-0">
-                       <h3 class="text-sm font-semibold text-gray-200 group-hover:text-blue-400 truncate">Ep. ${ep.id} - ${ep.title}</h3>
-                       <p class="text-xs text-gray-500 mt-0.5">Season 1</p>
-                   </div>
-               `;
-               item.addEventListener('click', () => {
-                   loadEpisode(index);
-                   // On mobile, close sidebar after selection
-                   if (window.innerWidth < 768) {
-                       togglePlaylist();
-                   }
-               });
-               playlistContainer.appendChild(item);
-           });
-       }
+            <div class="p-6 border-t border-gray-800 space-y-4">
+                <div class="flex justify-between text-lg font-bold text-white">
+                    <span>Total</span>
+                    <span id="cart-total">KES 0</span>
+                </div>
+                
+                <!-- Payment Method Selection -->
+                <div class="space-y-2">
+                    <label class="block text-sm text-gray-400 mb-2">Payment Method</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="selectPayment('mpesa')" id="pay-mpesa" class="flex items-center justify-center gap-2 p-3 rounded-lg border border-emerald-500 bg-emerald-500/10 text-emerald-400 transition-all">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" class="h-6 object-contain" alt="M-Pesa">
+                        </button>
+                        <button onclick="selectPayment('card')" id="pay-card" class="flex items-center justify-center gap-2 p-3 rounded-lg border border-gray-700 text-gray-400 hover:border-gray-500 transition-all">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                            <span class="text-sm">Card</span>
+                        </button>
+                    </div>
+                </div>
 
-       function togglePlay() {
-           if (video.paused) {
-               video.play();
-               iconPlay.classList.add('hidden');
-               iconPause.classList.remove('hidden');
-               bigPlayBtn.style.display = 'none';
-           } else {
-               video.pause();
-               iconPlay.classList.remove('hidden');
-               iconPause.classList.add('hidden');
-               bigPlayBtn.style.display = 'flex';
-           }
-       }
+                <button onclick="checkout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-lg font-bold text-lg transition-all duration-200 shadow-lg shadow-emerald-900/50">
+                    Checkout Now
+                </button>
+                <p class="text-xs text-center text-gray-500 flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                    Secured by SSL Encryption
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden" onclick="toggleCart()"></div>
 
-       function toggleMute() {
-           if (video.muted) {
-               video.muted = false;
-               volumeSlider.value = video.volume || 1;
-               iconVolHigh.classList.remove('hidden');
-               iconVolMute.classList.add('hidden');
-           } else {
-               video.muted = true;
-               iconVolHigh.classList.add('hidden');
-               iconVolMute.classList.remove('hidden');
-           }
-       }
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6">
+            <div class="glass-effect rounded-2xl border border-gray-700 p-8 relative">
+                <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
+                    <p class="text-gray-400">Access your purchases and bookings</p>
+                </div>
 
-       function toggleFullscreen() {
-           if (!document.fullscreenElement) {
-               if (videoContainer.requestFullscreen) {
-                   videoContainer.requestFullscreen();
-               } else if (videoContainer.webkitRequestFullscreen) { /* Safari */
-                   videoContainer.webkitRequestFullscreen();
-               }
-           } else {
-               if (document.exitFullscreen) {
-                   document.exitFullscreen();
-               }
-           }
-       }
+                <form onsubmit="handleAuth(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Email Address</label>
+                        <input type="email" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="you@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Password</label>
+                        <input type="password" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-semibold transition-colors">
+                        Sign In
+                    </button>
+                </form>
 
-       function togglePlaylist() {
-           isPlaylistOpen = !isPlaylistOpen;
-           if (isPlaylistOpen) {
-               playlistSidebar.classList.remove('translate-x-full');
-           } else {
-               playlistSidebar.classList.add('translate-x-full');
-           }
-       }
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-400">Don't have an account? <a href="#" class="text-emerald-400 hover:text-emerald-300">Register here</a></p>
+                </div>
 
-       // --- Event Listeners ---
+                <div class="mt-6 pt-6 border-t border-gray-800">
+                    <button class="w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Continue with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-       function setupEventListeners() {
-           // Video Events
-           video.addEventListener('click', togglePlay);
-           video.addEventListener('timeupdate', () => {
-               const percent = (video.currentTime / video.duration) * 100;
-               progressFill.style.width = `${percent}%`;
-               currentTimeEl.textContent = formatTime(video.currentTime);
-           });
-           video.addEventListener('loadedmetadata', () => {
-               durationEl.textContent = formatTime(video.duration);
-           });
-           video.addEventListener('ended', () => {
-               iconPlay.classList.remove('hidden');
-               iconPause.classList.add('hidden');
-               bigPlayBtn.style.display = 'flex';
-               // Auto play next
-               if (currentEpisodeIndex < episodes.length - 1) {
-                   setTimeout(() => loadEpisode(currentEpisodeIndex + 1), 1500);
-               }
-           });
-           video.addEventListener('waiting', () => videoLoader.classList.remove('hidden'));
-           video.addEventListener('playing', () => videoLoader.classList.add('hidden'));
-           video.addEventListener('canplay', () => videoLoader.classList.add('hidden'));
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeBooking()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-6">
+            <div class="glass-effect rounded-2xl border border-gray-700 p-8 relative max-h-[90vh] overflow-y-auto">
+                <button onclick="closeBooking()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                
+                <h2 class="text-2xl font-bold text-white mb-2">Book Consultation</h2>
+                <p class="text-gray-400 mb-6">Select your preferred date and time</p>
 
-           // Controls
-           playPauseBtn.addEventListener('click', (e) => {
-               e.stopPropagation();
-               togglePlay();
-           });
-           bigPlayBtn.addEventListener('click', togglePlay);
+                <form onsubmit="handleBooking(event)" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Date</label>
+                            <input type="date" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Time</label>
+                            <select required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold-500">
+                                <option>09:00 AM</option>
+                                <option>11:00 AM</option>
+                                <option>02:00 PM</option>
+                                <option>04:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Consultation Topic</label>
+                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold-500">
+                            <option>Business Structure & Setup</option>
+                            <option>Investment Strategy</option>
+                            <option>Wealth Management</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
 
-           muteBtn.addEventListener('click', (e) => {
-               e.stopPropagation();
-               toggleMute();
-           });
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Additional Notes</label>
+                        <textarea rows="3" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold-500" placeholder="Describe what you'd like to discuss..."></textarea>
+                    </div>
 
-           volumeSlider.addEventListener('input', (e) => {
-               video.volume = e.target.value;
-               video.muted = false;
-               if (video.volume === 0) {
-                   iconVolHigh.classList.add('hidden');
-                   iconVolMute.classList.remove('hidden');
-               } else {
-                   iconVolHigh.classList.remove('hidden');
-                   iconVolMute.classList.add('hidden');
-               }
-           });
+                    <div class="bg-gold-900/20 border border-gold-500/30 rounded-lg p-4 flex justify-between items-center">
+                        <span class="text-gold-200">Total</span>
+                        <span class="text-2xl font-bold text-gold-400" data-price="15000">KES 15,000</span>
+                    </div>
 
-           fullscreenBtn.addEventListener('click', (e) => {
-               e.stopPropagation();
-               toggleFullscreen();
-           });
+                    <button type="submit" class="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-charcoal-950 py-4 rounded-lg font-bold text-lg transition-all">
+                        Confirm Booking & Pay
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-           // Progress Bar
-           progressContainer.addEventListener('click', (e) => {
-               const rect = progressContainer.getBoundingClientRect();
-               const pos = (e.clientX - rect.left) / rect.width;
-               video.currentTime = pos * video.duration;
-           });
+    <!-- Footer -->
+    <footer class="bg-charcoal-950 border-t border-gray-800 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-gold-400 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">N</span>
+                        </div>
+                        <span class="text-xl font-serif font-bold text-white">NEXUS</span>
+                    </div>
+                    <p class="text-gray-400 max-w-sm">Premium technology meets ethical finance. Building wealth the right way through Shariah-compliant investments and world-class products.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#tech" class="hover:text-emerald-400 transition-colors">Tech Shop</a></li>
+                        <li><a href="#finance" class="hover:text-emerald-400 transition-colors">Finance Hub</a></li>
+                        <li><a href="#consulting" class="hover:text-emerald-400 transition-colors">Consulting</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>support@nexus-premium.com</li>
+                        <li>+254 XXX XXX XXX</li>
+                        <li>Nairobi, Kenya</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">© 2024 NEXUS Premium. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" class="h-8 opacity-50" alt="Visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" class="h-8 opacity-50" alt="Mastercard">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" class="h-8 opacity-50" alt="M-Pesa">
+                </div>
+            </div>
+        </div>
+    </footer>
 
-           progressContainer.addEventListener('mousemove', (e) => {
-               const rect = progressContainer.getBoundingClientRect();
-               const pos = (e.clientX - rect.left) / rect.width;
-               const time = pos * video.duration;
-               
-               hoverTime.style.left = `${e.clientX - rect.left}px`;
-               hoverTime.textContent = formatTime(time);
-               hoverTime.style.opacity = 1;
-           });
+    <!-- Application Logic -->
+    <script>
+        // State Management
+        let cart = [];
+        let currentCurrency = window.userLocation.currency;
+        let exchangeRates = { KES: 1, USD: 0.0077, AED: 0.028 };
+        let selectedPaymentMethod = 'mpesa';
 
-           progressContainer.addEventListener('mouseleave', () => {
-               hoverTime.style.opacity = 0;
-           });
+        // Product Data
+        const products = [
+            { id: 1, name: 'Premium Wireless Earbuds', price: 12999, category: 'Audio', image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop&q=80', rating: 4.8 },
+            { id: 2, name: 'Smart Watch Pro', price: 24999, category: 'Wearables', image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500&auto=format&fit=crop&q=80', rating: 4.9 },
+            { id: 3, name: 'Portable Power Bank 20k mAh', price: 4999, category: 'Accessories', image: 'https://images.unsplash.com/photo-1609592809794-8534f7d1677b?w=500&auto=format&fit=crop&q=80', rating: 4.7 },
+            { id: 4, name: 'Noise-Canceling Headphones', price: 18999, category: 'Audio', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80', rating: 4.9 },
+            { id: 5, name: 'Smart Home Hub', price: 15999, category: 'Smart Home', image: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=500&auto=format&fit=crop&q=80', rating: 4.6 },
+            { id: 6, name: 'Wireless Charging Pad', price: 3499, category: 'Accessories', image: 'https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?w=500&auto=format&fit=crop&q=80', rating: 4.5 }
+        ];
 
-           // Fullscreen Change Detection
-           document.addEventListener('fullscreenchange', () => {
-               if (document.fullscreenElement) {
-                   iconFullscreen.classList.add('hidden');
-                   iconExitFullscreen.classList.remove('hidden');
-               } else {
-                   iconFullscreen.classList.remove('hidden');
-                   iconExitFullscreen.classList.add('hidden');
-               }
-           });
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCurrencyDisplay();
+            simulateSocialProof();
+            
+            // Set initial currency selector
+            document.getElementById('currency-switcher').value = currentCurrency;
+        });
 
-           // Playlist Toggle
-           togglePlaylistBtn.addEventListener('click', togglePlaylist);
-           closePlaylistMobile.addEventListener('click', togglePlaylist);
+        // Currency Functions
+        function updateCurrency(currency) {
+            currentCurrency = currency;
+            updateCurrencyDisplay();
+            renderProducts();
+            updateCartDisplay();
+        }
 
-           // Keyboard Shortcuts
-           document.addEventListener('keydown', (e) => {
-               if (e.code === 'Space') {
-                   e.preventDefault(); // Prevent scrolling
-                   togglePlay();
-               } else if (e.code === 'ArrowRight') {
-                   video.currentTime += 10;
-                   showNotification('+10 seconds');
-               } else if (e.code === 'ArrowLeft') {
-                   video.currentTime -= 10;
-                   showNotification('-10 seconds');
-               } else if (e.code === 'KeyF') {
-                   toggleFullscreen();
-               }
-           });
-       }
+        function formatPrice(kesPrice) {
+            const converted = Math.round(kesPrice * exchangeRates[currentCurrency]);
+            const symbols = { KES: 'KES ', USD: '$', AED: 'AED ' };
+            return symbols[currentCurrency] + converted.toLocaleString();
+        }
 
-       // Run
-       document.addEventListener('DOMContentLoaded', init);
+        function updateCurrencyDisplay() {
+            document.querySelectorAll('[data-price]').forEach(el => {
+                const kes = parseInt(el.getAttribute('data-price'));
+                el.textContent = formatPrice(kes);
+            });
+        }
 
-   </script>
-</body>
-</html>
+        // Product Rendering
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(product => `
+                <div class="glass-effect rounded-2xl overflow-hidden border border-gray-800 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 right-4 bg-charcoal-950/80 backdrop-blur px-2 py-1 rounded-lg text-sm text-gold-400 font-semibold">
+                            ★ ${product.rating}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-emerald-400 uppercase tracking-wider mb-2">${product.category}</div>
+                        <h3 class="text-lg font-bold text-white mb-2">${product.name}</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-white" data-price="${product.price}">${formatPrice(product.price)}</span>
+                            <span class="text-xs text-gray-500">Free Shipping</span>
+                        </div>
+                        <button onclick="addToCart('${product.name}', ${product.price})" class="w-full bg-gray-800 hover:bg-emerald-600 text-white py-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 group-hover:bg-emerald-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
+        // Cart Functions
+        function addToCart(name, price) {
+            cart.push({ name, price, id: Date.now() });
+            updateCartDisplay();
+            showNotification(`Added ${name} to cart`);
+            
+            // Animate cart icon
+            const cartCount = document.getElementById('cart-count');
+            cartCount.classList.remove('scale-0');
+            cartCount.classList.add('scale-110');
+            setTimeout(() => cartCount.classList.remove('scale-110'), 200);
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartCount.textContent = cart.length;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center text-gray-500 mt-10">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        <p>Your cart is empty</p>
+                    </div>`;
+                cartTotal.textContent = formatPrice(0);
+                return;
+            }
+            
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between items-center bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+                    <div>
+                        <h4 class="text-white font-medium text-sm">${item.name}</h4>
+                        <p class="text-emerald-400 text-sm">${formatPrice(item.price)}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-red-400 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.textContent = formatPrice(total);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+            if (cart.length === 0) {
+                document.getElementById('cart-count').classList.add('scale-0');
+            }
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            
+            if (isOpen) {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        // Payment Functions
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            document.getElementById('pay-mpesa').className = method === 'mpesa' 
+                ? 'flex items-center justify-center gap-2 p-3 rounded-lg border border-emerald-500 bg-emerald-500/10 text-emerald-400 transition-all'
+                : 'flex items-center justify-center gap-2 p-3 rounded-lg border border-gray-700 text-gray-400 hover:border-gray-500 transition-all';
+            document.getElementById('pay-card').className = method === 'card'
+                ? 'flex items-center justify-center gap-2 p-3 rounded-lg border border-blue-500 bg-blue-500/10 text-blue-400 transition-all'
+                : 'flex items-center justify-center gap-2 p-3 rounded-lg border border-gray-700 text-gray-400 hover:border-gray-500 transition-all';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty');
+                return;
+            }
+            
+            if (selectedPaymentMethod === 'mpesa') {
+                initiateMpesa();
+            } else {
+                showNotification('Redirecting to Stripe...');
+                // Stripe integration would go here
+            }
+        }
+
+        function initiateMpesa() {
+            const phone = prompt('Enter your M-Pesa number (2547XXXXXXXX):');
+            if (phone && phone.startsWith('2547') && phone.length === 12) {
+                showNotification('STK Push sent to your phone. Please complete payment.');
+                // M-Pesa API integration would go here
+                simulatePaymentSuccess();
+            } else {
+                showNotification('Invalid phone number format');
+            }
+        }
+
+        function simulatePaymentSuccess() {
+            setTimeout(() => {
+                showNotification('Payment successful! Invoice generated.');
+                generateInvoice();
+                cart = [];
+                updateCartDisplay();
+                toggleCart();
+            }, 3000);
+        }
+
+        function generateInvoice() {
+            // PDF generation logic would go here
+            console.log('Generating PDF invoice...');
+        }
+
+        // Digital Products
+        function buyDigital(name, price) {
+            if (confirm(`Purchase ${name} for ${formatPrice(price)}?`)) {
+                showNotification('Processing secure download...');
+                setTimeout(() => {
+                    showNotification('Download link sent to your email (watermarked)');
+                }, 2000);
+            }
+        }
+
+        // Booking Functions
+        function bookConsultation() {
+            document.getElementById('booking-modal').class
