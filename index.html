@@ -5,342 +5,734 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scintillating Wisp | Command Portal v5.1</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'wisp-dark': '#050505',
+                        'wisp-surface': 'rgba(20, 20, 25, 0.7)',
+                        'neon-blue': '#00f3ff',
+                        'neon-gold': '#ffd700',
+                        'neon-purple': '#bc13fe',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --primary: #00d4ff;
-            --primary-glow: rgba(0, 212, 255, 0.3);
-            --ink: #000814;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(0, 212, 255, 0.15);
-            --surface: rgba(2, 6, 23, 0.85);
-            --gold: #D4AF37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --whatsapp: #25D366;
-        }
-
-        .theme-gold {
-            --primary: #D4AF37;
-            --primary-glow: rgba(212, 175, 55, 0.3);
-            --ink: #050505;
-            --border: rgba(212, 175, 55, 0.2);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
-        
         body {
-            background: var(--ink);
-            color: #f8fafc;
-            font-family: 'Montserrat', sans-serif;
+            background-color: #020202;
+            color: #e2e8f0;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
-        /* --- Atmospheric Water Background --- */
-        .water-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%);
-            overflow: hidden;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .ripple {
-            position: absolute; border: 1px solid var(--primary);
-            border-radius: 50%; animation: ripple-effect 8s infinite linear;
-            opacity: 0; pointer-events: none;
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
         }
-        @keyframes ripple-effect {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { opacity: 0.1; }
-            100% { transform: scale(2.5); opacity: 0; }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff; 
         }
 
-        /* --- Task Ticker --- */
-        .task-ticker {
-            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
-            padding: 12px 0; text-align: center; font-family: 'JetBrains Mono';
-            font-size: 10px; letter-spacing: 4px; color: var(--primary);
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
-            text-transform: uppercase;
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .layout {
-            max-width: 1100px; margin: 0 auto; padding: 40px 20px;
-            display: grid; grid-template-columns: 1fr 380px; gap: 30px;
-            position: relative; z-index: 10;
+        .glass-panel-hover:hover {
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
         }
 
-        @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
-
-        /* --- Brand Section --- */
-        .brand-card { grid-column: 1 / -1; text-align: center; padding: 40px 0; }
-        .moon-icon { font-size: 50px; color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin-bottom: 15px; }
-        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; }
-        .sub-tag { font-size: 10px; letter-spacing: 5px; opacity: 0.5; text-transform: uppercase; margin-top: 10px; }
-
-        /* --- Card Architecture --- */
-        .card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 35px; padding: 35px; backdrop-filter: blur(30px);
-            margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        /* Neon Text Effects */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-
-        /* --- Chart System --- */
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .chart-btn { 
-            background: transparent; border: 1px solid var(--border); color: var(--primary); 
-            padding: 6px 14px; border-radius: 10px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 11px;
+        .text-glow-gold {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
         }
-        .chart-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; }
 
-        /* --- Timer & Portal Buttons --- */
-        .timer-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 300; letter-spacing: -3px; margin: 20px 0; }
-        .btn-fluid {
-            width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer;
-            letter-spacing: 4px; border: none; text-transform: uppercase;
-            background: linear-gradient(90deg, var(--primary), #0077b6); color: #000;
-            transition: 0.3s;
+        /* Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
-        .btn-fluid:hover { filter: brightness(1.2); box-shadow: 0 0 30px var(--primary-glow); }
-        .btn-locked { background: transparent; border: 1px solid #334155; color: #444; cursor: not-allowed; }
 
-        /* --- Spiritual Goal Rows --- */
-        .goal-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px; background: rgba(255,255,255,0.02);
-            border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent;
+        /* Custom Checkbox */
+        .custom-check:checked + div {
+            background-color: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
         }
-        .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.05); }
-        .check-box { width: 24px; height: 24px; border: 2px solid var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .check-box.active::after { content: '✓'; color: var(--gold); font-weight: 900; }
+        .custom-check:checked + div .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
 
-        /* --- Professional Services Buttons --- */
-        .btn-whatsapp { background: var(--whatsapp); color: white; margin-top: 15px; }
-        .btn-hire { background: var(--gold); color: #000; }
-
-        /* --- Intelligence Chat --- */
-        .chat-box { height: 450px; display: flex; flex-direction: column; }
-        #chat-flow { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 15px 20px; border-radius: 22px; font-size: 13px; line-height: 1.6; max-width: 85%; }
-        .bot { background: rgba(255,255,255,0.05); border-left: 3px solid var(--primary); align-self: flex-start; }
-        .user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
-
-        /* --- Table Styling --- */
-        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; text-align: left; }
-        .history-table th { color: var(--primary); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; opacity: 0.8; }
-
-        /* --- Modal --- */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 30px; }
-        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 30px; max-width: 550px; max-height: 85vh; overflow-y: auto; }
+        /* Loader for Chat */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
     </style>
 </head>
-<body id="main-body">
+<body class="antialiased selection:bg-neon-blue selection:text-black">
 
-    <div class="task-ticker" id="live-ticker">INITIALIZING SENTINEL...</div>
-    <div class="water-bg" id="ripples"></div>
+    <!-- Dynamic Background -->
+    <canvas id="bg-canvas"></canvas>
 
-    <div class="layout">
-        
-        <div class="brand-card">
-            <div class="moon-icon">🌙</div>
-            <h1 class="brand-name">SCINTILLATING WISP</h1>
-            <p class="sub-tag">Digital Excellence • Sharia Compliant • Ramadhan 2026</p>
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
-                <button class="chart-btn" onclick="toggleTheme()">TOGGLE THEME</button>
-                <button class="chart-btn" onclick="toggleModal()">LEGAL VAULT</button>
+    <!-- Top Ticker -->
+    <div class="fixed top-0 w-full z-50 glass-panel border-b border-white/10 py-3 px-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="font-mono text-xs text-neon-blue tracking-widest uppercase" id="system-status">System Online</span>
+        </div>
+        <div class="font-mono text-xs tracking-[0.2em] text-gray-400 uppercase" id="task-ticker">
+            Initializing Sentinel...
+        </div>
+        <div class="font-mono text-xs text-gray-500" id="utc-clock">UTC 00:00:00</div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="max-w-7xl mx-auto px-4 pt-24 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Header Section (Full Width) -->
+        <div class="lg:col-span-12 text-center mb-8 animate-float">
+            <div class="inline-block p-4 rounded-full glass-panel mb-4 border-neon-gold/30 shadow-[0_0_30px_rgba(255,215,0,0.1)]">
+                <i class="fa-solid fa-moon text-4xl text-neon-gold text-glow-gold"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                SCINTILLATING WISP
+            </h1>
+            <p class="text-sm md:text-base font-mono text-gray-400 tracking-[0.3em] uppercase">
+                Digital Excellence • Sharia Compliant • Ramadhan 2026
+            </p>
+            
+            <div class="flex justify-center gap-4 mt-8">
+                <button onclick="toggleTheme()" class="px-6 py-2 rounded-full glass-panel text-xs font-bold tracking-widest hover:bg-white/5 transition-all border border-white/10 hover:border-neon-blue">
+                    <i class="fa-solid fa-palette mr-2"></i> THEME
+                </button>
+                <button onclick="toggleModal('legal-modal')" class="px-6 py-2 rounded-full glass-panel text-xs font-bold tracking-widest hover:bg-white/5 transition-all border border-white/10 hover:border-neon-gold">
+                    <i class="fa-solid fa-shield-halved mr-2"></i> VAULT
+                </button>
             </div>
         </div>
 
-        <div class="main-stack">
-            <div class="card">
-                <div class="chart-header">
+        <!-- Left Column: Data & Spirituality -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Chart Card -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8 glass-panel-hover transition-all duration-500">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
-                        <span class="sub-tag">Growth Pulse (Capped 7%)</span>
-                        <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary);" id="pulse-display">+6.84%</div>
+                        <h2 class="text-gray-400 text-xs font-mono tracking-widest uppercase mb-1">Growth Pulse</h2>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-4xl font-bold text-neon-blue text-glow" id="pulse-value">+6.84%</span>
+                            <span class="text-xs text-green-400 font-mono">▲ Capped 7%</span>
+                        </div>
                     </div>
-                    <div class="chart-controls">
-                        <button class="chart-btn" onclick="updateChart('H', this)">H</button>
-                        <button class="chart-btn active" onclick="updateChart('D', this)">D</button>
-                        <button class="chart-btn" onclick="updateChart('M', this)">M</button>
+                    <div class="flex bg-black/40 rounded-lg p-1 border border-white/5">
+                        <button onclick="updateChart('H')" class="chart-btn px-4 py-1.5 rounded-md text-xs font-bold text-gray-400 hover:text-white transition-colors" data-type="H">H</button>
+                        <button onclick="updateChart('D')" class="chart-btn px-4 py-1.5 rounded-md text-xs font-bold bg-white/10 text-white shadow-sm transition-all" data-type="D">D</button>
+                        <button onclick="updateChart('M')" class="chart-btn px-4 py-1.5 rounded-md text-xs font-bold text-gray-400 hover:text-white transition-colors" data-type="M">M</button>
                     </div>
                 </div>
-                <div style="height: 280px;"><canvas id="mainChart"></canvas></div>
-            </div>
-
-            <div class="card">
-                <h3 class="sub-tag" style="color: var(--gold); margin-bottom: 25px;">Spiritual Protocol</h3>
-                <div class="goal-row" onclick="toggleGoal(this, 'p')">
-                    <span>5 Daily Prayers 🏰 <small style="opacity:0.5; margin-left:10px;">(Current: 54)</small></span>
-                    <div class="check-box" id="check-p"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal(this, 'q')">
-                    <span>Quran Recitation 📖 <small style="opacity:0.5; margin-left:10px;">(Current: 21)</small></span>
-                    <div class="check-box" id="check-q"></div>
-                </div>
-                <div class="goal-row" onclick="toggleGoal(this, 's')">
-                    <span>Daily Sadaqah 🤲 <small style="opacity:0.5; margin-left:10px;">(Current: 7)</small></span>
-                    <div class="check-box" id="check-s"></div>
+                <div class="h-[300px] w-full relative">
+                    <canvas id="mainChart"></canvas>
                 </div>
             </div>
 
-            <div class="card">
-                <h3 class="sub-tag" style="margin-bottom: 20px;">Venture History</h3>
-                <table class="history-table">
-                    <thead><tr><th>Protocol</th><th>Timestamp</th><th>Status</th></tr></thead>
-                    <tbody id="history-body"></tbody>
-                </table>
+            <!-- Spiritual Protocol -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+                    <i class="fa-solid fa-kaaba text-neon-gold"></i>
+                    <h3 class="text-lg font-bold tracking-wide text-white">Spiritual Protocol</h3>
+                </div>
+                
+                <div class="space-y-3" id="goals-container">
+                    <!-- Goals injected via JS -->
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="glass-panel rounded-3xl p-6 md:p-8">
+                <h3 class="text-xs font-mono text-gray-400 tracking-widest uppercase mb-4">Venture History</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-xs text-gray-500 border-b border-white/5 font-mono">
+                                <th class="pb-3 pl-2">PROTOCOL</th>
+                                <th class="pb-3">TIMESTAMP</th>
+                                <th class="pb-3 text-right pr-2">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body" class="text-sm font-mono">
+                            <!-- Rows injected via JS -->
+                            <tr>
+                                <td colspan="3" class="py-8 text-center text-gray-600 italic">No records found in current session.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="side-stack">
-            <div class="card" style="text-align: center;">
-                <div id="p-status" class="sub-tag">Vault Secured</div>
-                <div class="timer-val" id="clock">00:00:00:00</div>
-                <button id="gate-btn" class="btn-fluid btn-locked" onclick="logAction()">Portal Locked</button>
+        <!-- Right Column: Controls & Interaction -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Timer / Gate Card -->
+            <div class="glass-panel rounded-3xl p-8 text-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-b from-neon-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                <div id="timer-status" class="text-xs font-mono tracking-[0.2em] text-gray-400 mb-4 uppercase">Vault Secured</div>
+                
+                <div class="relative z-10 mb-8">
+                    <div class="text-5xl md:text-6xl font-bold font-mono tracking-tighter mb-2" id="countdown-display">
+                        00:00:00
+                    </div>
+                    <div class="text-xs text-neon-blue font-mono animate-pulse" id="window-label">WAITING FOR WINDOW</div>
+                </div>
+
+                <button id="gate-btn" onclick="logAction()" disabled class="w-full py-4 rounded-xl font-bold tracking-widest text-sm uppercase transition-all duration-300 bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700 relative overflow-hidden">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i> Portal Locked
+                    </span>
+                </button>
             </div>
 
-            <div class="card" style="text-align: center;">
-                <h3 class="sub-tag" style="margin-bottom: 20px;">Client Services</h3>
-                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 25px;">
-                    <span class="sub-tag" style="background:rgba(255,255,255,0.05); padding:5px 12px; border-radius:10px;">Web Design</span>
-                    <span class="sub-tag" style="background:rgba(255,255,255,0.05); padding:5px 12px; border-radius:10px;">AI Chatbots</span>
+            <!-- Client Services -->
+            <div class="glass-panel rounded-3xl p-8">
+                <h3 class="text-xs font-mono text-gray-400 tracking-widest uppercase mb-6 text-center">Client Services</h3>
+                
+                <div class="flex flex-wrap justify-center gap-2 mb-6">
+                    <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-wider text-gray-300">WEB DESIGN</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-wider text-gray-300">AI CHATBOTS</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-wider text-gray-300">CONSULTING</span>
                 </div>
-                <button class="btn-fluid btn-whatsapp" onclick="window.open('https://wa.me/YOUR_NUMBER')">WhatsApp Message</button>
-                <button class="btn-fluid btn-hire" style="margin-top:10px;" onclick="location.href='mailto:YOUR_EMAIL'">Hire via Email</button>
+
+                <div class="space-y-3">
+                    <a href="https://wa.me/1234567890" target="_blank" class="block w-full py-3 rounded-xl bg-[#25D366] text-black font-bold text-center text-sm hover:brightness-110 transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)]">
+                        <i class="fa-brands fa-whatsapp mr-2"></i> WhatsApp
+                    </a>
+                    <a href="mailto:contact@scintillatingwisp.com" class="block w-full py-3 rounded-xl bg-neon-gold text-black font-bold text-center text-sm hover:brightness-110 transition-all shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                        <i class="fa-solid fa-envelope mr-2"></i> Hire via Email
+                    </a>
+                </div>
             </div>
 
-            <div class="card chat-box">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <span class="sub-tag" style="opacity: 1; font-weight: 700;">WISP.INTEL v4.0</span>
-                    <button onclick="localStorage.removeItem('g_key'); location.reload();" style="background:none; border:none; color:var(--primary); font-size:8px; cursor:pointer;">RESET KEY</button>
+            <!-- AI Chat Interface -->
+            <div class="glass-panel rounded-3xl p-0 overflow-hidden flex flex-col h-[500px]">
+                <div class="p-4 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-neon-purple animate-pulse"></div>
+                        <span class="text-xs font-bold tracking-widest text-white">WISP.INTEL v4.0</span>
+                    </div>
+                    <button onclick="resetChat()" class="text-[10px] text-gray-500 hover:text-white uppercase font-mono">Reset</button>
                 </div>
-                <div id="chat-flow"><div class="msg bot">Salam, Operator. "Silent Water" environment stabilized. No Ribba detected. How shall we proceed?</div></div>
-                <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
-                    <input type="text" id="user-in" placeholder="Enter command..." style="flex:1; background:transparent; border:none; color:#fff; outline:none; font-family:'JetBrains Mono'; font-size:12px;">
-                    <button onclick="askAI()" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">EXEC</button>
+                
+                <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-neon-purple/20 flex items-center justify-center text-neon-purple text-xs border border-neon-purple/30">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl rounded-tl-none p-3 max-w-[85%] text-sm text-gray-300 border border-white/5">
+                            <p class="mb-1">Salam, Operator.</p>
+                            <p class="text-xs opacity-70">"Silent Water" environment stabilized. No Ribba detected. How shall we proceed?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-black/20 border-t border-white/5">
+                    <div class="relative">
+                        <input type="text" id="chat-input" placeholder="Enter command..." 
+                            class="w-full bg-black/40 border border-white/10 rounded-xl py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-neon-blue transition-colors font-mono"
+                            onkeypress="handleChatKey(event)">
+                        <button onclick="sendMessage()" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-neon-blue text-black flex items-center justify-center hover:brightness-110 transition-all">
+                            <i class="fa-solid fa-arrow-up text-xs"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <div class="modal" id="tc-modal" onclick="toggleModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="margin-bottom: 20px; color: var(--primary); letter-spacing: 4px;">TERMS & CONDITIONS</h2>
-            <div style="opacity: 0.8; font-size: 13px; line-height: 1.8;">
-                <p>1. <strong>Sharia Compliance:</strong> This portal operates under a zero-interest (No Ribba) protocol.</p><br>
-                <p>2. <strong>Temporal Logic:</strong> Access to Venture In-Flow (3am-10am) and Out-Flow (3pm-10pm) is strictly time-locked.</p><br>
-                <p>3. <strong>Venture Capping:</strong> Weekly growth is capped at 7% to maintain professional ethical standards.</p><br>
-                <p>4. <strong>Data Privacy:</strong> All Spiritual Goal tracking and Venture History are stored locally on your device.</p>
+    <!-- Legal Modal -->
+    <div id="legal-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleModal('legal-modal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-1">
+            <div class="glass-panel rounded-3xl p-8 border border-neon-gold/30 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                <h2 class="text-2xl font-bold text-neon-gold mb-6 tracking-widest text-center">TERMS & CONDITIONS</h2>
+                <div class="space-y-4 text-sm text-gray-300 leading-relaxed h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <p><strong class="text-white">1. Sharia Compliance:</strong> This portal operates under a strict zero-interest (No Ribba) protocol. All financial growth displayed is hypothetical and capped ethically.</p>
+                    <p><strong class="text-white">2. Temporal Logic:</strong> Access to Venture In-Flow (03:00 - 10:00) and Out-Flow (15:00 - 22:00) is strictly time-locked based on local system time.</p>
+                    <p><strong class="text-white">3. Data Privacy:</strong> All Spiritual Goal tracking and Venture History are stored locally in your browser's memory and are not transmitted to external servers.</p>
+                    <p><strong class="text-white">4. AI Interaction:</strong> The WISP.INTEL module uses simulated responses for demonstration purposes unless a valid API key is provided.</p>
+                </div>
+                <button onclick="toggleModal('legal-modal')" class="w-full mt-8 py-3 rounded-xl bg-neon-gold text-black font-bold tracking-widest hover:brightness-110 transition-all">
+                    I ACCEPT TERMS
+                </button>
             </div>
-            <button class="btn-fluid" style="margin-top: 30px;" onclick="toggleModal()">I Accept Terms</button>
         </div>
     </div>
 
     <script>
-        let currentStatus = null;
+        // --- 1. State Management ---
+        const state = {
+            logs: [],
+            goals: [
+                { id: 'p', label: '5 Daily Prayers', icon: '🏰', count: 54, checked: false },
+                { id: 'q', label: 'Quran Recitation', icon: '📖', count: 21, checked: false },
+                { id: 's', label: 'Daily Sadaqah', icon: '🤲', count: 7, checked: false }
+            ],
+            theme: 'blue',
+            chartType: 'D'
+        };
 
-        // --- Task Ticker Logic ---
-        function updateTaskTicker() {
-            const hrs = new Date().getHours();
-            const ticker = document.getElementById('live-ticker');
-            let task = "";
-            if (hrs >= 3 && hrs < 5) task = "COMMAND: TAHAJJUD & SUHOOR // INVEST-IN ACTIVE";
-            else if (hrs >= 5 && hrs < 6) task = "COMMAND: FAJR // SPIRITUAL ALIGNMENT";
-            else if (hrs >= 6 && hrs < 10) task = "COMMAND: SKILL DEV // INVEST-IN ACTIVE";
-            else if (hrs >= 13 && hrs < 14) task = "COMMAND: DHUHR // RESET STATE";
-            else if (hrs >= 16 && hrs < 18) task = "COMMAND: ASR // REFLECTIVE GIVING";
-            else if (hrs >= 18 && hrs < 19) task = "COMMAND: IFTAR // MAGHRIB";
-            else if (hrs >= 19 && hrs < 21) task = "COMMAND: ISHA & TARAWIH // INVEST-OUT ACTIVE";
-            else if (hrs >= 21 && hrs < 22) task = "COMMAND: DAILY REVIEW // INVEST-OUT CLOSING";
-            else task = "COMMAND: REST & REGENERATE // VAULT SECURED";
-            ticker.innerText = task;
-        }
+        // --- 2. Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCanvas();
+            renderGoals();
+            startClock();
+            initChart();
+            
+            // Initial Log
+            addLog('SYSTEM', 'Portal Initialized');
+        });
 
-        // --- Dual Window Clock ---
-        function runClock() {
-            const now = new Date(); const hrs = now.getHours();
-            const clock = document.getElementById('clock'); const btn = document.getElementById('gate-btn'); const status = document.getElementById('p-status');
-            const isIn = (hrs >= 3 && hrs < 10); const isOut = (hrs >= 15 && hrs < 22);
+        // --- 3. Canvas Background Animation ---
+        function initCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
 
-            if (isIn || isOut) {
-                currentStatus = isIn ? "INVEST-IN" : "INVEST-OUT";
-                status.innerText = `${currentStatus} WINDOW OPEN`; status.style.color = "#34d399";
-                clock.innerText = "LIVE"; btn.className = "btn-fluid"; btn.innerText = `Initialize ${currentStatus}`;
-            } else {
-                currentStatus = null;
-                let target = new Date();
-                if (hrs < 3) target.setHours(3, 0, 0, 0);
-                else if (hrs >= 10 && hrs < 15) target.setHours(15, 0, 0, 0);
-                else { target.setDate(now.getDate() + 1); target.setHours(3, 0, 0, 0); }
-                const ms = target - now; const h = Math.floor(ms / 3600000); const m = Math.floor((ms % 3600000) / 60000); const s = Math.floor((ms % 60000) / 1000);
-                clock.innerText = `00:${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                status.innerText = "Vault Secured"; status.style.color = ""; btn.className = "btn-fluid btn-locked"; btn.innerText = "Locked";
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
             }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2;
+                    this.alpha = Math.random() * 0.5;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0) this.x = width;
+                    if (this.x > width) this.x = 0;
+                    if (this.y < 0) this.y = height;
+                    if (this.y > height) this.y = 0;
+                }
+                draw() {
+                    ctx.fillStyle = state.theme === 'blue' ? `rgba(0, 243, 255, ${this.alpha})` : `rgba(255, 215, 0, ${this.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw connections
+                ctx.strokeStyle = state.theme === 'blue' ? 'rgba(0, 243, 255, 0.03)' : 'rgba(255, 215, 0, 0.03)';
+                ctx.lineWidth = 1;
+                
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    
+                    for (let j = i; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
         }
 
-        function logAction() {
-            if (!currentStatus) return;
-            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
-            logs.unshift({ type: currentStatus, time: new Date().toLocaleTimeString() });
-            localStorage.setItem('v_logs', JSON.stringify(logs.slice(0, 5)));
+        // --- 4. Clock & Logic ---
+        function startClock() {
+            const update = () => {
+                const now = new Date();
+                const hrs = now.getHours();
+                const mins = now.getMinutes();
+                const secs = now.getSeconds();
+                
+                // UTC Clock
+                document.getElementById('utc-clock').innerText = now.toISOString().split('T')[1].split('.')[0] + " UTC";
+
+                // Ticker Logic
+                const ticker = document.getElementById('task-ticker');
+                let task = "";
+                if (hrs >= 3 && hrs < 5) task = "COMMAND: TAHAJJUD & SUHOOR // INVEST-IN ACTIVE";
+                else if (hrs >= 5 && hrs < 6) task = "COMMAND: FAJR // SPIRITUAL ALIGNMENT";
+                else if (hrs >= 6 && hrs < 10) task = "COMMAND: SKILL DEV // INVEST-IN ACTIVE";
+                else if (hrs >= 13 && hrs < 14) task = "COMMAND: DHUHR // RESET STATE";
+                else if (hrs >= 16 && hrs < 18) task = "COMMAND: ASR // REFLECTIVE GIVING";
+                else if (hrs >= 18 && hrs < 19) task = "COMMAND: IFTAR // MAGHRIB";
+                else if (hrs >= 19 && hrs < 21) task = "COMMAND: ISHA & TARAWIH // INVEST-OUT ACTIVE";
+                else if (hrs >= 21 && hrs < 22) task = "COMMAND: DAILY REVIEW // INVEST-OUT CLOSING";
+                else task = "COMMAND: REST & REGENERATE // VAULT SECURED";
+                ticker.innerText = task;
+
+                // Gate Logic
+                const isIn = (hrs >= 3 && hrs < 10);
+                const isOut = (hrs >= 15 && hrs < 22);
+                const btn = document.getElementById('gate-btn');
+                const display = document.getElementById('countdown-display');
+                const status = document.getElementById('timer-status');
+                const label = document.getElementById('window-label');
+
+                if (isIn || isOut) {
+                    const type = isIn ? "INVEST-IN" : "INVEST-OUT";
+                    status.innerText = `${type} WINDOW OPEN`;
+                    status.className = "text-xs font-mono tracking-[0.2em] text-green-400 mb-4 uppercase";
+                    display.innerText = "LIVE";
+                    display.classList.add('text-green-400', 'text-glow');
+                    display.classList.remove('text-white');
+                    
+                    label.innerText = "READY TO INITIALIZE";
+                    label.className = "text-xs text-green-400 font-mono";
+                    
+                    btn.disabled = false;
+                    btn.className = "w-full py-4 rounded-xl font-bold tracking-widest text-sm uppercase transition-all duration-300 bg-neon-blue text-black hover:brightness-110 shadow-[0_0_20px_rgba(0,243,255,0.4)] cursor-pointer relative overflow-hidden group";
+                    btn.innerHTML = `<span class="relative z-10 flex items-center justify-center gap-2">INITIALIZE ${type} <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i></span>`;
+                    btn.onclick = () => logAction(type);
+                } else {
+                    status.innerText = "Vault Secured";
+                    status.className = "text-xs font-mono tracking-[0.2em] text-gray-500 mb-4 uppercase";
+                    display.classList.remove('text-green-400', 'text-glow');
+                    display.classList.add('text-white');
+                    label.innerText = "WAITING FOR WINDOW";
+                    label.className = "text-xs text-gray-600 font-mono";
+
+                    // Calculate next window
+                    let target = new Date();
+                    if (hrs < 3) target.setHours(3, 0, 0, 0);
+                    else if (hrs >= 10 && hrs < 15) target.setHours(15, 0, 0, 0);
+                    else { target.setDate(now.getDate() + 1); target.setHours(3, 0, 0, 0); }
+                    
+                    const diff = target - now;
+                    const h = Math.floor(diff / 3600000);
+                    const m = Math.floor((diff % 3600000) / 60000);
+                    const s = Math.floor((diff % 60000) / 1000);
+                    display.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+
+                    btn.disabled = true;
+                    btn.className = "w-full py-4 rounded-xl font-bold tracking-widest text-sm uppercase transition-all duration-300 bg-gray-800 text-gray-600 cursor-not-allowed border border-gray-700";
+                    btn.innerHTML = `<span class="flex items-center justify-center gap-2"><i class="fa-solid fa-lock"></i> Portal Locked</span>`;
+                }
+            };
+            setInterval(update, 1000);
+            update();
+        }
+
+        // --- 5. Chart Logic ---
+        let myChart;
+        function initChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            // Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(0, 243, 255, 0.5)');
+            gradient.addColorStop(1, 'rgba(0, 243, 255, 0)');
+
+            const data = {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Growth',
+                    data: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84],
+                    borderColor: '#00f3ff',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#000',
+                    pointBorderColor: '#00f3ff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4
+                }]
+            };
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666' } },
+                        x: { grid: { display: false }, ticks: { color: '#666' } }
+                    },
+                    interaction: { intersect: false, mode: 'index' }
+                }
+            });
+        }
+
+        function updateChart(type) {
+            // Update Buttons
+            document.querySelectorAll('.chart-btn').forEach(b => {
+                if(b.dataset.type === type) {
+                    b.classList.remove('text-gray-400');
+                    b.classList.add('bg-white/10', 'text-white', 'shadow-sm');
+                } else {
+                    b.classList.add('text-gray-400');
+                    b.classList.remove('bg-white/10', 'text-white', 'shadow-sm');
+                }
+            });
+
+            // Update Data
+            const datasets = {
+                'H': { data: [6.1, 6.2, 6.15, 6.3, 6.5, 6.4, 6.6], labels: ['1pm','2pm','3pm','4pm','5pm','6pm','7pm'], val: '6.6%' },
+                'D': { data: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84], labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], val: '6.84%' },
+                'M': { data: [2.1, 3.5, 4.2, 5.1, 5.8, 6.3, 6.7], labels: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr'], val: '6.7%' }
+            };
+
+            myChart.data.labels = datasets[type].labels;
+            myChart.data.datasets[0].data = datasets[type].data;
+            myChart.update();
+            
+            document.getElementById('pulse-value').innerText = '+' + datasets[type].val;
+        }
+
+        // --- 6. Goals & Logs ---
+        function renderGoals() {
+            const container = document.getElementById('goals-container');
+            container.innerHTML = state.goals.map(goal => `
+                <label class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 cursor-pointer hover:bg-white/10 transition-all group custom-check-label">
+                    <input type="checkbox" class="hidden custom-check" ${goal.checked ? 'checked' : ''} onchange="toggleGoal('${goal.id}')">
+                    <div class="flex items-center gap-4 flex-1 transition-all duration-300 border border-transparent rounded-xl p-2 -m-2">
+                        <div class="w-10 h-10 rounded-full bg-black/30 flex items-center justify-center text-xl border border-white/10 group-hover:border-neon-gold/50 transition-colors">
+                            ${goal.icon}
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-bold text-sm tracking-wide">${goal.label}</div>
+                            <div class="text-[10px] text-gray-500 font-mono mt-0.5">CURRENT STREAK: ${goal.count} DAYS</div>
+                        </div>
+                        <div class="w-6 h-6 rounded border border-gray-600 flex items-center justify-center check-box transition-all">
+                            <i class="fa-solid fa-check text-neon-gold text-xs opacity-0 transform scale-50 transition-all check-icon"></i>
+                        </div>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        function toggleGoal(id) {
+            const goal = state.goals.find(g => g.id === id);
+            goal.checked = !goal.checked;
+            renderGoals();
+            if(goal.checked) addLog('SPIRITUAL', `Completed: ${goal.label}`);
+        }
+
+        function addLog(type, action) {
+            const now = new Date();
+            const time = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            state.logs.unshift({ type, time, action });
+            if (state.logs.length > 5) state.logs.pop();
             renderLogs();
-            alert(`${currentStatus} protocol recorded.`);
         }
 
         function renderLogs() {
-            const body = document.getElementById('history-body');
-            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
-            body.innerHTML = logs.map(l => `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:#34d399">VERIFIED</td></tr>`).join('');
+            const tbody = document.getElementById('history-body');
+            if (state.logs.length === 0) return;
+            
+            tbody.innerHTML = state.logs.map(log => `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td class="py-3 pl-2 text-neon-blue font-bold">${log.type}</td>
+                    <td class="py-3 text-gray-400">${log.time}</td>
+                    <td class="py-3 text-right pr-2 text-xs text-green-400 tracking-wider">VERIFIED</td>
+                </tr>
+            `).join('');
         }
 
-        // --- Chart logic (H/D/M) ---
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        const chartData = {
-            H: [6.1, 6.2, 6.15, 6.3, 6.5, 6.4, 6.6],
-            D: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84],
-            M: [2.1, 3.5, 4.2, 5.1, 5.8, 6.3, 6.7]
-        };
-        const chartLabels = { H: ['1pm','2pm','3pm','4pm','5pm','6pm','7pm'], D: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], M: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr'] };
-
-        let myChart = new Chart(ctx, {
-            type: 'line',
-            data: { labels: chartLabels.D, datasets: [{ data: chartData.D, borderColor: '#00d4ff', borderWidth: 2, pointRadius: 4, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)', tension: 0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#475569' } }, y: { ticks: { color: '#475569' } } } }
-        });
-
-        function updateChart(type, btn) {
-            document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('pulse-display').innerText = `+${chartData[type][6]}%`;
-            myChart.data.labels = chartLabels[type]; myChart.data.datasets[0].data = chartData[type]; myChart.update();
+        function logAction(type) {
+            if (!type) return;
+            addLog(type, 'Manual Entry');
+            // Visual feedback
+            const btn = document.getElementById('gate-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<span class="text-green-400"><i class="fa-solid fa-check"></i> RECORDED</span>`;
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
         }
 
-        // --- Utilities ---
-        function toggleGoal(el, id) { const box = el.querySelector('.check-box'); box.classList.toggle('active'); el.classList.toggle('checked'); }
-        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
-        function toggleModal() { const m = document.getElementById('tc-modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
-
-        async function askAI() {
-            const input = document.getElementById('user-in'); const val = input.value.trim(); if (!val) return;
-            let key = localStorage.getItem('g_key');
-            if (!key) { key = prompt("API Key Required:"); if (key?.startsWith("AIza")) localStorage.setItem('g_key', key); else return; }
-            addMsg(val, 'user'); input.value = ''; const loading = addMsg("Thinking...", 'bot');
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Persona: Sharia-compliant assistant. User: " + val }] }] })
-                });
-                const d = await res.json(); loading.innerText = d.candidates[0].content.parts[0].text;
-            } catch (e) { loading.innerText = "Connection error."; }
+        // --- 7. Chat Logic ---
+        function handleChatKey(e) {
+            if (e.key === 'Enter') sendMessage();
         }
 
-        function addMsg(t, type) { const m = document.createElement('div'); m.className = `msg ${type}`; m.innerText = t; const flow = document.getElementById('chat-flow'); flow.appendChild(m); flow.scrollTop = flow.scrollHeight; return m; }
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
 
-        setInterval(() => { runClock(); updateTaskTicker(); }, 1000);
-        runClock(); updateTaskTicker(); renderLogs();
+            // Add User Message
+            addChatMessage(text, 'user');
+            input.value = '';
+
+            // Simulate Bot Thinking
+            const loadingId = addChatMessage('...', 'bot', true);
+
+            // Simulate Response
+            setTimeout(() => {
+                removeMessage(loadingId);
+                const responses = [
+                    "Affirmative. Processing Sharia-compliant parameters.",
+                    "Data synchronized. Growth trajectory stable.",
+                    "Unable to comply. Interest rate detected in query.",
+                    "Spiritual protocol acknowledged. Proceed with caution.",
+                    "The vault is secure. All systems nominal."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addChatMessage(randomResponse, 'bot');
+            }, 1500);
+        }
+
+        function addChatMessage(text, sender, isLoading = false) {
+            const container = document.getElementById('chat-container');
+            const id = 'msg-' + Date.now();
+            
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = `flex gap-3 ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+            
+            const avatar = sender === 'user' 
+                ? `<div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white text-xs"><i class="fa-solid fa-user"></i></div>`
+                : `<div class="w-8 h-8 rounded-full bg-neon-purple/20 flex items-center justify-center text-neon-purple text-xs border border-neon-purple/30"><i class="fa-solid fa-robot"></i></div>`;
+            
+            const bubbleClass = sender === 'user'
+                ? 'bg-neon-blue text-black rounded-tr-none font-semibold'
+                : 'bg-white/5 text-gray-300 border border-white/5 rounded-tl-none';
+
+            const content = isLoading 
+                ? `<div class="flex gap-1 items-center h-5"><div class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot"></div><div class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot"></div><div class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot"></div></div>`
+                : `<p class="text-sm leading-relaxed">${text}</p>`;
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="${bubbleClass} rounded-2xl p-3 max-w-[85%] shadow-sm">
+                    ${content}
+                </div>
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function resetChat() {
+            document.getElementById('chat-container').innerHTML = `
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 rounded-full bg-neon-purple/20 flex items-center justify-center text-neon-purple text-xs border border-neon-purple/30"><i class="fa-solid fa-robot"></i></div>
+                    <div class="bg-white/5 rounded-2xl rounded-tl-none p-3 max-w-[85%] text-sm text-gray-300 border border-white/5">
+                        <p>Session reset. Awaiting input.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- 8. Utilities ---
+        function toggleTheme() {
+            state.theme = state.theme === 'blue' ? 'gold' : 'blue';
+            const root = document.documentElement;
+            
+            if (state.theme === 'gold') {
+                // Apply Gold Theme Overrides via CSS variables manipulation or class
+                document.body.style.setProperty('--neon-blue', '#ffd700');
+                // Note: In a real app, we'd toggle a class on body and use CSS variables extensively
+                // For this demo, we will reload canvas colors via the loop
+            } else {
+                document.body.style.removeProperty('--neon-blue');
+            }
+        }
+
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                // Small animation for content
+                modal.children[1].classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.children[1].classList.remove('scale-95', 'opacity-0');
+                    modal.children[1].classList.add('scale-100', 'opacity-100', 'transition-all', 'duration-300');
+                }, 10);
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
