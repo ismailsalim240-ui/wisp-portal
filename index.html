@@ -1,60 +1,346 @@
-/* ==================== PHASE 35: THE LIVE BRIDGE INTEGRATION ==================== */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scintillating Wisp | Command Portal v5.1</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-glow: rgba(0, 212, 255, 0.3);
+            --ink: #000814;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 212, 255, 0.15);
+            --surface: rgba(2, 6, 23, 0.85);
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --whatsapp: #25D366;
+        }
 
-/**
- * LIVE_DEPOSIT: This function talks to your Node.js backend
- * Replace 'http://localhost:3000' with your live server URL once hosted.
- */
-async function triggerLiveMpesaPush() {
-    const amount = document.getElementById('deposit-amt').value;
-    const phone = "2547XXXXXXXX"; // Bwana, you can add an input for the phone number too.
-    const serverUrl = "http://localhost:3000/stk-push"; 
+        .theme-gold {
+            --primary: #D4AF37;
+            --primary-glow: rgba(212, 175, 55, 0.3);
+            --ink: #050505;
+            --border: rgba(212, 175, 55, 0.2);
+        }
 
-    if (!amount || amount < 1) {
-        alert("Please enter a valid KES amount.");
-        return;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, border 0.5s; }
+        
+        body {
+            background: var(--ink);
+            color: #f8fafc;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
 
-    // UI Feedback
-    writeToTerm(`[LIVE] Initializing STK Push for KES ${amount}...`, "warning");
-    document.getElementById('mpesa-form-step').style.display = 'none';
-    document.getElementById('mpesa-wait-step').style.display = 'flex';
+        /* --- Atmospheric Water Background --- */
+        .water-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: linear-gradient(180deg, var(--ink) 0%, #001d3d 100%);
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute; border: 1px solid var(--primary);
+            border-radius: 50%; animation: ripple-effect 8s infinite linear;
+            opacity: 0; pointer-events: none;
+        }
+        @keyframes ripple-effect {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { opacity: 0.1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
 
-    try {
-        const response = await fetch(serverUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                amount: amount,
-                phone: phone
-            })
+        /* --- Task Ticker --- */
+        .task-ticker {
+            width: 100%; background: rgba(0, 212, 255, 0.05); border-bottom: 1px solid var(--border);
+            padding: 12px 0; text-align: center; font-family: 'JetBrains Mono';
+            font-size: 10px; letter-spacing: 4px; color: var(--primary);
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
+            text-transform: uppercase;
+        }
+
+        .layout {
+            max-width: 1100px; margin: 0 auto; padding: 40px 20px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 30px;
+            position: relative; z-index: 10;
+        }
+
+        @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
+
+        /* --- Brand Section --- */
+        .brand-card { grid-column: 1 / -1; text-align: center; padding: 40px 0; }
+        .moon-icon { font-size: 50px; color: var(--gold); text-shadow: 0 0 20px var(--gold-glow); margin-bottom: 15px; }
+        .brand-name { font-size: 28px; letter-spacing: 12px; font-weight: 700; text-transform: uppercase; }
+        .sub-tag { font-size: 10px; letter-spacing: 5px; opacity: 0.5; text-transform: uppercase; margin-top: 10px; }
+
+        /* --- Card Architecture --- */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 35px; padding: 35px; backdrop-filter: blur(30px);
+            margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        /* --- Chart System --- */
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .chart-btn { 
+            background: transparent; border: 1px solid var(--border); color: var(--primary); 
+            padding: 6px 14px; border-radius: 10px; cursor: pointer; font-family: 'JetBrains Mono'; font-size: 11px;
+        }
+        .chart-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 700; }
+
+        /* --- Timer & Portal Buttons --- */
+        .timer-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 300; letter-spacing: -3px; margin: 20px 0; }
+        .btn-fluid {
+            width: 100%; padding: 22px; border-radius: 20px; font-weight: 700; cursor: pointer;
+            letter-spacing: 4px; border: none; text-transform: uppercase;
+            background: linear-gradient(90deg, var(--primary), #0077b6); color: #000;
+            transition: 0.3s;
+        }
+        .btn-fluid:hover { filter: brightness(1.2); box-shadow: 0 0 30px var(--primary-glow); }
+        .btn-locked { background: transparent; border: 1px solid #334155; color: #444; cursor: not-allowed; }
+
+        /* --- Spiritual Goal Rows --- */
+        .goal-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: rgba(255,255,255,0.02);
+            border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent;
+        }
+        .goal-row.checked { border-color: var(--gold-glow); background: rgba(212, 175, 55, 0.05); }
+        .check-box { width: 24px; height: 24px; border: 2px solid var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .check-box.active::after { content: '✓'; color: var(--gold); font-weight: 900; }
+
+        /* --- Professional Services Buttons --- */
+        .btn-whatsapp { background: var(--whatsapp); color: white; margin-top: 15px; }
+        .btn-hire { background: var(--gold); color: #000; }
+
+        /* --- Intelligence Chat --- */
+        .chat-box { height: 450px; display: flex; flex-direction: column; }
+        #chat-flow { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { padding: 15px 20px; border-radius: 22px; font-size: 13px; line-height: 1.6; max-width: 85%; }
+        .bot { background: rgba(255,255,255,0.05); border-left: 3px solid var(--primary); align-self: flex-start; }
+        .user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
+
+        /* --- Table Styling --- */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 15px; text-align: left; }
+        .history-table th { color: var(--primary); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .history-table td { padding: 12px 0; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; opacity: 0.8; }
+
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 30px; }
+        .modal-content { background: var(--ink); border: 1px solid var(--primary); padding: 40px; border-radius: 30px; max-width: 550px; max-height: 85vh; overflow-y: auto; }
+    </style>
+</head>
+<body id="main-body">
+
+    <div class="task-ticker" id="live-ticker">INITIALIZING SENTINEL...</div>
+    <div class="water-bg" id="ripples"></div>
+
+    <div class="layout">
+        
+        <div class="brand-card">
+            <div class="moon-icon">🌙</div>
+            <h1 class="brand-name">SCINTILLATING WISP</h1>
+            <p class="sub-tag">Digital Excellence • Sharia Compliant • Ramadhan 2026</p>
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
+                <button class="chart-btn" onclick="toggleTheme()">TOGGLE THEME</button>
+                <button class="chart-btn" onclick="toggleModal()">LEGAL VAULT</button>
+            </div>
+        </div>
+
+        <div class="main-stack">
+            <div class="card">
+                <div class="chart-header">
+                    <div>
+                        <span class="sub-tag">Growth Pulse (Capped 7%)</span>
+                        <div style="font-size: 2.2rem; font-weight: 700; color: var(--primary);" id="pulse-display">+6.84%</div>
+                    </div>
+                    <div class="chart-controls">
+                        <button class="chart-btn" onclick="updateChart('H', this)">H</button>
+                        <button class="chart-btn active" onclick="updateChart('D', this)">D</button>
+                        <button class="chart-btn" onclick="updateChart('M', this)">M</button>
+                    </div>
+                </div>
+                <div style="height: 280px;"><canvas id="mainChart"></canvas></div>
+            </div>
+
+            <div class="card">
+                <h3 class="sub-tag" style="color: var(--gold); margin-bottom: 25px;">Spiritual Protocol</h3>
+                <div class="goal-row" onclick="toggleGoal(this, 'p')">
+                    <span>5 Daily Prayers 🏰 <small style="opacity:0.5; margin-left:10px;">(Current: 54)</small></span>
+                    <div class="check-box" id="check-p"></div>
+                </div>
+                <div class="goal-row" onclick="toggleGoal(this, 'q')">
+                    <span>Quran Recitation 📖 <small style="opacity:0.5; margin-left:10px;">(Current: 21)</small></span>
+                    <div class="check-box" id="check-q"></div>
+                </div>
+                <div class="goal-row" onclick="toggleGoal(this, 's')">
+                    <span>Daily Sadaqah 🤲 <small style="opacity:0.5; margin-left:10px;">(Current: 7)</small></span>
+                    <div class="check-box" id="check-s"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="sub-tag" style="margin-bottom: 20px;">Venture History</h3>
+                <table class="history-table">
+                    <thead><tr><th>Protocol</th><th>Timestamp</th><th>Status</th></tr></thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="side-stack">
+            <div class="card" style="text-align: center;">
+                <div id="p-status" class="sub-tag">Vault Secured</div>
+                <div class="timer-val" id="clock">00:00:00:00</div>
+                <button id="gate-btn" class="btn-fluid btn-locked" onclick="logAction()">Portal Locked</button>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h3 class="sub-tag" style="margin-bottom: 20px;">Client Services</h3>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 25px;">
+                    <span class="sub-tag" style="background:rgba(255,255,255,0.05); padding:5px 12px; border-radius:10px;">Web Design</span>
+                    <span class="sub-tag" style="background:rgba(255,255,255,0.05); padding:5px 12px; border-radius:10px;">AI Chatbots</span>
+                </div>
+                <button class="btn-fluid btn-whatsapp" onclick="window.open('https://wa.me/YOUR_NUMBER')">WhatsApp Message</button>
+                <button class="btn-fluid btn-hire" style="margin-top:10px;" onclick="location.href='mailto:YOUR_EMAIL'">Hire via Email</button>
+            </div>
+
+            <div class="card chat-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span class="sub-tag" style="opacity: 1; font-weight: 700;">WISP.INTEL v4.0</span>
+                    <button onclick="localStorage.removeItem('g_key'); location.reload();" style="background:none; border:none; color:var(--primary); font-size:8px; cursor:pointer;">RESET KEY</button>
+                </div>
+                <div id="chat-flow"><div class="msg bot">Salam, Operator. "Silent Water" environment stabilized. No Ribba detected. How shall we proceed?</div></div>
+                <div style="display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <input type="text" id="user-in" placeholder="Enter command..." style="flex:1; background:transparent; border:none; color:#fff; outline:none; font-family:'JetBrains Mono'; font-size:12px;">
+                    <button onclick="askAI()" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer;">EXEC</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="tc-modal" onclick="toggleModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="margin-bottom: 20px; color: var(--primary); letter-spacing: 4px;">TERMS & CONDITIONS</h2>
+            <div style="opacity: 0.8; font-size: 13px; line-height: 1.8;">
+                <p>1. <strong>Sharia Compliance:</strong> This portal operates under a zero-interest (No Ribba) protocol.</p><br>
+                <p>2. <strong>Temporal Logic:</strong> Access to Venture In-Flow (3am-10am) and Out-Flow (3pm-10pm) is strictly time-locked.</p><br>
+                <p>3. <strong>Venture Capping:</strong> Weekly growth is capped at 7% to maintain professional ethical standards.</p><br>
+                <p>4. <strong>Data Privacy:</strong> All Spiritual Goal tracking and Venture History are stored locally on your device.</p>
+            </div>
+            <button class="btn-fluid" style="margin-top: 30px;" onclick="toggleModal()">I Accept Terms</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStatus = null;
+
+        // --- Task Ticker Logic ---
+        function updateTaskTicker() {
+            const hrs = new Date().getHours();
+            const ticker = document.getElementById('live-ticker');
+            let task = "";
+            if (hrs >= 3 && hrs < 5) task = "COMMAND: TAHAJJUD & SUHOOR // INVEST-IN ACTIVE";
+            else if (hrs >= 5 && hrs < 6) task = "COMMAND: FAJR // SPIRITUAL ALIGNMENT";
+            else if (hrs >= 6 && hrs < 10) task = "COMMAND: SKILL DEV // INVEST-IN ACTIVE";
+            else if (hrs >= 13 && hrs < 14) task = "COMMAND: DHUHR // RESET STATE";
+            else if (hrs >= 16 && hrs < 18) task = "COMMAND: ASR // REFLECTIVE GIVING";
+            else if (hrs >= 18 && hrs < 19) task = "COMMAND: IFTAR // MAGHRIB";
+            else if (hrs >= 19 && hrs < 21) task = "COMMAND: ISHA & TARAWIH // INVEST-OUT ACTIVE";
+            else if (hrs >= 21 && hrs < 22) task = "COMMAND: DAILY REVIEW // INVEST-OUT CLOSING";
+            else task = "COMMAND: REST & REGENERATE // VAULT SECURED";
+            ticker.innerText = task;
+        }
+
+        // --- Dual Window Clock ---
+        function runClock() {
+            const now = new Date(); const hrs = now.getHours();
+            const clock = document.getElementById('clock'); const btn = document.getElementById('gate-btn'); const status = document.getElementById('p-status');
+            const isIn = (hrs >= 3 && hrs < 10); const isOut = (hrs >= 15 && hrs < 22);
+
+            if (isIn || isOut) {
+                currentStatus = isIn ? "INVEST-IN" : "INVEST-OUT";
+                status.innerText = `${currentStatus} WINDOW OPEN`; status.style.color = "#34d399";
+                clock.innerText = "LIVE"; btn.className = "btn-fluid"; btn.innerText = `Initialize ${currentStatus}`;
+            } else {
+                currentStatus = null;
+                let target = new Date();
+                if (hrs < 3) target.setHours(3, 0, 0, 0);
+                else if (hrs >= 10 && hrs < 15) target.setHours(15, 0, 0, 0);
+                else { target.setDate(now.getDate() + 1); target.setHours(3, 0, 0, 0); }
+                const ms = target - now; const h = Math.floor(ms / 3600000); const m = Math.floor((ms % 3600000) / 60000); const s = Math.floor((ms % 60000) / 1000);
+                clock.innerText = `00:${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                status.innerText = "Vault Secured"; status.style.color = ""; btn.className = "btn-fluid btn-locked"; btn.innerText = "Locked";
+            }
+        }
+
+        function logAction() {
+            if (!currentStatus) return;
+            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
+            logs.unshift({ type: currentStatus, time: new Date().toLocaleTimeString() });
+            localStorage.setItem('v_logs', JSON.stringify(logs.slice(0, 5)));
+            renderLogs();
+            alert(`${currentStatus} protocol recorded.`);
+        }
+
+        function renderLogs() {
+            const body = document.getElementById('history-body');
+            const logs = JSON.parse(localStorage.getItem('v_logs') || '[]');
+            body.innerHTML = logs.map(l => `<tr><td>${l.type}</td><td>${l.time}</td><td style="color:#34d399">VERIFIED</td></tr>`).join('');
+        }
+
+        // --- Chart logic (H/D/M) ---
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        const chartData = {
+            H: [6.1, 6.2, 6.15, 6.3, 6.5, 6.4, 6.6],
+            D: [4.2, 4.8, 5.1, 5.5, 6.2, 6.4, 6.84],
+            M: [2.1, 3.5, 4.2, 5.1, 5.8, 6.3, 6.7]
+        };
+        const chartLabels = { H: ['1pm','2pm','3pm','4pm','5pm','6pm','7pm'], D: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], M: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr'] };
+
+        let myChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: chartLabels.D, datasets: [{ data: chartData.D, borderColor: '#00d4ff', borderWidth: 2, pointRadius: 4, fill: true, backgroundColor: 'rgba(0, 212, 255, 0.05)', tension: 0.4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#475569' } }, y: { ticks: { color: '#475569' } } } }
         });
 
-        const data = await response.json();
-
-        if (data.ResponseCode === "0") {
-            writeToTerm(`[DARAJA] Request Accepted. MerchantID: ${data.MerchantRequestID}`, "success");
-            writeToTerm(`[SYSTEM] Check your phone for the M-PESA PIN prompt.`, "info");
-        } else {
-            writeToTerm(`[ERROR] M-PESA Denied: ${data.ResponseDescription}`, "error");
-            alert("M-PESA Error: " + data.ResponseDescription);
-            closeMpesa();
+        function updateChart(type, btn) {
+            document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('pulse-display').innerText = `+${chartData[type][6]}%`;
+            myChart.data.labels = chartLabels[type]; myChart.data.datasets[0].data = chartData[type]; myChart.update();
         }
-    } catch (error) {
-        writeToTerm(`[FATAL] Backend Server Unreachable. Is your Node.js server running?`, "error");
-        console.error("Connection Error:", error);
-        alert("Could not connect to the M-PESA Bridge.");
-        closeMpesa();
-    }
-}
 
-/**
- * AUTO-SYNC: This simulates the background 'polling' 
- * to check if the payment was successful.
- */
-function startPaymentPolling(checkoutId) {
-    writeToTerm(`[SYNC] Awaiting Callback confirmation...`, "info");
-    // In a real app, you would check your database here every 3 seconds.
-}
+        // --- Utilities ---
+        function toggleGoal(el, id) { const box = el.querySelector('.check-box'); box.classList.toggle('active'); el.classList.toggle('checked'); }
+        function toggleTheme() { document.getElementById('main-body').classList.toggle('theme-gold'); }
+        function toggleModal() { const m = document.getElementById('tc-modal'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
 
-// Re-linking the UI button to the Live Function
-document.querySelector('.btn-mpesa').onclick = triggerLiveMpesaPush;
+        async function askAI() {
+            const input = document.getElementById('user-in'); const val = input.value.trim(); if (!val) return;
+            let key = localStorage.getItem('g_key');
+            if (!key) { key = prompt("API Key Required:"); if (key?.startsWith("AIza")) localStorage.setItem('g_key', key); else return; }
+            addMsg(val, 'user'); input.value = ''; const loading = addMsg("Thinking...", 'bot');
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: "Persona: Sharia-compliant assistant. User: " + val }] }] })
+                });
+                const d = await res.json(); loading.innerText = d.candidates[0].content.parts[0].text;
+            } catch (e) { loading.innerText = "Connection error."; }
+        }
+
+        function addMsg(t, type) { const m = document.createElement('div'); m.className = `msg ${type}`; m.innerText = t; const flow = document.getElementById('chat-flow'); flow.appendChild(m); flow.scrollTop = flow.scrollHeight; return m; }
+
+        setInterval(() => { runClock(); updateTaskTicker(); }, 1000);
+        runClock(); updateTaskTicker(); renderLogs();
+    </script>
+</body>
+</html>
