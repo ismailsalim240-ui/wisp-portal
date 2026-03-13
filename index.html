@@ -1,381 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotating Background Experience</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ==================== PHASE 35: THE LIVE BRIDGE INTEGRATION ==================== */
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            overflow-x: hidden;
-            background: #0a0a0a;
-        }
+/**
+ * LIVE_DEPOSIT: This function talks to your Node.js backend
+ * Replace 'http://localhost:3000' with your live server URL once hosted.
+ */
+async function triggerLiveMpesaPush() {
+    const amount = document.getElementById('deposit-amt').value;
+    const phone = "2547XXXXXXXX"; // Bwana, you can add an input for the phone number too.
+    const serverUrl = "http://localhost:3000/stk-push"; 
 
-        /* Background Container */
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+    if (!amount || amount < 1) {
+        alert("Please enter a valid KES amount.");
+        return;
+    }
 
-        /* Individual Background Layers */
-        .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-        }
+    // UI Feedback
+    writeToTerm(`[LIVE] Initializing STK Push for KES ${amount}...`, "warning");
+    document.getElementById('mpesa-form-step').style.display = 'none';
+    document.getElementById('mpesa-wait-step').style.display = 'flex';
 
-        .bg-layer.active {
-            opacity: 1;
-        }
-
-        /* Sequence 1: Living Gradient Mesh */
-        .gradient-mesh {
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #7e22ce, #ec4899);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Sequence 2: Grain & Texture */
-        .grain-texture {
-            background: #1a1a1a;
-        }
-
-        .grain-texture::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            animation: grainMove 0.5s steps(10) infinite;
-        }
-
-        @keyframes grainMove {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); }
-            40% { transform: translate(-5%, 25%); }
-            50% { transform: translate(-15%, 10%); }
-            60% { transform: translate(15%, 0%); }
-            70% { transform: translate(0%, 15%); }
-            80% { transform: translate(3%, 35%); }
-            90% { transform: translate(-10%, 10%); }
-        }
-
-        /* Sequence 3: Architectural Void */
-        .architectural-void {
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 50%, #000000 100%);
-        }
-
-        .architectural-void::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 100px 100px;
-            perspective: 1000px;
-            transform: perspective(500px) rotateX(60deg);
-            transform-origin: center top;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(100px); }
-        }
-
-        /* Sequence 4: Abstract Fluid Forms */
-        .fluid-forms {
-            background: #0f1419;
-            overflow: hidden;
-        }
-
-        .fluid-forms .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .blob-1 {
-            width: 600px;
-            height: 600px;
-            background: #4ade80;
-            top: -200px;
-            left: -200px;
-            animation-delay: 0s;
-        }
-
-        .blob-2 {
-            width: 500px;
-            height: 500px;
-            background: #a78bfa;
-            bottom: -150px;
-            right: -150px;
-            animation-delay: -5s;
-        }
-
-        .blob-3 {
-            width: 400px;
-            height: 400px;
-            background: #fbbf24;
-            top: 50%;
-            left: 50%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-
-        /* Sequence 5: Typographic Landscape */
-        .typographic-landscape {
-            background: #0a0a0a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .typo-text {
-            font-size: 20vw;
-            font-weight: 900;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
-            white-space: nowrap;
-            animation: slideText 30s linear infinite;
-            position: absolute;
-        }
-
-        .typo-text:nth-child(1) { top: 10%; animation-delay: 0s; }
-        .typo-text:nth-child(2) { top: 40%; animation-delay: -10s; }
-        .typo-text:nth-child(3) { top: 70%; animation-delay: -20s; }
-
-        @keyframes slideText {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Sequence 6: Cinematic Photography */
-        .cinematic-photo {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
-            position: relative;
-        }
-
-        .cinematic-photo::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            animation: photoPulse 10s ease-in-out infinite;
-        }
-
-        @keyframes photoPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* Content Overlay */
-        .content {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        h1 {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
-        }
-
-        p {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            opacity: 0.8;
-            max-width: 600px;
-            line-height: 1.6;
-        }
-
-        /* Progress Indicator */
-        .progress-bar {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .progress-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .progress-dot.active {
-            background: white;
-            transform: scale(1.5);
-        }
-
-        /* Timer Bar */
-        .timer-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: white;
-            width: 0%;
-            transition: width 0.1s linear;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-container">
-        <!-- Sequence 1: Gradient Mesh -->
-        <div class="bg-layer gradient-mesh active" data-index="0"></div>
-        
-        <!-- Sequence 2: Grain & Texture -->
-        <div class="bg-layer grain-texture" data-index="1"></div>
-        
-        <!-- Sequence 3: Architectural Void -->
-        <div class="bg-layer architectural-void" data-index="2"></div>
-        
-        <!-- Sequence 4: Fluid Forms -->
-        <div class="bg-layer fluid-forms" data-index="3">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
-        
-        <!-- Sequence 5: Typographic Landscape -->
-        <div class="bg-layer typographic-landscape" data-index="4">
-            <div class="typo-text">CREATE</div>
-            <div class="typo-text">DESIGN</div>
-            <div class="typo-text">BUILD</div>
-        </div>
-        
-        <!-- Sequence 6: Cinematic Photo -->
-        <div class="bg-layer cinematic-photo" data-index="5"></div>
-    </div>
-
-    <!-- Progress Indicators -->
-    <div class="progress-bar">
-        <div class="progress-dot active" data-index="0"></div>
-        <div class="progress-dot" data-index="1"></div>
-        <div class="progress-dot" data-index="2"></div>
-        <div class="progress-dot" data-index="3"></div>
-        <div class="progress-dot" data-index="4"></div>
-        <div class="progress-dot" data-index="5"></div>
-    </div>
-    
-    <div class="timer-bar"></div>
-
-    <!-- Content -->
-    <div class="content">
-        <h1>Your Brand</h1>
-        <p>Experience the evolution. Every 30 seconds, a new dimension.</p>
-    </div>
-
-    <script>
-        const layers = document.querySelectorAll('.bg-layer');
-        const dots = document.querySelectorAll('.progress-dot');
-        const timerBar = document.querySelector('.timer-bar');
-        let currentIndex = 0;
-        const interval = 30000; // 30 seconds
-        let startTime = Date.now();
-
-        function switchBackground() {
-            // Remove active class from current
-            layers[currentIndex].classList.remove('active');
-            dots[currentIndex].classList.remove('active');
-            
-            // Move to next
-            currentIndex = (currentIndex + 1) % layers.length;
-            
-            // Add active class to new
-            layers[currentIndex].classList.add('active');
-            dots[currentIndex].classList.add('active');
-            
-            // Reset timer
-            startTime = Date.now();
-        }
-
-        // Update timer bar
-        function updateTimer() {
-            const elapsed = Date.now() - startTime;
-            const progress = (elapsed / interval) * 100;
-            timerBar.style.width = Math.min(progress, 100) + '%';
-            
-            if (elapsed >= interval) {
-                switchBackground();
-            }
-            
-            requestAnimationFrame(updateTimer);
-        }
-
-        // Start the loop
-        updateTimer();
-
-        // Optional: Click dots to jump to specific background
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                layers[currentIndex].classList.remove('active');
-                dots[currentIndex].classList.remove('active');
-                currentIndex = index;
-                layers[currentIndex].classList.add('active');
-                dots[currentIndex].classList.add('active');
-                startTime = Date.now();
-            });
+    try {
+        const response = await fetch(serverUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: amount,
+                phone: phone
+            })
         });
-    </script>
-</body>
-</html>
+
+        const data = await response.json();
+
+        if (data.ResponseCode === "0") {
+            writeToTerm(`[DARAJA] Request Accepted. MerchantID: ${data.MerchantRequestID}`, "success");
+            writeToTerm(`[SYSTEM] Check your phone for the M-PESA PIN prompt.`, "info");
+        } else {
+            writeToTerm(`[ERROR] M-PESA Denied: ${data.ResponseDescription}`, "error");
+            alert("M-PESA Error: " + data.ResponseDescription);
+            closeMpesa();
+        }
+    } catch (error) {
+        writeToTerm(`[FATAL] Backend Server Unreachable. Is your Node.js server running?`, "error");
+        console.error("Connection Error:", error);
+        alert("Could not connect to the M-PESA Bridge.");
+        closeMpesa();
+    }
+}
+
+/**
+ * AUTO-SYNC: This simulates the background 'polling' 
+ * to check if the payment was successful.
+ */
+function startPaymentPolling(checkoutId) {
+    writeToTerm(`[SYNC] Awaiting Callback confirmation...`, "info");
+    // In a real app, you would check your database here every 3 seconds.
+}
+
+// Re-linking the UI button to the Live Function
+document.querySelector('.btn-mpesa').onclick = triggerLiveMpesaPush;
