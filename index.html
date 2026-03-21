@@ -1,126 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Muslim Animation & Hadith Website</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+# server.py
+from flask import Flask, render_template, jsonify
+import requests
+from flask_cors import CORS
 
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
-            padding: 16px;
-        }
+app = Flask(__name__)
+CORS(app)
 
-        .video-thumbnail {
-            cursor: pointer;
-            width: 300px;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
+# Sample data - in a real app, this would come from a database
+ANIMATION_VIDEOS = [
+    {
+        "id": "1",
+        "title": "The Story of Prophet Muhammad (PBUH)",
+        "description": "A beautiful animated journey through the life of our beloved Prophet",
+        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_1/maxresdefault.jpg",
+        "youtube_id": "VIDEO_ID_1"
+    },
+    {
+        "id": "2",
+        "title": "Parables of the Quran",
+        "description": "Visual storytelling of Quranic parables for all ages",
+        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_2/maxresdefault.jpg",
+        "youtube_id": "VIDEO_ID_2"
+    },
+    {
+        "id": "3",
+        "title": "History of Islam in Animation",
+        "description": "An educational animated guide through Islamic history",
+        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_3/maxresdefault.jpg",
+        "youtube_id": "VIDEO_ID_3"
+    }
+]
 
-        .video-thumbnail img {
-            width: 100%;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
+HADITH_VIDEOS = [
+    {
+        "id": "1",
+        "title": "Hadith of the Day",
+        "description": "A daily reminder of noble teachings",
+        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_1/maxresdefault.jpg",
+        "youtube_id": "HADITH_ID_1"
+    },
+    {
+        "id": "2",
+        "title": "Prophet's Teachings",
+        "description": "Important lessons from the Prophet's sayings",
+        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_2/maxresdefault.jpg",
+        "youtube_id": "HADITH_ID_2"
+    },
+    {
+        "id": "3",
+        "title": "Islamic Wisdom",
+        "description": "Timeless wisdom from the Hadith collections",
+        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_3/maxresdefault.jpg",
+        "youtube_id": "HADITH_ID_3"
+    }
+]
 
-        .video-thumbnail:hover img {
-            transform: scale(1.05);
-        }
+@app.route('/')
+def index():
+    """Serve the main page"""
+    return render_template('index.html')
 
-        .modal {
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background-color: rgba(0, 0, 0, 0.8); 
-            justify-content: center; 
-            align-items: center; 
-        }
+@app.route('/api/animation-videos')
+def get_animation_videos():
+    """API endpoint to fetch animation videos"""
+    return jsonify(ANIMATION_VIDEOS)
 
-        .modal-content {
-            position: relative; 
-            width: 80%; 
-            max-width: 800px; 
-        }
+@app.route('/api/hadith-videos')
+def get_hadith_videos():
+    """API endpoint to fetch hadith videos"""
+    return jsonify(HADITH_VIDEOS)
 
-        .modal-content iframe {
-            width: 100%; 
-            height: 450px; 
-        }
-
-        .close {
-            position: absolute; 
-            top: 10px; right: 20px; 
-            color: white; 
-            font-size: 24px; 
-            cursor: pointer; 
-        }
-    </style>
-</head>
-<body>
-
-    <h1 style="text-align:center;">Popular Muslim Animations</h1>
-    <div class="gallery">
-        <div class="video-thumbnail" data-video-id="VIDEO_ID_1" data-hadith-id="HADITH_ID_1">
-            <img src="https://img.youtube.com/vi/VIDEO_ID_1/0.jpg" alt="Animation 1">
-            <p style="text-align:center;">Animation Title 1</p>
-        </div>
-        <div class="video-thumbnail" data-video-id="VIDEO_ID_2" data-hadith-id="HADITH_ID_2">
-            <img src="https://img.youtube.com/vi/VIDEO_ID_2/0.jpg" alt="Animation 2">
-            <p style="text-align:center;">Animation Title 2</p>
-        </div>
-        <!-- Add more video thumbnails as necessary -->
-    </div>
-
-    <div class="modal" id="videoModal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <script>
-        const thumbnails = document.querySelectorAll('.video-thumbnail');
-        const modal = document.getElementById('videoModal');
-        const videoPlayer = document.getElementById('videoPlayer');
-        const closeModal = document.getElementById('closeModal');
-
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                const videoId = thumbnail.getAttribute('data-video-id');
-                const hadithId = thumbnail.getAttribute('data-hadith-id');
-
-                videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                modal.style.display = 'flex';
-
-                // You can add logic here to play the corresponding Hadith video 
-                // using hadithId if needed.
-            });
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-            videoPlayer.src = ''; // Stop the video when modal is closed
-        });
-
-        window.onclick = (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-                videoPlayer.src = '';
-            }
-        };
-    </script>
-</body>
-</html>
+if __name__ == '__main__':
+    app.run(debug=True)
