@@ -1,74 +1,180 @@
-# server.py
-from flask import Flask, render_template, jsonify
-import requests
-from flask_cors import CORS
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muslim Animation & Hadith Hub</title>
 
-app = Flask(__name__)
-CORS(app)
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
 
-# Sample data - in a real app, this would come from a database
-ANIMATION_VIDEOS = [
-    {
-        "id": "1",
-        "title": "The Story of Prophet Muhammad (PBUH)",
-        "description": "A beautiful animated journey through the life of our beloved Prophet",
-        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_1/maxresdefault.jpg",
-        "youtube_id": "VIDEO_ID_1"
-    },
-    {
-        "id": "2",
-        "title": "Parables of the Quran",
-        "description": "Visual storytelling of Quranic parables for all ages",
-        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_2/maxresdefault.jpg",
-        "youtube_id": "VIDEO_ID_2"
-    },
-    {
-        "id": "3",
-        "title": "History of Islam in Animation",
-        "description": "An educational animated guide through Islamic history",
-        "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID_3/maxresdefault.jpg",
-        "youtube_id": "VIDEO_ID_3"
+header {
+    text-align: center;
+    padding: 20px;
+    background: #020617;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    display: block;
+}
+
+.card h3 {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    position: relative;
+    margin: 5% auto;
+    width: 90%;
+    max-width: 900px;
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: -40px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.video-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+iframe {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+}
+
+@media (min-width: 768px) {
+    iframe {
+        height: 400px;
     }
-]
+}
+</style>
+</head>
 
-HADITH_VIDEOS = [
+<body>
+
+<header>🕌 Muslim Animation & Hadith Hub</header>
+
+<div class="grid" id="videoGrid"></div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">✖</span>
+        <div class="video-wrapper">
+            <iframe id="mainVideo" allow="autoplay"></iframe>
+            <iframe id="hadithVideo" allow="autoplay"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+const videos = [
     {
-        "id": "1",
-        "title": "Hadith of the Day",
-        "description": "A daily reminder of noble teachings",
-        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_1/maxresdefault.jpg",
-        "youtube_id": "HADITH_ID_1"
+        title: "Story of Prophet Muhammad (Animation)",
+        animationId: "VIDEO_ID_1",
+        hadithId: "HADITH_ID_1"
     },
     {
-        "id": "2",
-        "title": "Prophet's Teachings",
-        "description": "Important lessons from the Prophet's sayings",
-        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_2/maxresdefault.jpg",
-        "youtube_id": "HADITH_ID_2"
+        title: "The Boy and The King",
+        animationId: "VIDEO_ID_2",
+        hadithId: "HADITH_ID_2"
     },
     {
-        "id": "3",
-        "title": "Islamic Wisdom",
-        "description": "Timeless wisdom from the Hadith collections",
-        "thumbnail": "https://i.ytimg.com/vi/HADITH_ID_3/maxresdefault.jpg",
-        "youtube_id": "HADITH_ID_3"
+        title: "Prophet Yusuf Story",
+        animationId: "VIDEO_ID_3",
+        hadithId: "HADITH_ID_3"
     }
-]
+];
 
-@app.route('/')
-def index():
-    """Serve the main page"""
-    return render_template('index.html')
+// Load thumbnails
+const grid = document.getElementById("videoGrid");
 
-@app.route('/api/animation-videos')
-def get_animation_videos():
-    """API endpoint to fetch animation videos"""
-    return jsonify(ANIMATION_VIDEOS)
+videos.forEach(video => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-@app.route('/api/hadith-videos')
-def get_hadith_videos():
-    """API endpoint to fetch hadith videos"""
-    return jsonify(HADITH_VIDEOS)
+    card.innerHTML = `
+        <img src="https://img.youtube.com/vi/${video.animationId}/hqdefault.jpg" loading="lazy">
+        <h3>${video.title}</h3>
+    `;
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    card.onclick = () => openModal(video.animationId, video.hadithId);
+    grid.appendChild(card);
+});
+
+// Open modal
+function openModal(animationId, hadithId) {
+    document.getElementById("modal").style.display = "block";
+
+    document.getElementById("mainVideo").src =
+        `https://www.youtube.com/embed/${animationId}?autoplay=1`;
+
+    document.getElementById("hadithVideo").src =
+        `https://www.youtube.com/embed/${hadithId}?autoplay=1`;
+}
+
+// Close modal
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("mainVideo").src = "";
+    document.getElementById("hadithVideo").src = "";
+}
+
+// Close on outside click
+window.onclick = function(event) {
+    const modal = document.getElementById("modal");
+    if (event.target === modal) {
+        closeModal();
+    }
+};
+</script>
+
+</body>
+</html>
