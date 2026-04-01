@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Islam Investment Space</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg-dark: #0B0F14;
+  --bg-light: #F8FAF8;
+  --primary: #0F9D58;
+  --gold: #D4AF37;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
+  color: white;
+  transition: 0.3s;
+}
+
+.light {
+  background: var(--bg-light);
+  color: black;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.light .card {
+  background: rgba(0,0,0,0.05);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(45deg, var(--primary), var(--gold));
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.header {
+  text-align: center;
+}
+
+.balance {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.fade {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="toggle" onclick="toggleTheme()">🌙/☀️</div>
+
+<div class="container">
+
+<div class="header fade">
+  <h2>🌙 Islam Investment Space</h2>
+  <p>ثمر واستثمر بثقة</p>
+</div>
+
+<!-- AUTH -->
+<div id="auth" class="card fade">
+  <h3>Register</h3>
+  <input id="name" placeholder="Name">
+  <input id="email" placeholder="Email">
+  <input id="password" placeholder="Password">
+  <button onclick="register()">Create Account</button>
+
+  <hr>
+
+  <h3>Login</h3>
+  <input id="email2" placeholder="Email">
+  <input id="password2" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none;">
+
+  <div class="card fade">
+    <h3>Dashboard</h3>
+    <p class="balance" id="balance"></p>
+    <p id="invested"></p>
+  </div>
+
+  <div class="card fade">
+    <h4>Invest via M-Pesa</h4>
+    <input id="phone" placeholder="2547XXXXXXXX">
+    <input id="amount" placeholder="Amount">
+    <button onclick="invest()">Invest Now</button>
+  </div>
+
+  <div class="card fade">
+    <h4>Admin Panel</h4>
+    <input id="profit" placeholder="Total Profit">
+    <button onclick="distribute()">Distribute Profit</button>
+  </div>
+
+  <div class="card fade">
+    <button onclick="logout()">Logout</button>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+const API = "http://localhost:5000";
+
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+/* AUTH */
+async function register(){
+  await fetch(API+"/api/register",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      name: name.value,
+      email: email.value,
+      password: password.value
+    })
+  });
+  alert("Account created");
+}
+
+async function login(){
+  const res = await fetch(API+"/api/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      email: email2.value,
+      password: password2.value
+    })
+  });
+
+  const data = await res.json();
+  localStorage.setItem("token",data.token);
+  loadDashboard();
+}
+
+/* DASHBOARD */
+async function loadDashboard(){
+  document.getElementById("auth").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+
+  const res = await fetch(API+"/api/me",{
+    headers:{Authorization: localStorage.getItem("token")}
+  });
+
+  const user = await res.json();
+
+  balance.innerText = "KES " + user.balance;
+  invested.innerText = "Invested: KES " + user.totalInvested;
+}
+
+/* INVEST */
+async function invest(){
+  await fetch(API+"/api/mpesa",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      phone: phone.value,
+      amount: Number(amount.value)
+    })
+  });
+
+  alert("📲 Check your phone");
+}
+
+/* ADMIN */
+async function distribute(){
+  await fetch(API+"/api/admin/distribute",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      totalProfit: Number(profit.value)
+    })
+  });
+
+  alert("Profit distributed");
+}
+
+/* LOGOUT */
+function logout(){
+  localStorage.removeItem("token");
+  location.reload();
+}
+</script>
+
+</body>
+</html>
