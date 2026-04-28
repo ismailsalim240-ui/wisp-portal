@@ -815,3 +815,398 @@ console.log(
 );
 
 </script>
+<!-- =========================
+ADVANCED PLATFORM FEATURES
+========================= -->
+
+<section id="kycSection">
+    <h2 class="section-title">KYC Verification</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <input 
+                type="text"
+                id="fullLegalName"
+                placeholder="Full Legal Name"
+            >
+
+            <input 
+                type="text"
+                id="nationalId"
+                placeholder="National ID / Passport"
+            >
+
+            <input 
+                type="file"
+                id="idUpload"
+            >
+
+            <button onclick="submitKYC()">
+                Submit Verification
+            </button>
+
+            <p id="kycStatus">Status: Not Verified</p>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="cryptoDeposit">
+    <h2 class="section-title">Crypto Deposits</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <h3>BTC Wallet</h3>
+            <p>bc1hiddenempirewalletx9283</p>
+
+            <h3>USDT Wallet</h3>
+            <p>TRC20-HIDDEN-928388</p>
+
+            <button onclick="copyWallet()">
+                Copy Wallet Address
+            </button>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="premiumMembership">
+    <h2 class="section-title">Premium Membership</h2>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h2>Bronze</h2>
+            <p>KES 5,000/month</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>Silver</h2>
+            <p>KES 15,000/month</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>Gold</h2>
+            <p>KES 50,000/month</p>
+        </div>
+
+    </div>
+</section>
+
+
+<section id="withdrawApproval">
+    <h2 class="section-title">Admin Withdrawal Queue</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <ul id="withdrawQueue"></ul>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="leaderboard">
+    <h2 class="section-title">Top Investors</h2>
+
+    <div class="container">
+        <div class="card">
+            <ol id="leaderboardList"></ol>
+        </div>
+    </div>
+</section>
+
+
+<section id="securityLogs">
+    <h2 class="section-title">Security Logs</h2>
+
+    <div class="container">
+        <div class="card">
+            <ul id="securityLogList"></ul>
+        </div>
+    </div>
+</section>
+
+
+<section id="invoiceGenerator">
+    <h2 class="section-title">Generate Invoice</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <input 
+                type="number"
+                id="invoiceAmount"
+                placeholder="Enter Amount"
+            >
+
+            <button onclick="generateInvoice()">
+                Generate Invoice
+            </button>
+
+            <div id="invoiceOutput"></div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+
+/* ==========================
+KYC VERIFICATION
+========================== */
+
+function submitKYC(){
+
+    let fullName =
+        document.getElementById(
+            "fullLegalName"
+        ).value;
+
+    let nationalId =
+        document.getElementById(
+            "nationalId"
+        ).value;
+
+    if(fullName && nationalId){
+
+        document.getElementById(
+            "kycStatus"
+        ).innerText =
+            "Status: Verified ✅";
+
+        logSecurity(
+            "KYC submitted by " + fullName
+        );
+
+        alert("KYC Submitted Successfully");
+
+    }else{
+        alert("Fill all KYC fields");
+    }
+}
+
+
+/* ==========================
+COPY CRYPTO WALLET
+========================== */
+
+function copyWallet(){
+
+    navigator.clipboard.writeText(
+        "bc1hiddenempirewalletx9283"
+    );
+
+    alert("Wallet copied successfully");
+}
+
+
+/* ==========================
+WITHDRAWAL APPROVAL QUEUE
+========================== */
+
+let withdrawalRequests = [];
+
+function addWithdrawalRequest(amount){
+
+    withdrawalRequests.push(amount);
+
+    renderWithdrawQueue();
+}
+
+function renderWithdrawQueue(){
+
+    let html = "";
+
+    withdrawalRequests.forEach((amount,index)=>{
+
+        html += `
+            <li>
+                Withdrawal Request:
+                KES ${amount}
+                <button onclick="approveWithdraw(${index})">
+                    Approve
+                </button>
+            </li>
+        `;
+    });
+
+    document.getElementById(
+        "withdrawQueue"
+    ).innerHTML = html;
+}
+
+function approveWithdraw(index){
+
+    withdrawalRequests.splice(index,1);
+
+    renderWithdrawQueue();
+
+    alert("Withdrawal Approved");
+}
+
+
+/* ==========================
+LEADERBOARD SYSTEM
+========================== */
+
+function updateLeaderboard(){
+
+    let investors = [];
+
+    for(let i=0;i<localStorage.length;i++){
+
+        let key = localStorage.key(i);
+
+        let user =
+            JSON.parse(
+                localStorage.getItem(key)
+            );
+
+        if(user && user.email){
+            investors.push(user);
+        }
+    }
+
+    investors.sort(
+        (a,b)=>b.invested-a.invested
+    );
+
+    let html = "";
+
+    investors.slice(0,10).forEach(user=>{
+        html += `
+            <li>
+                ${user.name} - 
+                KES ${user.invested}
+            </li>
+        `;
+    });
+
+    document.getElementById(
+        "leaderboardList"
+    ).innerHTML = html;
+}
+
+setInterval(updateLeaderboard,5000);
+
+
+/* ==========================
+EMAIL VERIFICATION SIMULATION
+========================== */
+
+function verifyEmail(){
+
+    let code =
+        Math.floor(
+            Math.random()*999999
+        );
+
+    alert(
+        "Verification Code Sent: " + code
+    );
+}
+
+
+/* ==========================
+QR PAYMENT GENERATOR
+========================== */
+
+function generateQR(){
+
+    let qrWindow =
+        window.open();
+
+    qrWindow.document.write(`
+        <h1>Scan To Pay</h1>
+        <p>M-Pesa QR Coming Soon</p>
+    `);
+}
+
+
+/* ==========================
+INVOICE GENERATOR
+========================== */
+
+function generateInvoice(){
+
+    let amount =
+        document.getElementById(
+            "invoiceAmount"
+        ).value;
+
+    let invoiceNumber =
+        "INV-" +
+        Math.floor(
+            Math.random()*999999
+        );
+
+    document.getElementById(
+        "invoiceOutput"
+    ).innerHTML = `
+        <h3>Invoice Generated</h3>
+        <p>Invoice Number:
+        ${invoiceNumber}</p>
+
+        <p>Amount:
+        KES ${amount}</p>
+
+        <p>Status:
+        Pending Payment</p>
+    `;
+}
+
+
+/* ==========================
+SECURITY LOGS
+========================== */
+
+let securityLogs = [];
+
+function logSecurity(message){
+
+    let timestamp =
+        new Date().toLocaleString();
+
+    securityLogs.push(
+        timestamp + " - " + message
+    );
+
+    renderSecurityLogs();
+}
+
+function renderSecurityLogs(){
+
+    let html = "";
+
+    securityLogs.forEach(log=>{
+        html += `<li>${log}</li>`;
+    });
+
+    document.getElementById(
+        "securityLogList"
+    ).innerHTML = html;
+}
+
+
+/* ==========================
+ADMIN ROLE CHECK
+========================== */
+
+function checkAdmin(){
+
+    if(currentUser &&
+       currentUser.email ===
+       "admin@hiddenempire.com"){
+
+        alert("Admin Access Granted");
+    }
+}
+
+</script>
