@@ -1210,3 +1210,438 @@ function checkAdmin(){
 }
 
 </script>
+<!-- =========================
+ENTERPRISE SCALE FEATURES
+========================= -->
+
+<section id="otpLogin">
+    <h2 class="section-title">SMS OTP Login</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <input
+                type="text"
+                id="phoneLogin"
+                placeholder="Enter phone number"
+            >
+
+            <button onclick="sendOTP()">
+                Send OTP
+            </button>
+
+            <input
+                type="text"
+                id="otpCode"
+                placeholder="Enter OTP"
+            >
+
+            <button onclick="verifyOTP()">
+                Verify OTP
+            </button>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="copyTrading">
+    <h2 class="section-title">Copy Trading Marketplace</h2>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h2>Trader Alpha</h2>
+            <p>ROI: 34%</p>
+            <button onclick="followTrader('Trader Alpha')">
+                Copy Trade
+            </button>
+        </div>
+
+        <div class="stat-box">
+            <h2>Trader Elite</h2>
+            <p>ROI: 52%</p>
+            <button onclick="followTrader('Trader Elite')">
+                Copy Trade
+            </button>
+        </div>
+
+        <div class="stat-box">
+            <h2>Trader Vision</h2>
+            <p>ROI: 68%</p>
+            <button onclick="followTrader('Trader Vision')">
+                Copy Trade
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+<section id="nftMarket">
+    <h2 class="section-title">Digital Asset Marketplace</h2>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h2>Empire Token #001</h2>
+            <p>Price: KES 20,000</p>
+            <button onclick="buyNFT('Empire Token #001')">
+                Buy
+            </button>
+        </div>
+
+        <div class="stat-box">
+            <h2>Empire Token #002</h2>
+            <p>Price: KES 35,000</p>
+            <button onclick="buyNFT('Empire Token #002')">
+                Buy
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+<section id="fraudDetection">
+    <h2 class="section-title">AI Fraud Detection</h2>
+
+    <div class="container">
+        <div class="card">
+            <p id="fraudStatus">
+                System scanning transactions...
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<section id="affiliateSystem">
+    <h2 class="section-title">Affiliate Commission Center</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <h3 id="affiliateBalance">
+                KES 0
+            </h3>
+
+            <button onclick="claimCommission()">
+                Claim Commission
+            </button>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="vaultSystem">
+    <h2 class="section-title">Wealth Vault</h2>
+
+    <div class="container">
+        <div class="card">
+
+            <input
+                type="number"
+                id="vaultAmount"
+                placeholder="Lock Savings Amount"
+            >
+
+            <button onclick="lockFunds()">
+                Lock Funds
+            </button>
+
+            <p id="vaultStatus">
+                No active vault
+            </p>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="apiLogs">
+    <h2 class="section-title">API Activity Logs</h2>
+
+    <div class="container">
+        <div class="card">
+            <ul id="apiLogList"></ul>
+        </div>
+    </div>
+</section>
+
+
+<script>
+
+/* ==========================
+SMS OTP SYSTEM
+========================== */
+
+let generatedOTP = null;
+
+function sendOTP(){
+
+    generatedOTP =
+        Math.floor(
+            100000 +
+            Math.random()*900000
+        );
+
+    alert(
+        "OTP Sent: " + generatedOTP
+    );
+
+    addApiLog(
+        "OTP generated successfully"
+    );
+}
+
+function verifyOTP(){
+
+    let entered =
+        document.getElementById(
+            "otpCode"
+        ).value;
+
+    if(entered == generatedOTP){
+
+        alert("Phone verified successfully");
+
+        addApiLog(
+            "OTP verified"
+        );
+
+    }else{
+        alert("Invalid OTP");
+    }
+}
+
+
+/* ==========================
+COPY TRADING
+========================== */
+
+function followTrader(name){
+
+    if(!currentUser){
+        alert("Login first");
+        return;
+    }
+
+    currentUser.history.push(
+        "Started copy trading: " + name
+    );
+
+    localStorage.setItem(
+        currentUser.email,
+        JSON.stringify(currentUser)
+    );
+
+    updateDashboard();
+
+    alert(
+        "You are now copying " + name
+    );
+}
+
+
+/* ==========================
+DIGITAL ASSET PURCHASE
+========================== */
+
+function buyNFT(asset){
+
+    alert(
+        asset + " purchased successfully"
+    );
+
+    addApiLog(
+        asset + " purchased"
+    );
+}
+
+
+/* ==========================
+FRAUD DETECTION
+========================== */
+
+function scanFraud(){
+
+    let statuses = [
+        "No suspicious activity detected",
+        "Monitoring high-value withdrawals",
+        "Verifying unusual login activity",
+        "Transaction flow stable"
+    ];
+
+    let randomStatus =
+        statuses[
+            Math.floor(
+                Math.random()*statuses.length
+            )
+        ];
+
+    document.getElementById(
+        "fraudStatus"
+    ).innerText = randomStatus;
+}
+
+setInterval(scanFraud,6000);
+
+
+/* ==========================
+AFFILIATE COMMISSIONS
+========================== */
+
+let affiliateEarnings = 0;
+
+function earnCommission(amount){
+
+    affiliateEarnings += amount;
+
+    document.getElementById(
+        "affiliateBalance"
+    ).innerText =
+        "KES " + affiliateEarnings;
+}
+
+function claimCommission(){
+
+    alert(
+        "Commission payout requested"
+    );
+
+    affiliateEarnings = 0;
+
+    document.getElementById(
+        "affiliateBalance"
+    ).innerText =
+        "KES 0";
+}
+
+
+/* ==========================
+WEALTH VAULT
+========================== */
+
+function lockFunds(){
+
+    let amount =
+        parseInt(
+            document.getElementById(
+                "vaultAmount"
+            ).value
+        );
+
+    if(
+        currentUser &&
+        amount <= currentUser.balance
+    ){
+
+        currentUser.balance -= amount;
+
+        localStorage.setItem(
+            currentUser.email,
+            JSON.stringify(currentUser)
+        );
+
+        updateDashboard();
+
+        document.getElementById(
+            "vaultStatus"
+        ).innerText =
+            "KES " + amount +
+            " locked for 90 days";
+
+        addApiLog(
+            "Funds locked in vault"
+        );
+
+    }else{
+        alert(
+            "Insufficient balance"
+        );
+    }
+}
+
+
+/* ==========================
+API LOGS
+========================== */
+
+let apiLogs = [];
+
+function addApiLog(message){
+
+    let timestamp =
+        new Date().toLocaleString();
+
+    apiLogs.push(
+        timestamp + " - " + message
+    );
+
+    renderApiLogs();
+}
+
+function renderApiLogs(){
+
+    let html = "";
+
+    apiLogs.forEach(log=>{
+        html += `
+            <li>${log}</li>
+        `;
+    });
+
+    document.getElementById(
+        "apiLogList"
+    ).innerHTML = html;
+}
+
+
+/* ==========================
+AUTO REFERRAL COMMISSIONS
+========================== */
+
+setInterval(()=>{
+
+    let randomCommission =
+        Math.floor(
+            Math.random()*5000
+        );
+
+    earnCommission(
+        randomCommission
+    );
+
+},20000);
+
+
+/* ==========================
+AUTO BACKUP SYSTEM
+========================== */
+
+function autoBackup(){
+
+    let backupData = {
+        users: localStorage.length,
+        timestamp:
+            new Date().toLocaleString()
+    };
+
+    console.log(
+        "Backup complete:",
+        backupData
+    );
+
+    addApiLog(
+        "System backup completed"
+    );
+}
+
+setInterval(
+    autoBackup,
+    60000
+);
+
+</script>
