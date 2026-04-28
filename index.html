@@ -1,121 +1,429 @@
-<!-- PREMIUM LANDING PAGE SECTION -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Empire Capital</title>
 
-<section class="hero">
-    <nav class="navbar">
-        <h1>Hidden Empire Capital</h1>
-
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Investments</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-
-        <button class="nav-btn">Get Started</button>
-    </nav>
-
-    <div class="hero-content">
-        <div class="left-side">
-            <h2>Build Wealth The Halal Way</h2>
-
-            <p>
-                Join Africa's premium Islamic investment platform
-                powered by M-Pesa, smart automation, and secure wealth growth.
-            </p>
-
-            <button onclick="scrollToRegister()">
-                Start Investing
-            </button>
-        </div>
-
-        <div class="right-side">
-            <div class="stats-card">
-                <h3>KES 12,500,000+</h3>
-                <p>Total Investments</p>
-            </div>
-
-            <div class="stats-card">
-                <h3>4,200+</h3>
-                <p>Active Investors</p>
-            </div>
-
-            <div class="stats-card">
-                <h3>98%</h3>
-                <p>Client Satisfaction</p>
-            </div>
-        </div>
-    </div>
-</section>
-<.hero{
-    min-height:100vh;
-    background:linear-gradient(
-        135deg,
-        #05070d,
-        #0f172a,
-        #111827
-    );
-    padding:30px;
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
 }
 
-.navbar{
+body{
+    background:#0a0f1f;
+    color:white;
+    transition:0.4s;
+}
+
+.light-mode{
+    background:white;
+    color:black;
+}
+
+header{
+    padding:20px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    flex-wrap:wrap;
+    background:#111827;
 }
 
-.navbar h1{
+header h1{
     color:gold;
 }
-.navbar ul{
-    display:flex;
-    list-style:none;
-    gap:20px;
-}
-.navbar ul li a{
+
+nav a{
     color:white;
     text-decoration:none;
+    margin:0 10px;
 }
 
-.nav-btn{
-    width:auto;
-    padding:12px 25px;
+.hero{
+    height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    flex-direction:column;
+    padding:20px;
 }
 
-.hero-content{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    margin-top:80px;
-    gap:30px;
+.hero h2{
+    font-size:55px;
 }
 
-.left-side h2{
-    font-size:50px;
+.hero p{
+    color:gray;
+    margin-top:15px;
+    width:70%;
+}
+
+button{
+    background:linear-gradient(45deg,#16a34a,gold);
     color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    margin-top:15px;
+    width:100%;
 }
 
-.left-side p{
-    font-size:18px;
-    color:#ccc;
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
 }
 
-.right-side{
-    display:grid;
-    gap:20px;
-}
-
-.stats-card{
+.card{
     background:rgba(255,255,255,0.05);
-    padding:30px;
+    padding:20px;
     border-radius:20px;
+    margin-top:20px;
     backdrop-filter:blur(20px);
 }
 
-.stats-card h3{
-    color:gold;
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
 }
-function scrollToRegister(){
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+    width:90%;
+    margin:auto;
+}
+
+.stat-box{
+    background:#111827;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.section-title{
+    text-align:center;
+    margin-top:50px;
+    margin-bottom:20px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    margin-top:50px;
+    background:#111827;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Hidden Empire Capital</h1>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#auth">Login</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <button onclick="toggleTheme()" style="width:auto;">🌙</button>
+</header>
+
+<section class="hero">
+    <h2>Build Wealth The Halal Way</h2>
+    <p>
+        Africa's modern Islamic investment platform powered by M-Pesa,
+        secure automation and passive wealth growth.
+    </p>
+
+    <button onclick="scrollToAuth()" style="width:200px;">
+        Start Investing
+    </button>
+</section>
+
+<h2 class="section-title">Platform Statistics</h2>
+
+<div class="stats">
+    <div class="stat-box">
+        <h2>KES 14M+</h2>
+        <p>Total Investments</p>
+    </div>
+
+    <div class="stat-box">
+        <h2>8,200+</h2>
+        <p>Active Investors</p>
+    </div>
+
+    <div class="stat-box">
+        <h2>99%</h2>
+        <p>User Satisfaction</p>
+    </div>
+</div>
+
+<div class="container" id="auth">
+
+    <div class="card" id="registerSection">
+        <h2>Create Account</h2>
+
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+
+        <button onclick="register()">Register</button>
+    </div>
+
+    <div class="card">
+        <h2>Login</h2>
+
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+
+        <button onclick="login()">Login</button>
+    </div>
+
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+
+    <div class="card">
+        <h2>User Dashboard</h2>
+        <h3 id="balance">KES 0</h3>
+        <p id="invested">Invested: KES 0</p>
+    </div>
+
+    <div class="card">
+        <h2>Invest via M-Pesa</h2>
+
+        <input type="text" id="phone" placeholder="2547XXXXXXXX">
+        <input type="number" id="amount" placeholder="Amount">
+
+        <button onclick="invest()">Invest Now</button>
+    </div>
+
+    <div class="card">
+        <h2>Withdraw Funds</h2>
+
+        <input type="number" id="withdrawAmount" placeholder="Amount">
+
+        <button onclick="withdrawFunds()">Withdraw</button>
+    </div>
+
+    <div class="card">
+        <h2>Referral System</h2>
+        <p>Your referral code:</p>
+        <h3 id="refCode"></h3>
+    </div>
+
+    <div class="card">
+        <h2>Transaction History</h2>
+        <ul id="history"></ul>
+    </div>
+
+    <div class="card">
+        <h2>Admin Profit Distribution</h2>
+
+        <input type="number" id="profitAmount" placeholder="Enter Profit Amount">
+
+        <button onclick="distributeProfit()">
+            Distribute Profit
+        </button>
+    </div>
+
+    <div class="card">
+        <button onclick="logout()">Logout</button>
+    </div>
+
+</div>
+
+<section id="faq">
+    <h2 class="section-title">FAQ</h2>
+
+    <div class="container">
+        <div class="card">
+            <h3>Is this halal?</h3>
+            <p>Yes, our investment system follows Islamic finance principles.</p>
+        </div>
+
+        <div class="card">
+            <h3>How do I deposit?</h3>
+            <p>Use M-Pesa instantly through our secure payment system.</p>
+        </div>
+
+        <div class="card">
+            <h3>How do withdrawals work?</h3>
+            <p>Withdraw directly to your mobile wallet.</p>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+
+    <div class="container">
+        <div class="card">
+            <input placeholder="Your Name">
+            <input placeholder="Your Email">
+            <input placeholder="Message">
+            <button>Send Message</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <h3>Hidden Empire Capital © 2026</h3>
+</footer>
+
+<script>
+let currentUser = null;
+
+function scrollToAuth(){
     document.getElementById("auth").scrollIntoView({
         behavior:"smooth"
     });
 }
+
+function toggleTheme(){
+    document.body.classList.toggle("light-mode");
+}
+
+function register(){
+    let name=document.getElementById("name").value;
+    let email=document.getElementById("email").value;
+    let password=document.getElementById("password").value;
+
+    let user={
+        name,
+        email,
+        password,
+        balance:0,
+        invested:0,
+        history:[]
+    };
+
+    localStorage.setItem(email,JSON.stringify(user));
+    alert("Account Created Successfully");
+}
+
+function login(){
+    let email=document.getElementById("loginEmail").value;
+    let password=document.getElementById("loginPassword").value;
+
+    let user=JSON.parse(localStorage.getItem(email));
+
+    if(user && user.password===password){
+        currentUser=user;
+
+        document.getElementById("auth").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+
+        updateDashboard();
+    }else{
+        alert("Invalid login");
+    }
+}
+
+function updateDashboard(){
+    document.getElementById("balance").innerText=
+        "KES "+currentUser.balance;
+
+    document.getElementById("invested").innerText=
+        "Invested: KES "+currentUser.invested;
+
+    document.getElementById("refCode").innerText=
+        currentUser.name.substring(0,4).toUpperCase()+"2026";
+
+    let historyHTML="";
+
+    currentUser.history.forEach(item=>{
+        historyHTML += `<li>${item}</li>`;
+    });
+
+    document.getElementById("history").innerHTML=
+        historyHTML;
+}
+
+function invest(){
+    let amount=parseInt(
+        document.getElementById("amount").value
+    );
+
+    currentUser.invested += amount;
+    currentUser.balance += amount*1.15;
+
+    currentUser.history.push(
+        "Invested KES "+amount
+    );
+
+    localStorage.setItem(
+        currentUser.email,
+        JSON.stringify(currentUser)
+    );
+
+    updateDashboard();
+
+    alert("M-Pesa payment request sent");
+}
+
+function withdrawFunds(){
+    let amount=parseInt(
+        document.getElementById("withdrawAmount").value
+    );
+
+    if(amount<=currentUser.balance){
+        currentUser.balance -= amount;
+
+        currentUser.history.push(
+            "Withdrawn KES "+amount
+        );
+
+        localStorage.setItem(
+            currentUser.email,
+            JSON.stringify(currentUser)
+        );
+
+        updateDashboard();
+
+        alert("Withdrawal processing");
+    }else{
+        alert("Insufficient balance");
+    }
+}
+
+function distributeProfit(){
+    let profit=parseInt(
+        document.getElementById("profitAmount").value
+    );
+
+    currentUser.balance += profit;
+
+    currentUser.history.push(
+        "Profit Added KES "+profit
+    );
+
+    localStorage.setItem(
+        currentUser.email,
+        JSON.stringify(currentUser)
+    );
+
+    updateDashboard();
+
+    alert("Profit distributed");
+}
+
+function logout(){
+    location.reload();
+}
+</script>
+
+</body>
+</html>
