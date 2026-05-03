@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hidden Empire Capital</title>
+<title>Hidden Empire Experience</title>
 
 <style>
 *{
@@ -14,1634 +14,179 @@
 }
 
 body{
-    background:#0a0f1f;
+    background:#05070f;
+    overflow:hidden;
     color:white;
-    transition:0.4s;
 }
 
-.light-mode{
-    background:white;
-    color:black;
-}
-
-header{
-    padding:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#111827;
-}
-
-header h1{
-    color:gold;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    margin:0 10px;
-}
-
+/* HERO TEXT */
 .hero{
-    height:90vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
     text-align:center;
-    flex-direction:column;
-    padding:20px;
+    z-index:10;
 }
 
-.hero h2{
-    font-size:55px;
+.hero h1{
+    font-size:60px;
+    letter-spacing:2px;
 }
 
 .hero p{
-    color:gray;
-    margin-top:15px;
-    width:70%;
+    margin-top:10px;
+    opacity:0.6;
 }
 
 button{
-    background:linear-gradient(45deg,#16a34a,gold);
-    color:white;
-    border:none;
-    padding:14px;
-    border-radius:10px;
-    cursor:pointer;
-    margin-top:15px;
-    width:100%;
-}
-
-.container{
-    width:90%;
-    max-width:500px;
-    margin:auto;
-}
-
-.card{
-    background:rgba(255,255,255,0.05);
-    padding:20px;
-    border-radius:20px;
     margin-top:20px;
-    backdrop-filter:blur(20px);
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
+    padding:14px 30px;
     border:none;
-    border-radius:10px;
+    border-radius:30px;
+    background:linear-gradient(45deg,orange,gold);
+    color:black;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(255,165,0,0.5);
+    transition:0.3s;
 }
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-    width:90%;
-    margin:auto;
+button:hover{
+    transform:scale(1.1);
 }
 
-.stat-box{
-    background:#111827;
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
+/* GLASS NAV */
+.nav{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:10px 30px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);
+    border-radius:50px;
+    z-index:10;
 }
 
-.section-title{
-    text-align:center;
-    margin-top:50px;
-    margin-bottom:20px;
-}
-
-footer{
-    text-align:center;
-    padding:30px;
-    margin-top:50px;
-    background:#111827;
+.nav a{
+    margin:0 10px;
+    color:white;
+    text-decoration:none;
+    font-size:14px;
 }
 </style>
 </head>
+
 <body>
 
-<header>
-    <h1>Hidden Empire Capital</h1>
-
-    <nav>
-        <a href="#">Home</a>
-        <a href="#auth">Login</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <button onclick="toggleTheme()" style="width:auto;">🌙</button>
-</header>
-
-<section class="hero">
-    <h2>Build Wealth The Halal Way</h2>
-    <p>
-        Africa's modern Islamic investment platform powered by M-Pesa,
-        secure automation and passive wealth growth.
-    </p>
-
-    <button onclick="scrollToAuth()" style="width:200px;">
-        Start Investing
-    </button>
-</section>
-
-<h2 class="section-title">Platform Statistics</h2>
-
-<div class="stats">
-    <div class="stat-box">
-        <h2>KES 14M+</h2>
-        <p>Total Investments</p>
-    </div>
-
-    <div class="stat-box">
-        <h2>8,200+</h2>
-        <p>Active Investors</p>
-    </div>
-
-    <div class="stat-box">
-        <h2>99%</h2>
-        <p>User Satisfaction</p>
-    </div>
+<div class="nav">
+    <a href="#">Home</a>
+    <a href="#">Experience</a>
+    <a href="#">Contact</a>
 </div>
 
-<div class="container" id="auth">
-
-    <div class="card" id="registerSection">
-        <h2>Create Account</h2>
-
-        <input type="text" id="name" placeholder="Full Name">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-
-        <button onclick="register()">Register</button>
-    </div>
-
-    <div class="card">
-        <h2>Login</h2>
-
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginPassword" placeholder="Password">
-
-        <button onclick="login()">Login</button>
-    </div>
-
+<div class="hero">
+    <h1>HIDDEN EMPIRE</h1>
+    <p>Enter the Future of Digital Wealth</p>
+    <button>Enter Experience</button>
 </div>
 
-<div class="container" id="dashboard" style="display:none;">
-
-    <div class="card">
-        <h2>User Dashboard</h2>
-        <h3 id="balance">KES 0</h3>
-        <p id="invested">Invested: KES 0</p>
-    </div>
-
-    <div class="card">
-        <h2>Invest via M-Pesa</h2>
-
-        <input type="text" id="phone" placeholder="2547XXXXXXXX">
-        <input type="number" id="amount" placeholder="Amount">
-
-        <button onclick="invest()">Invest Now</button>
-    </div>
-
-    <div class="card">
-        <h2>Withdraw Funds</h2>
-
-        <input type="number" id="withdrawAmount" placeholder="Amount">
-
-        <button onclick="withdrawFunds()">Withdraw</button>
-    </div>
-
-    <div class="card">
-        <h2>Referral System</h2>
-        <p>Your referral code:</p>
-        <h3 id="refCode"></h3>
-    </div>
-
-    <div class="card">
-        <h2>Transaction History</h2>
-        <ul id="history"></ul>
-    </div>
-
-    <div class="card">
-        <h2>Admin Profit Distribution</h2>
-
-        <input type="number" id="profitAmount" placeholder="Enter Profit Amount">
-
-        <button onclick="distributeProfit()">
-            Distribute Profit
-        </button>
-    </div>
-
-    <div class="card">
-        <button onclick="logout()">Logout</button>
-    </div>
-
-</div>
-
-<section id="faq">
-    <h2 class="section-title">FAQ</h2>
-
-    <div class="container">
-        <div class="card">
-            <h3>Is this halal?</h3>
-            <p>Yes, our investment system follows Islamic finance principles.</p>
-        </div>
-
-        <div class="card">
-            <h3>How do I deposit?</h3>
-            <p>Use M-Pesa instantly through our secure payment system.</p>
-        </div>
-
-        <div class="card">
-            <h3>How do withdrawals work?</h3>
-            <p>Withdraw directly to your mobile wallet.</p>
-        </div>
-    </div>
-</section>
-
-<section id="contact">
-    <h2 class="section-title">Contact Us</h2>
-
-    <div class="container">
-        <div class="card">
-            <input placeholder="Your Name">
-            <input placeholder="Your Email">
-            <input placeholder="Message">
-            <button>Send Message</button>
-        </div>
-    </div>
-</section>
-
-<footer>
-    <h3>Hidden Empire Capital © 2026</h3>
-</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-let currentUser = null;
+const scene = new THREE.Scene();
 
-function scrollToAuth(){
-    document.getElementById("auth").scrollIntoView({
-        behavior:"smooth"
-    });
+const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth/window.innerHeight,
+    0.1,
+    1000
+);
+
+const renderer = new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.domElement.style.position="fixed";
+renderer.domElement.style.top="0";
+renderer.domElement.style.zIndex="-1";
+
+document.body.appendChild(renderer.domElement);
+
+/* 🔥 CORE ENERGY SPHERE */
+const geometry = new THREE.SphereGeometry(1,64,64);
+
+const material = new THREE.MeshStandardMaterial({
+    color:0xff6600,
+    emissive:0xff2200,
+    roughness:0.3,
+    metalness:0.8
+});
+
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+/* 💡 LIGHTS */
+const light = new THREE.PointLight(0xff5500, 2);
+light.position.set(2,2,2);
+scene.add(light);
+
+/* 🔥 PARTICLES */
+const particlesCount = 4000;
+const posArray = new Float32Array(particlesCount * 3);
+
+for(let i=0;i<particlesCount*3;i++){
+    posArray[i] = (Math.random()-0.5)*6;
 }
 
-function toggleTheme(){
-    document.body.classList.toggle("light-mode");
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute(
+    "position",
+    new THREE.BufferAttribute(posArray,3)
+);
+
+const pMat = new THREE.PointsMaterial({
+    size:0.02,
+    color:0xff8800
+});
+
+const particles = new THREE.Points(pGeo,pMat);
+scene.add(particles);
+
+camera.position.z = 3;
+
+/* 🖱️ MOUSE */
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener("mousemove",(e)=>{
+    mouseX = (e.clientX/window.innerWidth - 0.5);
+    mouseY = (e.clientY/window.innerHeight - 0.5);
+});
+
+/* 🎬 ANIMATION */
+function animate(){
+    requestAnimationFrame(animate);
+
+    sphere.rotation.y += 0.01;
+    sphere.rotation.x += 0.005;
+
+    particles.rotation.y += 0.001;
+
+    sphere.position.x = mouseX;
+    sphere.position.y = -mouseY;
+
+    renderer.render(scene,camera);
 }
 
-function register(){
-    let name=document.getElementById("name").value;
-    let email=document.getElementById("email").value;
-    let password=document.getElementById("password").value;
+animate();
 
-    let user={
-        name,
-        email,
-        password,
-        balance:0,
-        invested:0,
-        history:[]
-    };
-
-    localStorage.setItem(email,JSON.stringify(user));
-    alert("Account Created Successfully");
-}
-
-function login(){
-    let email=document.getElementById("loginEmail").value;
-    let password=document.getElementById("loginPassword").value;
-
-    let user=JSON.parse(localStorage.getItem(email));
-
-    if(user && user.password===password){
-        currentUser=user;
-
-        document.getElementById("auth").style.display="none";
-        document.getElementById("dashboard").style.display="block";
-
-        updateDashboard();
-    }else{
-        alert("Invalid login");
-    }
-}
-
-function updateDashboard(){
-    document.getElementById("balance").innerText=
-        "KES "+currentUser.balance;
-
-    document.getElementById("invested").innerText=
-        "Invested: KES "+currentUser.invested;
-
-    document.getElementById("refCode").innerText=
-        currentUser.name.substring(0,4).toUpperCase()+"2026";
-
-    let historyHTML="";
-
-    currentUser.history.forEach(item=>{
-        historyHTML += `<li>${item}</li>`;
-    });
-
-    document.getElementById("history").innerHTML=
-        historyHTML;
-}
-
-function invest(){
-    let amount=parseInt(
-        document.getElementById("amount").value
-    );
-
-    currentUser.invested += amount;
-    currentUser.balance += amount*1.15;
-
-    currentUser.history.push(
-        "Invested KES "+amount
-    );
-
-    localStorage.setItem(
-        currentUser.email,
-        JSON.stringify(currentUser)
-    );
-
-    updateDashboard();
-
-    alert("M-Pesa payment request sent");
-}
-
-function withdrawFunds(){
-    let amount=parseInt(
-        document.getElementById("withdrawAmount").value
-    );
-
-    if(amount<=currentUser.balance){
-        currentUser.balance -= amount;
-
-        currentUser.history.push(
-            "Withdrawn KES "+amount
-        );
-
-        localStorage.setItem(
-            currentUser.email,
-            JSON.stringify(currentUser)
-        );
-
-        updateDashboard();
-
-        alert("Withdrawal processing");
-    }else{
-        alert("Insufficient balance");
-    }
-}
-
-function distributeProfit(){
-    let profit=parseInt(
-        document.getElementById("profitAmount").value
-    );
-
-    currentUser.balance += profit;
-
-    currentUser.history.push(
-        "Profit Added KES "+profit
-    );
-
-    localStorage.setItem(
-        currentUser.email,
-        JSON.stringify(currentUser)
-    );
-
-    updateDashboard();
-
-    alert("Profit distributed");
-}
-
-function logout(){
-    location.reload();
-}
+/* 📱 RESPONSIVE */
+window.addEventListener("resize",()=>{
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+});
 </script>
 
 </body>
 </html>
-<!-- NEW PREMIUM FEATURES SECTION -->
-
-<section id="plans">
-    <h2 class="section-title">VIP Investment Plans</h2>
-
-    <div class="stats">
-
-        <div class="stat-box">
-            <h2>Starter Plan</h2>
-            <p>Minimum: KES 1,000</p>
-            <p>Daily Profit: 5%</p>
-            <p>Duration: 7 Days</p>
-            <button onclick="choosePlan('Starter')">
-                Select Plan
-            </button>
-        </div>
-
-        <div class="stat-box">
-            <h2>Silver Plan</h2>
-            <p>Minimum: KES 10,000</p>
-            <p>Daily Profit: 8%</p>
-            <p>Duration: 14 Days</p>
-            <button onclick="choosePlan('Silver')">
-                Select Plan
-            </button>
-        </div>
-
-        <div class="stat-box">
-            <h2>Gold Plan</h2>
-            <p>Minimum: KES 50,000</p>
-            <p>Daily Profit: 12%</p>
-            <p>Duration: 30 Days</p>
-            <button onclick="choosePlan('Gold')">
-                Select Plan
-            </button>
-        </div>
-
-    </div>
-</section>
-
-<section id="testimonials">
-    <h2 class="section-title">What Investors Say</h2>
-
-    <div class="container">
-        <div class="card">
-            <h3 id="testimonialName">Ahmed - Nairobi</h3>
-            <p id="testimonialText">
-                "Best halal platform I've used."
-            </p>
-        </div>
-    </div>
-</section>
-
-<section id="liveCounter">
-    <h2 class="section-title">Live Platform Activity</h2>
-
-    <div class="container">
-        <div class="card">
-            <h2 id="onlineUsers">2,451 Users Online</h2>
-        </div>
-    </div>
-</section>
-
-<section id="chatSupport">
-    <h2 class="section-title">AI Support</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <input 
-                type="text" 
-                id="chatInput"
-                placeholder="Ask support..."
-            >
-
-            <button onclick="sendChat()">
-                Send
-            </button>
-
-            <div id="chatMessages"></div>
-
-        </div>
-    </div>
-</section>
-
-<section id="analytics">
-    <h2 class="section-title">Admin Analytics</h2>
-
-    <div class="stats">
-
-        <div class="stat-box">
-            <h2 id="totalUsers">0</h2>
-            <p>Total Users</p>
-        </div>
-
-        <div class="stat-box">
-            <h2 id="totalDeposits">0</h2>
-            <p>Total Deposits</p>
-        </div>
-
-        <div class="stat-box">
-            <h2 id="totalWithdrawals">0</h2>
-            <p>Total Withdrawals</p>
-        </div>
-
-    </div>
-</section>
-
-<script>
-
-/* ===========================
-   INVESTMENT PLAN SELECTION
-=========================== */
-
-function choosePlan(plan){
-
-    alert(plan + " plan selected successfully");
-
-    currentUser.history.push(
-        "Selected " + plan + " investment plan"
-    );
-
-    localStorage.setItem(
-        currentUser.email,
-        JSON.stringify(currentUser)
-    );
-
-    updateDashboard();
-}
-
-
-/* ===========================
-   DAILY PROFIT AUTO SYSTEM
-=========================== */
-
-function autoProfit(){
-
-    if(currentUser){
-
-        let profit = currentUser.invested * 0.05;
-
-        currentUser.balance += profit;
-
-        currentUser.history.push(
-            "Daily profit added: KES " + profit
-        );
-
-        localStorage.setItem(
-            currentUser.email,
-            JSON.stringify(currentUser)
-        );
-
-        updateDashboard();
-    }
-}
-
-setInterval(autoProfit, 30000);
-
-
-/* ===========================
-   TESTIMONIAL SLIDER
-=========================== */
-
-const testimonials = [
-    {
-        name:"Ali - Mombasa",
-        text:"Fast withdrawals and clean UI."
-    },
-    {
-        name:"Fatima - Nairobi",
-        text:"I doubled my money safely."
-    },
-    {
-        name:"Yusuf - Kisumu",
-        text:"Very trusted investment platform."
-    }
-];
-
-let testimonialIndex = 0;
-
-function rotateTestimonials(){
-
-    testimonialIndex++;
-
-    if(testimonialIndex >= testimonials.length){
-        testimonialIndex = 0;
-    }
-
-    document.getElementById(
-        "testimonialName"
-    ).innerText =
-    testimonials[testimonialIndex].name;
-
-    document.getElementById(
-        "testimonialText"
-    ).innerText =
-    testimonials[testimonialIndex].text;
-}
-
-setInterval(rotateTestimonials,5000);
-
-
-/* ===========================
-   LIVE USER COUNTER
-=========================== */
-
-function updateLiveUsers(){
-
-    let users =
-        Math.floor(Math.random()*5000)+1000;
-
-    document.getElementById(
-        "onlineUsers"
-    ).innerText =
-    users + " Users Online";
-}
-
-setInterval(updateLiveUsers,3000);
-
-
-/* ===========================
-   CHAT SUPPORT BOT
-=========================== */
-
-function sendChat(){
-
-    let input =
-        document.getElementById(
-            "chatInput"
-        ).value;
-
-    let messages =
-        document.getElementById(
-            "chatMessages"
-        );
-
-    let reply = "";
-
-    if(input.includes("withdraw")){
-        reply = "Withdrawals take 24 hours.";
-    }
-    else if(input.includes("deposit")){
-        reply = "Use M-Pesa deposit section.";
-    }
-    else{
-        reply = "Support will contact you shortly.";
-    }
-
-    messages.innerHTML += `
-        <p><strong>You:</strong> ${input}</p>
-        <p><strong>Bot:</strong> ${reply}</p>
-    `;
-}
-
-
-/* ===========================
-   ADMIN ANALYTICS
-=========================== */
-
-function updateAnalytics(){
-
-    let totalUsersCount = 0;
-    let deposits = 0;
-    let withdrawals = 0;
-
-    for(let i=0; i<localStorage.length; i++){
-
-        let key = localStorage.key(i);
-
-        let user =
-            JSON.parse(
-                localStorage.getItem(key)
-            );
-
-        if(user && user.email){
-
-            totalUsersCount++;
-
-            deposits += user.invested;
-
-            withdrawals +=
-                (user.invested + user.balance)
-                - user.balance;
-        }
-    }
-
-    document.getElementById(
-        "totalUsers"
-    ).innerText = totalUsersCount;
-
-    document.getElementById(
-        "totalDeposits"
-    ).innerText =
-        "KES " + deposits;
-
-    document.getElementById(
-        "totalWithdrawals"
-    ).innerText =
-        "KES " + withdrawals;
-}
-
-setInterval(updateAnalytics,4000);
-
-
-/* ===========================
-   PUSH NOTIFICATIONS
-=========================== */
-
-function showNotification(message){
-
-    let notification =
-        document.createElement("div");
-
-    notification.innerText = message;
-
-    notification.style.position="fixed";
-    notification.style.bottom="20px";
-    notification.style.right="20px";
-    notification.style.background="green";
-    notification.style.padding="15px";
-    notification.style.borderRadius="10px";
-    notification.style.zIndex="999";
-
-    document.body.appendChild(notification);
-
-    setTimeout(()=>{
-        notification.remove();
-    },4000);
-}
-
-setInterval(()=>{
-
-    let names = [
-        "Ahmed",
-        "Yusuf",
-        "Fatima",
-        "Ali"
-    ];
-
-    let randomName =
-        names[
-            Math.floor(
-                Math.random()*names.length
-            )
-        ];
-
-    let randomAmount =
-        Math.floor(
-            Math.random()*100000
-        ) + 5000;
-
-    showNotification(
-        randomName +
-        " invested KES " +
-        randomAmount
-    );
-
-},12000);
-
-
-/* ===========================
-   COMPOUND CALCULATOR
-=========================== */
-
-function calculateCompound(
-    principal,
-    rate,
-    days
-){
-
-    let total = principal;
-
-    for(let i=0;i<days;i++){
-        total += total*(rate/100);
-    }
-
-    return total;
-}
-
-console.log(
-    calculateCompound(
-        10000,
-        5,
-        30
-    )
-);
-
-</script>
-<!-- =========================
-ADVANCED PLATFORM FEATURES
-========================= -->
-
-<section id="kycSection">
-    <h2 class="section-title">KYC Verification</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <input 
-                type="text"
-                id="fullLegalName"
-                placeholder="Full Legal Name"
-            >
-
-            <input 
-                type="text"
-                id="nationalId"
-                placeholder="National ID / Passport"
-            >
-
-            <input 
-                type="file"
-                id="idUpload"
-            >
-
-            <button onclick="submitKYC()">
-                Submit Verification
-            </button>
-
-            <p id="kycStatus">Status: Not Verified</p>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="cryptoDeposit">
-    <h2 class="section-title">Crypto Deposits</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <h3>BTC Wallet</h3>
-            <p>bc1hiddenempirewalletx9283</p>
-
-            <h3>USDT Wallet</h3>
-            <p>TRC20-HIDDEN-928388</p>
-
-            <button onclick="copyWallet()">
-                Copy Wallet Address
-            </button>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="premiumMembership">
-    <h2 class="section-title">Premium Membership</h2>
-
-    <div class="stats">
-
-        <div class="stat-box">
-            <h2>Bronze</h2>
-            <p>KES 5,000/month</p>
-        </div>
-
-        <div class="stat-box">
-            <h2>Silver</h2>
-            <p>KES 15,000/month</p>
-        </div>
-
-        <div class="stat-box">
-            <h2>Gold</h2>
-            <p>KES 50,000/month</p>
-        </div>
-
-    </div>
-</section>
-
-
-<section id="withdrawApproval">
-    <h2 class="section-title">Admin Withdrawal Queue</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <ul id="withdrawQueue"></ul>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="leaderboard">
-    <h2 class="section-title">Top Investors</h2>
-
-    <div class="container">
-        <div class="card">
-            <ol id="leaderboardList"></ol>
-        </div>
-    </div>
-</section>
-
-
-<section id="securityLogs">
-    <h2 class="section-title">Security Logs</h2>
-
-    <div class="container">
-        <div class="card">
-            <ul id="securityLogList"></ul>
-        </div>
-    </div>
-</section>
-
-
-<section id="invoiceGenerator">
-    <h2 class="section-title">Generate Invoice</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <input 
-                type="number"
-                id="invoiceAmount"
-                placeholder="Enter Amount"
-            >
-
-            <button onclick="generateInvoice()">
-                Generate Invoice
-            </button>
-
-            <div id="invoiceOutput"></div>
-
-        </div>
-    </div>
-</section>
-
-
-<script>
-
-/* ==========================
-KYC VERIFICATION
-========================== */
-
-function submitKYC(){
-
-    let fullName =
-        document.getElementById(
-            "fullLegalName"
-        ).value;
-
-    let nationalId =
-        document.getElementById(
-            "nationalId"
-        ).value;
-
-    if(fullName && nationalId){
-
-        document.getElementById(
-            "kycStatus"
-        ).innerText =
-            "Status: Verified ✅";
-
-        logSecurity(
-            "KYC submitted by " + fullName
-        );
-
-        alert("KYC Submitted Successfully");
-
-    }else{
-        alert("Fill all KYC fields");
-    }
-}
-
-
-/* ==========================
-COPY CRYPTO WALLET
-========================== */
-
-function copyWallet(){
-
-    navigator.clipboard.writeText(
-        "bc1hiddenempirewalletx9283"
-    );
-
-    alert("Wallet copied successfully");
-}
-
-
-/* ==========================
-WITHDRAWAL APPROVAL QUEUE
-========================== */
-
-let withdrawalRequests = [];
-
-function addWithdrawalRequest(amount){
-
-    withdrawalRequests.push(amount);
-
-    renderWithdrawQueue();
-}
-
-function renderWithdrawQueue(){
-
-    let html = "";
-
-    withdrawalRequests.forEach((amount,index)=>{
-
-        html += `
-            <li>
-                Withdrawal Request:
-                KES ${amount}
-                <button onclick="approveWithdraw(${index})">
-                    Approve
-                </button>
-            </li>
-        `;
-    });
-
-    document.getElementById(
-        "withdrawQueue"
-    ).innerHTML = html;
-}
-
-function approveWithdraw(index){
-
-    withdrawalRequests.splice(index,1);
-
-    renderWithdrawQueue();
-
-    alert("Withdrawal Approved");
-}
-
-
-/* ==========================
-LEADERBOARD SYSTEM
-========================== */
-
-function updateLeaderboard(){
-
-    let investors = [];
-
-    for(let i=0;i<localStorage.length;i++){
-
-        let key = localStorage.key(i);
-
-        let user =
-            JSON.parse(
-                localStorage.getItem(key)
-            );
-
-        if(user && user.email){
-            investors.push(user);
-        }
-    }
-
-    investors.sort(
-        (a,b)=>b.invested-a.invested
-    );
-
-    let html = "";
-
-    investors.slice(0,10).forEach(user=>{
-        html += `
-            <li>
-                ${user.name} - 
-                KES ${user.invested}
-            </li>
-        `;
-    });
-
-    document.getElementById(
-        "leaderboardList"
-    ).innerHTML = html;
-}
-
-setInterval(updateLeaderboard,5000);
-
-
-/* ==========================
-EMAIL VERIFICATION SIMULATION
-========================== */
-
-function verifyEmail(){
-
-    let code =
-        Math.floor(
-            Math.random()*999999
-        );
-
-    alert(
-        "Verification Code Sent: " + code
-    );
-}
-
-
-/* ==========================
-QR PAYMENT GENERATOR
-========================== */
-
-function generateQR(){
-
-    let qrWindow =
-        window.open();
-
-    qrWindow.document.write(`
-        <h1>Scan To Pay</h1>
-        <p>M-Pesa QR Coming Soon</p>
-    `);
-}
-
-
-/* ==========================
-INVOICE GENERATOR
-========================== */
-
-function generateInvoice(){
-
-    let amount =
-        document.getElementById(
-            "invoiceAmount"
-        ).value;
-
-    let invoiceNumber =
-        "INV-" +
-        Math.floor(
-            Math.random()*999999
-        );
-
-    document.getElementById(
-        "invoiceOutput"
-    ).innerHTML = `
-        <h3>Invoice Generated</h3>
-        <p>Invoice Number:
-        ${invoiceNumber}</p>
-
-        <p>Amount:
-        KES ${amount}</p>
-
-        <p>Status:
-        Pending Payment</p>
-    `;
-}
-
-
-/* ==========================
-SECURITY LOGS
-========================== */
-
-let securityLogs = [];
-
-function logSecurity(message){
-
-    let timestamp =
-        new Date().toLocaleString();
-
-    securityLogs.push(
-        timestamp + " - " + message
-    );
-
-    renderSecurityLogs();
-}
-
-function renderSecurityLogs(){
-
-    let html = "";
-
-    securityLogs.forEach(log=>{
-        html += `<li>${log}</li>`;
-    });
-
-    document.getElementById(
-        "securityLogList"
-    ).innerHTML = html;
-}
-
-
-/* ==========================
-ADMIN ROLE CHECK
-========================== */
-
-function checkAdmin(){
-
-    if(currentUser &&
-       currentUser.email ===
-       "admin@hiddenempire.com"){
-
-        alert("Admin Access Granted");
-    }
-}
-
-</script>
-<!-- =========================
-ENTERPRISE SCALE FEATURES
-========================= -->
-
-<section id="otpLogin">
-    <h2 class="section-title">SMS OTP Login</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <input
-                type="text"
-                id="phoneLogin"
-                placeholder="Enter phone number"
-            >
-
-            <button onclick="sendOTP()">
-                Send OTP
-            </button>
-
-            <input
-                type="text"
-                id="otpCode"
-                placeholder="Enter OTP"
-            >
-
-            <button onclick="verifyOTP()">
-                Verify OTP
-            </button>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="copyTrading">
-    <h2 class="section-title">Copy Trading Marketplace</h2>
-
-    <div class="stats">
-
-        <div class="stat-box">
-            <h2>Trader Alpha</h2>
-            <p>ROI: 34%</p>
-            <button onclick="followTrader('Trader Alpha')">
-                Copy Trade
-            </button>
-        </div>
-
-        <div class="stat-box">
-            <h2>Trader Elite</h2>
-            <p>ROI: 52%</p>
-            <button onclick="followTrader('Trader Elite')">
-                Copy Trade
-            </button>
-        </div>
-
-        <div class="stat-box">
-            <h2>Trader Vision</h2>
-            <p>ROI: 68%</p>
-            <button onclick="followTrader('Trader Vision')">
-                Copy Trade
-            </button>
-        </div>
-
-    </div>
-</section>
-
-
-<section id="nftMarket">
-    <h2 class="section-title">Digital Asset Marketplace</h2>
-
-    <div class="stats">
-
-        <div class="stat-box">
-            <h2>Empire Token #001</h2>
-            <p>Price: KES 20,000</p>
-            <button onclick="buyNFT('Empire Token #001')">
-                Buy
-            </button>
-        </div>
-
-        <div class="stat-box">
-            <h2>Empire Token #002</h2>
-            <p>Price: KES 35,000</p>
-            <button onclick="buyNFT('Empire Token #002')">
-                Buy
-            </button>
-        </div>
-
-    </div>
-</section>
-
-
-<section id="fraudDetection">
-    <h2 class="section-title">AI Fraud Detection</h2>
-
-    <div class="container">
-        <div class="card">
-            <p id="fraudStatus">
-                System scanning transactions...
-            </p>
-        </div>
-    </div>
-</section>
-
-
-<section id="affiliateSystem">
-    <h2 class="section-title">Affiliate Commission Center</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <h3 id="affiliateBalance">
-                KES 0
-            </h3>
-
-            <button onclick="claimCommission()">
-                Claim Commission
-            </button>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="vaultSystem">
-    <h2 class="section-title">Wealth Vault</h2>
-
-    <div class="container">
-        <div class="card">
-
-            <input
-                type="number"
-                id="vaultAmount"
-                placeholder="Lock Savings Amount"
-            >
-
-            <button onclick="lockFunds()">
-                Lock Funds
-            </button>
-
-            <p id="vaultStatus">
-                No active vault
-            </p>
-
-        </div>
-    </div>
-</section>
-
-
-<section id="apiLogs">
-    <h2 class="section-title">API Activity Logs</h2>
-
-    <div class="container">
-        <div class="card">
-            <ul id="apiLogList"></ul>
-        </div>
-    </div>
-</section>
-
-
-<script>
-
-/* ==========================
-SMS OTP SYSTEM
-========================== */
-
-let generatedOTP = null;
-
-function sendOTP(){
-
-    generatedOTP =
-        Math.floor(
-            100000 +
-            Math.random()*900000
-        );
-
-    alert(
-        "OTP Sent: " + generatedOTP
-    );
-
-    addApiLog(
-        "OTP generated successfully"
-    );
-}
-
-function verifyOTP(){
-
-    let entered =
-        document.getElementById(
-            "otpCode"
-        ).value;
-
-    if(entered == generatedOTP){
-
-        alert("Phone verified successfully");
-
-        addApiLog(
-            "OTP verified"
-        );
-
-    }else{
-        alert("Invalid OTP");
-    }
-}
-
-
-/* ==========================
-COPY TRADING
-========================== */
-
-function followTrader(name){
-
-    if(!currentUser){
-        alert("Login first");
-        return;
-    }
-
-    currentUser.history.push(
-        "Started copy trading: " + name
-    );
-
-    localStorage.setItem(
-        currentUser.email,
-        JSON.stringify(currentUser)
-    );
-
-    updateDashboard();
-
-    alert(
-        "You are now copying " + name
-    );
-}
-
-
-/* ==========================
-DIGITAL ASSET PURCHASE
-========================== */
-
-function buyNFT(asset){
-
-    alert(
-        asset + " purchased successfully"
-    );
-
-    addApiLog(
-        asset + " purchased"
-    );
-}
-
-
-/* ==========================
-FRAUD DETECTION
-========================== */
-
-function scanFraud(){
-
-    let statuses = [
-        "No suspicious activity detected",
-        "Monitoring high-value withdrawals",
-        "Verifying unusual login activity",
-        "Transaction flow stable"
-    ];
-
-    let randomStatus =
-        statuses[
-            Math.floor(
-                Math.random()*statuses.length
-            )
-        ];
-
-    document.getElementById(
-        "fraudStatus"
-    ).innerText = randomStatus;
-}
-
-setInterval(scanFraud,6000);
-
-
-/* ==========================
-AFFILIATE COMMISSIONS
-========================== */
-
-let affiliateEarnings = 0;
-
-function earnCommission(amount){
-
-    affiliateEarnings += amount;
-
-    document.getElementById(
-        "affiliateBalance"
-    ).innerText =
-        "KES " + affiliateEarnings;
-}
-
-function claimCommission(){
-
-    alert(
-        "Commission payout requested"
-    );
-
-    affiliateEarnings = 0;
-
-    document.getElementById(
-        "affiliateBalance"
-    ).innerText =
-        "KES 0";
-}
-
-
-/* ==========================
-WEALTH VAULT
-========================== */
-
-function lockFunds(){
-
-    let amount =
-        parseInt(
-            document.getElementById(
-                "vaultAmount"
-            ).value
-        );
-
-    if(
-        currentUser &&
-        amount <= currentUser.balance
-    ){
-
-        currentUser.balance -= amount;
-
-        localStorage.setItem(
-            currentUser.email,
-            JSON.stringify(currentUser)
-        );
-
-        updateDashboard();
-
-        document.getElementById(
-            "vaultStatus"
-        ).innerText =
-            "KES " + amount +
-            " locked for 90 days";
-
-        addApiLog(
-            "Funds locked in vault"
-        );
-
-    }else{
-        alert(
-            "Insufficient balance"
-        );
-    }
-}
-
-
-/* ==========================
-API LOGS
-========================== */
-
-let apiLogs = [];
-
-function addApiLog(message){
-
-    let timestamp =
-        new Date().toLocaleString();
-
-    apiLogs.push(
-        timestamp + " - " + message
-    );
-
-    renderApiLogs();
-}
-
-function renderApiLogs(){
-
-    let html = "";
-
-    apiLogs.forEach(log=>{
-        html += `
-            <li>${log}</li>
-        `;
-    });
-
-    document.getElementById(
-        "apiLogList"
-    ).innerHTML = html;
-}
-
-
-/* ==========================
-AUTO REFERRAL COMMISSIONS
-========================== */
-
-setInterval(()=>{
-
-    let randomCommission =
-        Math.floor(
-            Math.random()*5000
-        );
-
-    earnCommission(
-        randomCommission
-    );
-
-},20000);
-
-
-/* ==========================
-AUTO BACKUP SYSTEM
-========================== */
-
-function autoBackup(){
-
-    let backupData = {
-        users: localStorage.length,
-        timestamp:
-            new Date().toLocaleString()
-    };
-
-    console.log(
-        "Backup complete:",
-        backupData
-    );
-
-    addApiLog(
-        "System backup completed"
-    );
-}
-
-setInterval(
-    autoBackup,
-    60000
-);
-
-</script>
