@@ -1,107 +1,1011 @@
-<!-- =========================
-ROUND 1 — CINEMATIC ENGINE
-========================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Empire Capital</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#05070f;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* GLASS UI */
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+/* HEADER */
+header{
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h1{
+    color:gold;
+}
+
+nav a{
+    color:white;
+    margin:0 10px;
+    text-decoration:none;
+}
+
+/* HERO */
+.hero{
+    height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:50px;
+}
+
+button{
+    background:linear-gradient(45deg,orange,gold);
+    border:none;
+    padding:14px 25px;
+    border-radius:10px;
+    margin-top:15px;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(255,165,0,0.5);
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+    width:90%;
+    margin:auto;
+}
+
+.stat-box{
+    background:#111827;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+/* CONTAINER */
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:none;
+}
+
+.section-title{
+    text-align:center;
+    margin-top:50px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Hidden Empire</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#auth">Login</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Build Wealth The Halal Way</h2>
+<p>Modern Islamic investment platform</p>
+<button onclick="scrollToAuth()">Start</button>
+</section>
+
+<h2 class="section-title">Platform Stats</h2>
+
+<div class="stats">
+<div class="stat-box"><h2>KES 14M+</h2></div>
+<div class="stat-box"><h2>8,200+</h2></div>
+<div class="stat-box"><h2>99%</h2></div>
+</div>
+
+<div class="container" id="auth">
+<div class="card">
+<h2>Register</h2>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
+<button onclick="register()">Register</button>
+</div>
+
+<div class="card">
+<h2>Login</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+<div class="card">
+<h2>Dashboard</h2>
+<h3 id="balance">KES 0</h3>
+</div>
+
+<div class="card">
+<input id="amount" placeholder="Amount">
+<button onclick="invest()">Invest</button>
+</div>
+
+<div class="card">
+<input id="withdrawAmount" placeholder="Withdraw">
+<button onclick="withdrawFunds()">Withdraw</button>
+</div>
+</div>
+
+<footer>© 2026 Hidden Empire</footer>
+
+<!-- ======================
+JS SYSTEM
+====================== -->
+
+<script>
+let currentUser=null;
+
+function scrollToAuth(){
+document.getElementById("auth").scrollIntoView({behavior:"smooth"});
+}
+
+function register(){
+let user={
+name:name.value,
+email:email.value,
+password:password.value,
+balance:0
+};
+localStorage.setItem(user.email,JSON.stringify(user));
+alert("Registered");
+}
+
+function login(){
+let user=JSON.parse(localStorage.getItem(loginEmail.value));
+if(user && user.password===loginPassword.value){
+currentUser=user;
+auth.style.display="none";
+dashboard.style.display="block";
+update();
+}else alert("Error");
+}
+
+function update(){
+balance.innerText="KES "+currentUser.balance;
+}
+
+function invest(){
+let amt=parseInt(amount.value);
+currentUser.balance+=amt*1.2;
+localStorage.setItem(currentUser.email,JSON.stringify(currentUser));
+update();
+}
+
+function withdrawFunds(){
+let amt=parseInt(withdrawAmount.value);
+if(amt<=currentUser.balance){
+currentUser.balance-=amt;
+update();
+}
+}
+</script>
+
+<!-- ======================
+🔥 CINEMATIC ENGINE
+====================== -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-const scene = new THREE.Scene();
+const scene=new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth/window.innerHeight,
-    0.1,
-    1000
+const camera=new THREE.PerspectiveCamera(
+75,window.innerWidth/window.innerHeight,0.1,1000
 );
 
-const renderer = new THREE.WebGLRenderer({
-    alpha:true,
-    antialias:true
-});
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.domElement.style.position = "fixed";
-renderer.domElement.style.top = "0";
-renderer.domElement.style.left = "0";
-renderer.domElement.style.zIndex = "-1";
-
+const renderer=new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.domElement.style.position="fixed";
+renderer.domElement.style.top="0";
+renderer.domElement.style.zIndex="-1";
 document.body.appendChild(renderer.domElement);
 
-/* =========================
-🔥 ENERGY PARTICLES
-========================= */
+/* PARTICLES */
+const count=5000;
+const pos=new Float32Array(count*3);
 
-const particlesCount = 7000;
-const positions = new Float32Array(particlesCount * 3);
-
-for(let i=0;i<particlesCount*3;i++){
-    positions[i] = (Math.random()-0.5)*10;
+for(let i=0;i<count*3;i++){
+pos[i]=(Math.random()-0.5)*10;
 }
 
-const geometry = new THREE.BufferGeometry();
-geometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(positions,3)
-);
+const geo=new THREE.BufferGeometry();
+geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
 
-const material = new THREE.PointsMaterial({
-    size:0.02,
-    color:0xff7a00,
-    transparent:true,
-    opacity:0.8
+const mat=new THREE.PointsMaterial({
+size:0.02,
+color:0xff8800
 });
 
-const particles = new THREE.Points(geometry,material);
+const particles=new THREE.Points(geo,mat);
 scene.add(particles);
 
-/* =========================
-💡 LIGHT SYSTEM
-========================= */
+camera.position.z=3;
 
-const light1 = new THREE.PointLight(0xff5500, 2);
-light1.position.set(2,2,2);
-scene.add(light1);
-
-const light2 = new THREE.PointLight(0xff2200, 1.5);
-light2.position.set(-2,-2,2);
-scene.add(light2);
-
-camera.position.z = 3;
-
-/* =========================
-🖱 MOUSE INTERACTION
-========================= */
-
-let mouseX = 0;
-let mouseY = 0;
+let mouseX=0,mouseY=0;
 
 document.addEventListener("mousemove",(e)=>{
-    mouseX = (e.clientX/window.innerWidth - 0.5);
-    mouseY = (e.clientY/window.innerHeight - 0.5);
+mouseX=(e.clientX/window.innerWidth-0.5);
+mouseY=(e.clientY/window.innerHeight-0.5);
 });
 
-/* =========================
-🎬 ANIMATION LOOP
-========================= */
-
 function animate(){
-    requestAnimationFrame(animate);
+requestAnimationFrame(animate);
 
-    particles.rotation.y += 0.001 + mouseX * 0.003;
-    particles.rotation.x += 0.001 + mouseY * 0.003;
+particles.rotation.y+=0.001+mouseX*0.002;
+particles.rotation.x+=0.001+mouseY*0.002;
 
-    renderer.render(scene,camera);
+renderer.render(scene,camera);
 }
 
 animate();
-
-/* =========================
-📱 RESPONSIVE FIX
-========================= */
-
-window.addEventListener("resize",()=>{
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-});
 </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Empire Capital</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#05070f;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* GLASS UI */
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:20px;
+    margin-top:20px;
+}
+
+/* HEADER */
+header{
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h1{
+    color:gold;
+}
+
+nav a{
+    color:white;
+    margin:0 10px;
+    text-decoration:none;
+}
+
+/* HERO */
+.hero{
+    height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:50px;
+}
+
+button{
+    background:linear-gradient(45deg,orange,gold);
+    border:none;
+    padding:14px 25px;
+    border-radius:10px;
+    margin-top:15px;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(255,165,0,0.5);
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+    width:90%;
+    margin:auto;
+}
+
+.stat-box{
+    background:#111827;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+/* CONTAINER */
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:none;
+}
+
+.section-title{
+    text-align:center;
+    margin-top:50px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Hidden Empire</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#auth">Login</a>
+</nav>
+</header>
+
+<section class="hero">
+<h2>Build Wealth The Halal Way</h2>
+<p>Modern Islamic investment platform</p>
+<button onclick="scrollToAuth()">Start</button>
+</section>
+
+<h2 class="section-title">Platform Stats</h2>
+
+<div class="stats">
+<div class="stat-box"><h2>KES 14M+</h2></div>
+<div class="stat-box"><h2>8,200+</h2></div>
+<div class="stat-box"><h2>99%</h2></div>
+</div>
+
+<div class="container" id="auth">
+<div class="card">
+<h2>Register</h2>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
+<button onclick="register()">Register</button>
+</div>
+
+<div class="card">
+<h2>Login</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+<div class="card">
+<h2>Dashboard</h2>
+<h3 id="balance">KES 0</h3>
+</div>
+
+<div class="card">
+<input id="amount" placeholder="Amount">
+<button onclick="invest()">Invest</button>
+</div>
+
+<div class="card">
+<input id="withdrawAmount" placeholder="Withdraw">
+<button onclick="withdrawFunds()">Withdraw</button>
+</div>
+</div>
+
+<footer>© 2026 Hidden Empire</footer>
+
+<!-- ======================
+JS SYSTEM
+====================== -->
+
+<script>
+let currentUser=null;
+
+function scrollToAuth(){
+document.getElementById("auth").scrollIntoView({behavior:"smooth"});
+}
+
+function register(){
+let user={
+name:name.value,
+email:email.value,
+password:password.value,
+balance:0
+};
+localStorage.setItem(user.email,JSON.stringify(user));
+alert("Registered");
+}
+
+function login(){
+let user=JSON.parse(localStorage.getItem(loginEmail.value));
+if(user && user.password===loginPassword.value){
+currentUser=user;
+auth.style.display="none";
+dashboard.style.display="block";
+update();
+}else alert("Error");
+}
+
+function update(){
+balance.innerText="KES "+currentUser.balance;
+}
+
+function invest(){
+let amt=parseInt(amount.value);
+currentUser.balance+=amt*1.2;
+localStorage.setItem(currentUser.email,JSON.stringify(currentUser));
+update();
+}
+
+function withdrawFunds(){
+let amt=parseInt(withdrawAmount.value);
+if(amt<=currentUser.balance){
+currentUser.balance-=amt;
+update();
+}
+}
+</script>
+
+<!-- ======================
+🔥 CINEMATIC ENGINE
+====================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+const scene=new THREE.Scene();
+
+const camera=new THREE.PerspectiveCamera(
+75,window.innerWidth/window.innerHeight,0.1,1000
+);
+
+const renderer=new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.domElement.style.position="fixed";
+renderer.domElement.style.top="0";
+renderer.domElement.style.zIndex="-1";
+document.body.appendChild(renderer.domElement);
+
+/* PARTICLES */
+const count=5000;
+const pos=new Float32Array(count*3);
+
+for(let i=0;i<count*3;i++){
+pos[i]=(Math.random()-0.5)*10;
+}
+
+const geo=new THREE.BufferGeometry();
+geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+
+const mat=new THREE.PointsMaterial({
+size:0.02,
+color:0xff8800
+});
+
+const particles=new THREE.Points(geo,mat);
+scene.add(particles);
+
+/* 🔥 ENERGY CORE */
+const coreGeo=new THREE.SphereGeometry(1,64,64);
+
+const coreMat=new THREE.MeshStandardMaterial({
+color:0xff6600,
+emissive:0xff2200,
+emissiveIntensity:1.5,
+metalness:0.8,
+roughness:0.3
+});
+
+const core=new THREE.Mesh(coreGeo,coreMat);
+scene.add(core);
+
+/* LIGHT */
+const light=new THREE.PointLight(0xff5500,2);
+light.position.set(2,2,2);
+scene.add(light);
+
+camera.position.z=3;
+
+/* MOUSE */
+let mouseX=0,mouseY=0;
+
+document.addEventListener("mousemove",(e)=>{
+mouseX=(e.clientX/window.innerWidth-0.5);
+mouseY=(e.clientY/window.innerHeight-0.5);
+});
+
+/* ANIMATION */
+function animate(){
+requestAnimationFrame(animate);
+
+/* particles */
+particles.rotation.y+=0.001+mouseX*0.002;
+particles.rotation.x+=0.001+mouseY*0.002;
+
+/* core motion */
+core.rotation.y+=0.01;
+core.rotation.x+=0.005;
+
+core.position.x=mouseX*1.5;
+core.position.y=-mouseY*1.5;
+
+/* pulse */
+let pulse=Math.sin(Date.now()*0.002)*0.3+1;
+core.scale.set(pulse,pulse,pulse);
+
+renderer.render(scene,camera);
+}
+
+animate();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hidden Empire Capital</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#05070f;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* 🔥 GLOBAL FADE-IN */
+.fade{
+    opacity:0;
+    transform:translateY(30px);
+    transition:all 1s ease;
+}
+
+.fade.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* 💎 GLASS UI UPGRADE */
+.card{
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(30px);
+    border:1px solid rgba(255,255,255,0.12);
+    padding:20px;
+    border-radius:20px;
+    margin-top:20px;
+    box-shadow:0 0 30px rgba(255,140,0,0.1);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px) scale(1.02);
+}
+
+/* HEADER */
+header{
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(20px);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h1{
+    color:gold;
+}
+
+nav a{
+    color:white;
+    margin:0 10px;
+    text-decoration:none;
+    position:relative;
+}
+
+nav a::after{
+    content:"";
+    position:absolute;
+    bottom:-5px;
+    left:0;
+    width:0%;
+    height:2px;
+    background:gold;
+    transition:0.3s;
+}
+
+nav a:hover::after{
+    width:100%;
+}
+
+/* HERO */
+.hero{
+    height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:55px;
+}
+
+.hero p{
+    opacity:0.6;
+}
+
+/* BUTTON */
+button{
+    background:linear-gradient(45deg,orange,gold);
+    border:none;
+    padding:14px 25px;
+    border-radius:12px;
+    margin-top:15px;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(255,165,0,0.6);
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.08);
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+    width:90%;
+    margin:auto;
+}
+
+.stat-box{
+    background:rgba(255,255,255,0.05);
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    backdrop-filter:blur(20px);
+}
+
+/* CONTAINER */
+.container{
+    width:90%;
+    max-width:500px;
+    margin:auto;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:none;
+}
+
+/* TITLES */
+.section-title{
+    text-align:center;
+    margin-top:60px;
+    margin-bottom:20px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="fade">
+<h1>Hidden Empire</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#auth">Login</a>
+</nav>
+</header>
+
+<section class="hero fade">
+<h2>Build Wealth The Halal Way</h2>
+<p>Modern Islamic investment platform</p>
+<button onclick="scrollToAuth()">Start</button>
+</section>
+
+<h2 class="section-title fade">Platform Stats</h2>
+
+<div class="stats fade">
+<div class="stat-box"><h2>KES 14M+</h2></div>
+<div class="stat-box"><h2>8,200+</h2></div>
+<div class="stat-box"><h2>99%</h2></div>
+</div>
+
+<div class="container" id="auth">
+
+<div class="card fade">
+<h2>Register</h2>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
+<button onclick="register()">Register</button>
+</div>
+
+<div class="card fade">
+<h2>Login</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+
+<div class="card fade">
+<h2>Dashboard</h2>
+<h3 id="balance">KES 0</h3>
+</div>
+
+<div class="card fade">
+<input id="amount" placeholder="Amount">
+<button onclick="invest()">Invest</button>
+</div>
+
+<div class="card fade">
+<input id="withdrawAmount" placeholder="Withdraw">
+<button onclick="withdrawFunds()">Withdraw</button>
+</div>
+
+</div>
+
+<footer class="fade">© 2026 Hidden Empire</footer>
+
+<!-- ======================
+JS SYSTEM
+====================== -->
+
+<script>
+let currentUser=null;
+
+function scrollToAuth(){
+document.getElementById("auth").scrollIntoView({behavior:"smooth"});
+}
+
+function register(){
+let user={
+name:name.value,
+email:email.value,
+password:password.value,
+balance:0
+};
+localStorage.setItem(user.email,JSON.stringify(user));
+alert("Registered");
+}
+
+function login(){
+let user=JSON.parse(localStorage.getItem(loginEmail.value));
+if(user && user.password===loginPassword.value){
+currentUser=user;
+auth.style.display="none";
+dashboard.style.display="block";
+update();
+}else alert("Error");
+}
+
+function update(){
+balance.innerText="KES "+currentUser.balance;
+}
+
+function invest(){
+let amt=parseInt(amount.value);
+currentUser.balance+=amt*1.2;
+localStorage.setItem(currentUser.email,JSON.stringify(currentUser));
+update();
+}
+
+function withdrawFunds(){
+let amt=parseInt(withdrawAmount.value);
+if(amt<=currentUser.balance){
+currentUser.balance-=amt;
+update();
+}
+}
+
+/* 🔥 FADE-IN ON SCROLL */
+const faders=document.querySelectorAll(".fade");
+
+function showOnScroll(){
+faders.forEach(el=>{
+const top=el.getBoundingClientRect().top;
+if(top<window.innerHeight-100){
+el.classList.add("show");
+}
+});
+}
+
+window.addEventListener("scroll",showOnScroll);
+showOnScroll();
+</script>
+
+<!-- ======================
+🔥 CINEMATIC ENGINE
+====================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+const scene=new THREE.Scene();
+
+const camera=new THREE.PerspectiveCamera(
+75,window.innerWidth/window.innerHeight,0.1,1000
+);
+
+const renderer=new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.domElement.style.position="fixed";
+renderer.domElement.style.top="0";
+renderer.domElement.style.zIndex="-1";
+document.body.appendChild(renderer.domElement);
+
+/* PARTICLES */
+const count=5000;
+const pos=new Float32Array(count*3);
+
+for(let i=0;i<count*3;i++){
+pos[i]=(Math.random()-0.5)*10;
+}
+
+const geo=new THREE.BufferGeometry();
+geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+
+const mat=new THREE.PointsMaterial({
+size:0.02,
+color:0xff8800
+});
+
+const particles=new THREE.Points(geo,mat);
+scene.add(particles);
+
+/* ENERGY CORE */
+const coreGeo=new THREE.SphereGeometry(1,64,64);
+
+const coreMat=new THREE.MeshStandardMaterial({
+color:0xff6600,
+emissive:0xff2200,
+emissiveIntensity:1.5,
+metalness:0.8,
+roughness:0.3
+});
+
+const core=new THREE.Mesh(coreGeo,coreMat);
+scene.add(core);
+
+/* LIGHT */
+const light=new THREE.PointLight(0xff5500,2);
+light.position.set(2,2,2);
+scene.add(light);
+
+camera.position.z=3;
+
+/* MOUSE */
+let mouseX=0,mouseY=0;
+
+document.addEventListener("mousemove",(e)=>{
+mouseX=(e.clientX/window.innerWidth-0.5);
+mouseY=(e.clientY/window.innerHeight-0.5);
+});
+
+/* ANIMATION */
+function animate(){
+requestAnimationFrame(animate);
+
+particles.rotation.y+=0.001+mouseX*0.002;
+particles.rotation.x+=0.001+mouseY*0.002;
+
+core.rotation.y+=0.01;
+core.rotation.x+=0.005;
+
+core.position.x=mouseX*1.5;
+core.position.y=-mouseY*1.5;
+
+let pulse=Math.sin(Date.now()*0.002)*0.3+1;
+core.scale.set(pulse,pulse,pulse);
+
+renderer.render(scene,camera);
+}
+
+animate();
+</script>
+
+</body>
+</html>
